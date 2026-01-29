@@ -16,7 +16,7 @@
                     </div>
                     
                     <ul class="nav-menu" id="navMenu">
-                        <li><a href="#" class="nav-link active">Home</a></li>
+                        <li><a href="#home" class="nav-link ">Home</a></li>
                         <li><a href="#services" class="nav-link">Services</a></li>
                         <li><a href="#announcements" class="nav-link">Announcements</a></li>
                         <li><a href="#contact" class="nav-link">Contact</a></li>

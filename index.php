@@ -12,7 +12,7 @@
     <?php require_once '../agap_link/view/header.php'; ?>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" id="home">
         <div class="hero-background"></div>
         <div class="container">
             <div class="hero-content">
@@ -78,15 +78,16 @@
                     </p>
                     <ul class="about-list">
                         <li>
-                             <img src="assets/icons/aboutlist_icon.png" alt="About List Icon" />
+                           <img src="assets/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
                             <span>Direct line to city services</span>
                         </li>
                         <li>
-                             <img src="assets/icons/aboutlist_icon.png" alt="About List Icon" />
+                            <img src="assets/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
+
                             <span>Transparent tracking of issues</span>
                         </li>
                         <li>
-                             <img src="assets/icons/aboutlist_icon.png" alt="About List Icon" />
+                            <img src="assets/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
                             <span>Community-driven improvements</span>
                         </li>
                     </ul>

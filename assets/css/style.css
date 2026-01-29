@@ -593,12 +593,20 @@ h6 {
   line-height: 1.7;
 }
 
+.about-icon {
+  width: 20px;
+  height: 20px;
+  filter: invert(48%) sepia(86%) saturate(2200%)
+          hue-rotate(345deg) brightness(102%) contrast(101%);
+}
+
 .about-list {
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
 }
+
 
 .about-list li {
   display: flex;
@@ -980,3 +988,4 @@ h6 {
     align-items: flex-start;
   }
 }
+
