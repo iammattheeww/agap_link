@@ -26,6 +26,7 @@
                 <h1 class="hero-title">
                     Welcome to<br>
                     <span class="hero-title-highlight">AGAP-Link</span>
+                    <h1>Hello, Agap City!</h1>
                 </h1>
                 <p class="hero-description">
                     Your ultimate city companion! Access services, report issues, and stay connected with your community in real-time.
