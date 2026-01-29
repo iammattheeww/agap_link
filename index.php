@@ -5,9 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AGAP-Link - Your Ultimate City Companion</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../agap_link/assets/css/style.css">
 </head>
 
@@ -26,7 +23,6 @@
                 <h1 class="hero-title">
                     Welcome to<br>
                     <span class="hero-title-highlight">AGAP-Link</span>
-                    <h1>Hello, Agap City!</h1>
                 </h1>
                 <p class="hero-description">
                     Your ultimate city companion! Access services, report issues, and stay connected with your community in real-time.
@@ -45,11 +41,7 @@
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon warning">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-                            <line x1="12" y1="9" x2="12" y2="13" />
-                            <line x1="12" y1="17" x2="12.01" y2="17" />
-                        </svg>
+                         <img src="assets/icons/alert_icon.png" alt="Report Hazard">
                     </div>
                     <h3 class="feature-title">Report Hazards</h3>
                     <p class="feature-description">Spot an issue? Report it instantly and help keep our city safe.</p>
@@ -57,11 +49,7 @@
 
                 <div class="feature-card">
                     <div class="feature-icon refresh">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="23 4 23 10 17 10" />
-                            <polyline points="1 20 1 14 7 14" />
-                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
-                        </svg>
+                       <img src="assets/icons/refresh_icon.png" alt="Refresh Updates">
                     </div>
                     <h3 class="feature-title">Real-Time Updates</h3>
                     <p class="feature-description">Stay informed with live notifications about your reported issues.</p>
@@ -69,10 +57,7 @@
 
                 <div class="feature-card">
                     <div class="feature-icon check">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
-                            <polyline points="22 4 12 14.01 9 11.01" />
-                        </svg>
+                       <img src="assets/icons/check_icon.png" alt="Check Status">
                     </div>
                     <h3 class="feature-title">Track Progress</h3>
                     <p class="feature-description">Monitor the status of community projects and service requests.</p>
@@ -93,24 +78,15 @@
                     </p>
                     <ul class="about-list">
                         <li>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="9 11 12 14 22 4" />
-                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-                            </svg>
+                             <img src="assets/icons/aboutlist_icon.png" alt="About List Icon" />
                             <span>Direct line to city services</span>
                         </li>
                         <li>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="9 11 12 14 22 4" />
-                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-                            </svg>
+                             <img src="assets/icons/aboutlist_icon.png" alt="About List Icon" />
                             <span>Transparent tracking of issues</span>
                         </li>
                         <li>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <polyline points="9 11 12 14 22 4" />
-                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-                            </svg>
+                             <img src="assets/icons/aboutlist_icon.png" alt="About List Icon" />
                             <span>Community-driven improvements</span>
                         </li>
                     </ul>
