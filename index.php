@@ -152,7 +152,7 @@
         </div>
     </section>
 
-    <!-- CTA Section -->
+    <!-- CTA SECTION (CALL-TO-ACTION BUTTON) -->
     <section class="cta" id="contact">
         <div class="container">
             <div class="cta-content">

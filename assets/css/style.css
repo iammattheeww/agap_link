@@ -1,10 +1,8 @@
-/* ===================================
-   AGAP-Link Landing Page Styles
-   Modern, Bold Design with Sunset Theme
-   =================================== */
 
+/* CSS ROOT VARIABLES */
 :root {
   /* Color Palette - Sunset & City Theme */
+  /*COLOR PALETTE - SUNSET & CITY THEME */
   --color-primary: #ff6b35;
   --color-primary-dark: #e85a2a;
   --color-primary-light: #ff8555;
@@ -21,11 +19,11 @@
   --color-success: #10b981;
   --color-warning: #f59e0b;
 
-  /* Typography */
+  /* TYPOGRAPHY OR FONTS */
   --font-primary: "Outfit", sans-serif;
   --font-display: "Sora", sans-serif;
 
-  /* Spacing */
+  /* SPACINGS */
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
   --spacing-md: 1.5rem;
@@ -40,22 +38,19 @@
   --radius-lg: 1rem;
   --radius-xl: 1.5rem;
 
-  /* Shadows */
+  /* SHADOW PROPERTIES */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 
-  /* Transitions */
+  /* TRANSITIONS */
   --transition-fast: 150ms ease;
   --transition-base: 250ms ease;
   --transition-slow: 350ms ease;
 }
 
-/* ===================================
-   Base Styles
-   =================================== */
-   
+/* FONT FACE RULE */
 @font-face {
     font-family: 'Outfit';
     src: url('../fonts/Outfit-Regular.woff2') format('woff2');
@@ -120,10 +115,7 @@ body {
   padding: 0 var(--spacing-md);
 }
 
-/* ===================================
-   Typography
-   =================================== */
-
+/* TYPOGRAPHY */
 h1,
 h2,
 h3,
@@ -151,10 +143,7 @@ h6 {
   margin-bottom: var(--spacing-md);
 }
 
-/* ===================================
-   Buttons
-   =================================== */
-
+/* BUTTONS STYLE */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -225,10 +214,7 @@ h6 {
   color: var(--color-primary);
 }
 
-/* ===================================
-   Header & Navigation
-   =================================== */
-
+/* HEADER/TOPNAV STYLE */
 .main-header {
   position: fixed;
   top: 0;
@@ -316,9 +302,7 @@ h6 {
   transition: all var(--transition-base);
 }
 
-/* ===================================
-   Hero Section
-   =================================== */
+/* HERO SECTION STYLE */
 
 .hero {
   position: relative;
@@ -472,9 +456,7 @@ h6 {
   animation: fadeInUp 0.8s ease 0.5s backwards;
 }
 
-/* ===================================
-   Features Section
-   =================================== */
+/* FEATURES SECTION STYLE */
 
 .features {
   position: relative;
@@ -555,9 +537,7 @@ h6 {
   line-height: 1.6;
 }
 
-/* ===================================
-   About Section
-   =================================== */
+/* ABOUT SECTION STYLE */
 
 .about {
   padding: var(--spacing-3xl) 0;
@@ -656,10 +636,7 @@ h6 {
   position: relative;
 }
 
-/* ===================================
-   Announcements Section
-   =================================== */
-
+/* ANNOUNCEMENTS SECTION STYLE */
 .announcements {
   padding: var(--spacing-3xl) 0;
 }
@@ -763,9 +740,7 @@ h6 {
   gap: 0.5rem;
 }
 
-/* ===================================
-   CTA Section
-   =================================== */
+/* CTA SECTION (CALL-TO-ACTION BUTTON) */
 
 .cta {
   padding: var(--spacing-3xl) 0;
@@ -817,9 +792,7 @@ h6 {
   line-height: 1.7;
 }
 
-/* ===================================
-   Footer
-   =================================== */
+/* FOOTER STYLE */  
 
 .main-footer {
   background: var(--color-darker);
@@ -865,9 +838,7 @@ h6 {
   color: var(--color-primary);
 }
 
-/* ===================================
-   Responsive Design
-   =================================== */
+/* RESPONSIVE DESIGN */
 
 @media (max-width: 992px) {
   .section-title {
@@ -883,7 +854,7 @@ h6 {
     gap: var(--spacing-xl);
   }
 
-  /* Mobile Navigation */
+  /* MOBILE NAV */
   .nav-menu {
     position: fixed;
     top: 73px;
