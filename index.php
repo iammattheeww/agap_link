@@ -28,7 +28,7 @@
                     Your ultimate city companion! Access services, report issues, and stay connected with your community in real-time.
                 </p>
                 <div class="hero-actions">
-                    <a href="#" class="btn btn-primary btn-lg">Download App</a>
+                    <a href="/agap_link/login/index.php" class="btn btn-primary btn-lg">Download App</a>
                     <a href="#" class="btn btn-secondary btn-lg">Learn More</a>
                 </div>
             </div>

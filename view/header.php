@@ -23,7 +23,7 @@
                     </ul>
                     
                     <div class="nav-actions">
-                        <a href="#" class="btn-link">Login</a>
+                        <a href="/agap_link/login/index.php" class="btn-link">Login</a>
                         <a href="#" class="btn btn-primary">Get App</a>
                     </div>
                     

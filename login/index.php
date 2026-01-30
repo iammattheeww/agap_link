@@ -54,7 +54,7 @@ together.
             </div>
 
             <!-- LOGIN -->
-            <form method="POST" action="auth_process.php" id="login" class="tab-content active">
+            <form method="POST" action="processes/auth_process.php" id="login" class="tab-content active">
                 <input type="hidden" name="action" value="login">
 
                 <label>Email</label>
@@ -69,7 +69,7 @@ together.
             </form>
 
             <!-- REGISTER -->
-            <form method="POST" action="auth_process.php" id="register" class="tab-content">
+            <form method="POST" action="processes/auth_process.php" id="register" class="tab-content">
                 <input type="hidden" name="action" value="register">
 
                 <label>Full Name</label>
@@ -78,11 +78,14 @@ together.
                 <label>Email</label>
                 <input type="email" name="email" placeholder="name@example.com" required>
 
+                <label>Contact Number</label>
+                <input type="tel" name="phone"  placeholder="09123456789"  oninput="this.value = this.value.replace(/[^0-9]/g, '')" pattern="[0-9]*" minlength="11" maxlength="11"  inputmode="numeric"  required>
+
                 <label>Password</label>
-                <input type="password" name="password" minlength="6" required>
+                <input type="password" name="password"  required>
 
                 <label>Confirm Password</label>
-                <input type="password" name="confirm_password" minlength="6" required>
+                <input type="password" name="confirm_password"  required>
 
                 <button type="submit">Create Account</button>
             </form>
