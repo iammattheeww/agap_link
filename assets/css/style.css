@@ -311,7 +311,7 @@ h6 {
   overflow: hidden;
 }
 
-/* .hero-background {
+.hero-background {
   position: absolute;
   top: 0;
   left: 0;
@@ -325,7 +325,7 @@ h6 {
   background-position: center;
   background-repeat: no-repeat;
   animation: backgroundShift 20s ease infinite;
-} */
+}
 
 .hero-background::before {
   content: "";

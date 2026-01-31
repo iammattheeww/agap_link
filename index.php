@@ -14,7 +14,6 @@
     <!-- HERO SECTION -->
     <section class="hero" id="home">
         <div class="hero-background">
-            <img src="assets/images/landing_page.png" alt="Hero Background" style="width: 100%; height: 100vh; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1;">
         </div>
         <div class="container">
             <div class="hero-content">
