@@ -24,7 +24,7 @@ html, body {
 .auth-container.signup-active {
   grid-template-columns: 1fr 1fr; /* 50 / 50 */
 }
-/* ================= LEFT HERO ================= */
+/* LEFT HERO IMAGE */
 .auth-left {
   position: relative;
    height: 100vh;
@@ -117,7 +117,7 @@ html, body {
   color: rgba(255, 255, 255, 0.5);
 }
 
-/* ================= RIGHT AUTH ================= */
+/* RIGHT AUTH */
 .auth-right {
   height: 100vh;
   overflow-y: auto; 

@@ -38,13 +38,13 @@ if ($action === 'register') {
     }
 }
 
-/* ================= LOGIN ================= */
+/* LOGIN ACCESS FOR ADMINT */
 if ($action === 'login') {
 
     $email = trim($_POST['email']);
     $password = $_POST['password'];
 
-    // ADMIN LOGIN
+    // ADMIN LOGIN CREDENTIALS
     if ($email === "admin@agap-link.com" && $password === "Admin123!") {
         $_SESSION['admin_logged_in'] = true;
         $_SESSION['admin_name'] = "Admin";
