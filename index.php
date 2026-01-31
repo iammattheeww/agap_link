@@ -13,7 +13,9 @@
 
     <!-- HERO SECTION -->
     <section class="hero" id="home">
-        <div class="hero-background"></div>
+        <div class="hero-background">
+            <img src="assets/images/landing_page.png" alt="Hero Background" style="width: 100%; height: 100vh; object-fit: cover; position: absolute; top: 0; left: 0; z-index: 1;">
+        </div>
         <div class="container">
             <div class="hero-content">
                 <span class="badge">
@@ -112,10 +114,12 @@
                 <a href="#" class="btn btn-outline">View All</a>
             </div>
 
-            <div class="announcements-grid">
+            <div class="announcements-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--spacing-xl);">
                 <article class="announcement-card">
                     <div class="announcement-image">
-                        <span class="announcement-badge">News</span>
+                        <img src="assets/images/landing_page.png" alt="Announcement Image" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
+                        <span class="announcement-badge" style="position: relative; z-index: 2;">News</span>
                     </div>
                     <div class="announcement-content">
                         <time class="announcement-date">Oct. 24, 2025</time>
@@ -127,7 +131,9 @@
 
                 <article class="announcement-card">
                     <div class="announcement-image">
-                        <span class="announcement-badge">News</span>
+                        <img src="assets/images/landing_page.png" alt="Announcement Image" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
+                        <span class="announcement-badge" style="position: relative; z-index: 2;">News</span>
                     </div>
                     <div class="announcement-content">
                         <time class="announcement-date">Oct. 24, 2025</time>
@@ -139,7 +145,9 @@
 
                 <article class="announcement-card">
                     <div class="announcement-image">
-                        <span class="announcement-badge">News</span>
+                        <img src="assets/images/landing_page.png" alt="Announcement Image" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
+                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
+                        <span class="announcement-badge" style="position: relative; z-index: 2;">News</span>
                     </div>
                     <div class="announcement-content">
                         <time class="announcement-date">Oct. 24, 2025</time>

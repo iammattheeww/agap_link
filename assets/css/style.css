@@ -311,7 +311,7 @@ h6 {
   overflow: hidden;
 }
 
-.hero-background {
+/* .hero-background {
   position: absolute;
   top: 0;
   left: 0;
@@ -325,7 +325,7 @@ h6 {
   background-position: center;
   background-repeat: no-repeat;
   animation: backgroundShift 20s ease infinite;
-}
+} */
 
 .hero-background::before {
   content: "";
@@ -646,11 +646,11 @@ h6 {
   gap: var(--spacing-md);
 }
 
-.announcements-grid {
+/* .announcements-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: var(--spacing-xl);
-}
+} */
 
 .announcement-card {
   background: var(--color-white);
@@ -676,6 +676,7 @@ h6 {
   box-shadow: var(--shadow-xl);
 }
 
+/* 
 .announcement-image {
   position: relative;
   width: 100%;
@@ -695,7 +696,8 @@ h6 {
   border-radius: var(--radius-sm);
   font-size: 0.8125rem;
   font-weight: 600;
-}
+} 
+*/
 
 .announcement-content {
   padding: var(--spacing-lg);
