@@ -41,7 +41,7 @@
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon warning">
-                         <img src="assets/icons/alert_icon.png" alt="Report Hazard">
+                        <img src="assets/icons/alert_icon.png" alt="Report Hazard">
                     </div>
                     <h3 class="feature-title">Report Hazards</h3>
                     <p class="feature-description">Spot an issue? Report it instantly and help keep our city safe.</p>
@@ -49,7 +49,7 @@
 
                 <div class="feature-card">
                     <div class="feature-icon refresh">
-                       <img src="assets/icons/refresh_icon.png" alt="Refresh Updates">
+                        <img src="assets/icons/refresh_icon.png" alt="Refresh Updates">
                     </div>
                     <h3 class="feature-title">Real-Time Updates</h3>
                     <p class="feature-description">Stay informed with live notifications about your reported issues.</p>
@@ -57,7 +57,7 @@
 
                 <div class="feature-card">
                     <div class="feature-icon check">
-                       <img src="assets/icons/check_icon.png" alt="Check Status">
+                        <img src="assets/icons/check_icon.png" alt="Check Status">
                     </div>
                     <h3 class="feature-title">Track Progress</h3>
                     <p class="feature-description">Monitor the status of community projects and service requests.</p>
@@ -78,7 +78,7 @@
                     </p>
                     <ul class="about-list">
                         <li>
-                           <img src="assets/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
+                            <img src="assets/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
                             <span>Direct line to city services</span>
                         </li>
                         <li>
@@ -93,8 +93,8 @@
                     </ul>
                 </div>
                 <div class="about-image">
-                    <div class="image-wrapper">
-                        <div class="image-placeholder"></div>
+                    <div class="image-wrapper" style="position: relative; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-xl); height: 500px; ">
+                        <img src="assets/images/landing_page.png" alt="About Agap-Link" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-xl);">
                     </div>
                 </div>
             </div>
