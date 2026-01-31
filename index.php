@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AGAP-Link - Your Ultimate City Companion</title>
-    <link rel="stylesheet" href="agap_link/assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
 <body>
@@ -35,7 +35,7 @@
         </div>
     </section>
 
-    <!-- Features Section -->
+    <!-- FEATURES SECTION -->
     <section class="features">
         <div class="container">
             <div class="features-grid">
@@ -66,7 +66,7 @@
         </div>
     </section>
 
-    <!-- About Section -->
+    <!-- ABOUT SECTION -->
     <section class="about" id="services">
         <div class="container">
             <div class="about-grid">
@@ -101,7 +101,7 @@
         </div>
     </section>
 
-    <!-- Announcements Section -->
+    <!-- ANNOUNCEMENTS SECTION -->
     <section class="announcements" id="announcements">
         <div class="container">
             <div class="announcements-header">
