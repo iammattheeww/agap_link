@@ -4,15 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <base hrerf="agap_link">
     <title>AGAP-Link - Your Ultimate City Companion</title>
     <link rel="stylesheet" href="agap_link/assets/css/style.css">
 </head>
 
 <body>
-    <?php require_once 'agap_link/view/header.php'; ?>
+    <?php require_once __DIR__ . '/view/header.php'; ?>
 
-    <!-- Hero Section -->
+    <!-- HERO SECTION -->
     <section class="hero" id="home">
         <div class="hero-background"></div>
         <div class="container">
@@ -166,9 +165,9 @@
         </div>
     </section>
 
-    <?php require_once 'agap_link/view/footer.php'; ?>
+    <?php require_once __DIR__ . '/view/footer.php'; ?>
 
-    <script src="agap_link/assets/js/main.js"></script>
+    <script src="assets/js/main.js"></script>
 </body>
 
 </html>
