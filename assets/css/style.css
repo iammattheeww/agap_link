@@ -320,7 +320,6 @@ h6 {
   background:
     linear-gradient(135deg, rgba(26, 35, 50, 0.75), rgba(44, 62, 80, 0.65)),
     url("../images/landing_page.png");
-
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -560,13 +559,6 @@ h6 {
   }
 }
 
-.about-text {
-  font-size: 1.125rem;
-  color: var(--color-gray-600);
-  margin-bottom: var(--spacing-lg);
-  line-height: 1.7;
-}
-
 .about-icon {
   width: 20px;
   height: 20px;
@@ -610,16 +602,15 @@ h6 {
   }
 }
 
-/* .image-wrapper {
+.image-wrapper {
   position: relative;
   border-radius: var(--radius-xl);
   overflow: hidden;
   box-shadow: var(--shadow-xl);
   height: 500px; 
 } 
-*/ 
 
-/* .image-placeholder {
+.image-placeholder {
   position: absolute;
   top: 0;
   left: 0;
@@ -630,7 +621,7 @@ h6 {
   background-position: center;
   background-repeat: no-repeat;
 } 
-*/ 
+
 
 /* ANNOUNCEMENTS SECTION STYLE */
 .announcements {
