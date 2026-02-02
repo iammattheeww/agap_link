@@ -5,23 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AGAP-Link - Your Ultimate City Companion</title>
-    <link rel="icon" type="image/x-icon" href="assets/favicon_io/favicon.ico">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="../agap_link/assets/css/style.css">
 </head>
 
 <body>
-    <?php require_once __DIR__ . '/view/header.php'; ?>
+    <?php require_once '../agap_link/view/header.php'; ?>
 
-    <!-- HERO SECTION -->
+    <!-- Hero Section -->
     <section class="hero" id="home">
-        <div class="hero-background">
-        </div>
+        <div class="hero-background"></div>
         <div class="container">
             <div class="hero-content">
                 <span class="badge">
                     <span class="badge-dot"></span>
                     Live City Updates
-                </span>
+                </span> 
                 <h1 class="hero-title">
                     Welcome to<br>
                     <span class="hero-title-highlight">AGAP-Link</span>
@@ -37,13 +35,13 @@
         </div>
     </section>
 
-    <!-- FEATURES SECTION -->
+    <!-- Features Section -->
     <section class="features">
         <div class="container">
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon warning">
-                        <img src="assets/icons/alert_icon.png" alt="Report Hazard">
+                         <img src="assets/icons/alert_icon.png" alt="Report Hazard">
                     </div>
                     <h3 class="feature-title">Report Hazards</h3>
                     <p class="feature-description">Spot an issue? Report it instantly and help keep our city safe.</p>
@@ -51,7 +49,7 @@
 
                 <div class="feature-card">
                     <div class="feature-icon refresh">
-                        <img src="assets/icons/refresh_icon.png" alt="Refresh Updates">
+                       <img src="assets/icons/refresh_icon.png" alt="Refresh Updates">
                     </div>
                     <h3 class="feature-title">Real-Time Updates</h3>
                     <p class="feature-description">Stay informed with live notifications about your reported issues.</p>
@@ -59,7 +57,7 @@
 
                 <div class="feature-card">
                     <div class="feature-icon check">
-                        <img src="assets/icons/check_icon.png" alt="Check Status">
+                       <img src="assets/icons/check_icon.png" alt="Check Status">
                     </div>
                     <h3 class="feature-title">Track Progress</h3>
                     <p class="feature-description">Monitor the status of community projects and service requests.</p>
@@ -68,7 +66,7 @@
         </div>
     </section>
 
-    <!-- ABOUT SECTION -->
+    <!-- About Section -->
     <section class="about" id="services">
         <div class="container">
             <div class="about-grid">
@@ -80,7 +78,7 @@
                     </p>
                     <ul class="about-list">
                         <li>
-                            <img src="assets/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
+                           <img src="assets/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
                             <span>Direct line to city services</span>
                         </li>
                         <li>
@@ -95,15 +93,15 @@
                     </ul>
                 </div>
                 <div class="about-image">
-                    <div class="image-wrapper" style="position: relative; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-xl); height: 500px; ">
-                        <img src="assets/images/landing_page.png" alt="About Agap-Link" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-xl);">
+                    <div class="image-wrapper">
+                        <div class="image-placeholder"></div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ANNOUNCEMENTS SECTION -->
+    <!-- Announcements Section -->
     <section class="announcements" id="announcements">
         <div class="container">
             <div class="announcements-header">
@@ -114,12 +112,10 @@
                 <a href="#" class="btn btn-outline">View All</a>
             </div>
 
-            <div class="announcements-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: var(--spacing-xl);">
+            <div class="announcements-grid">
                 <article class="announcement-card">
                     <div class="announcement-image">
-                        <img src="assets/images/landing_page.png" alt="Announcement Image" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
-                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
-                        <span class="announcement-badge" style="position: relative; z-index: 2;">News</span>
+                        <span class="announcement-badge">News</span>
                     </div>
                     <div class="announcement-content">
                         <time class="announcement-date">Oct. 24, 2025</time>
@@ -131,9 +127,7 @@
 
                 <article class="announcement-card">
                     <div class="announcement-image">
-                        <img src="assets/images/landing_page.png" alt="Announcement Image" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
-                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
-                        <span class="announcement-badge" style="position: relative; z-index: 2;">News</span>
+                        <span class="announcement-badge">News</span>
                     </div>
                     <div class="announcement-content">
                         <time class="announcement-date">Oct. 24, 2025</time>
@@ -145,9 +139,7 @@
 
                 <article class="announcement-card">
                     <div class="announcement-image">
-                        <img src="assets/images/landing_page.png" alt="Announcement Image" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;">
-                        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></div>
-                        <span class="announcement-badge" style="position: relative; z-index: 2;">News</span>
+                        <span class="announcement-badge">News</span>
                     </div>
                     <div class="announcement-content">
                         <time class="announcement-date">Oct. 24, 2025</time>
@@ -173,7 +165,7 @@
         </div>
     </section>
 
-    <?php require_once __DIR__ . '/view/footer.php'; ?>
+    <?php require_once '../agap_link/view/footer.php'; ?>
 
     <script src="assets/js/main.js"></script>
 </body>
