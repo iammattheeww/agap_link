@@ -1,10 +1,5 @@
-/* ===================================
-   AGAP-Link Landing Page Styles
-   Modern, Bold Design with Sunset Theme
-   =================================== */
-
 :root {
-  /* Color Palette - Sunset & City Theme */
+  /* ROOT VARIABLES FOR COLOR PALETTE */
   --color-primary: #ff6b35;
   --color-primary-dark: #e85a2a;
   --color-primary-light: #ff8555;
@@ -21,11 +16,11 @@
   --color-success: #10b981;
   --color-warning: #f59e0b;
 
-  /* Typography */
+  /* ROOT VARIABLES FOR TYPOGRAPHY */
   --font-primary: "Outfit", sans-serif;
   --font-display: "Sora", sans-serif;
 
-  /* Spacing */
+  /* ROOT VARIABLES FOR SPACING */
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
   --spacing-md: 1.5rem;
@@ -34,28 +29,25 @@
   --spacing-2xl: 4rem;
   --spacing-3xl: 6rem;
 
-  /* Border Radius */
+  /* ROOT VARIABLES FOR RADIUS */
   --radius-sm: 0.5rem;
   --radius-md: 0.75rem;
   --radius-lg: 1rem;
   --radius-xl: 1.5rem;
 
-  /* Shadows */
+  /* ROOT VARIABLES FOR SHADOWS */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 
-  /* Transitions */
+  /* ROOT VARIABLES FOR TRANSITIONS */
   --transition-fast: 150ms ease;
   --transition-base: 250ms ease;
   --transition-slow: 350ms ease;
 }
 
-/* ===================================
-   Base Styles
-   =================================== */
-
+/* FONT-FACE RULE IMPORTS */
 @font-face {
   font-family: "Outfit";
   src: url("../fonts/Outfit-Regular.woff2") format("woff2");
@@ -119,10 +111,7 @@ body {
   padding: 0 var(--spacing-md);
 }
 
-/* ===================================
-   Typography
-   =================================== */
-
+/* TYPOGRAPHY */
 h1,
 h2,
 h3,
@@ -150,10 +139,7 @@ h6 {
   margin-bottom: var(--spacing-md);
 }
 
-/* ===================================
-   Buttons
-   =================================== */
-
+/* BUTTON STYLING */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -224,10 +210,7 @@ h6 {
   color: var(--color-primary);
 }
 
-/* ===================================
-   Header & Navigation
-   =================================== */
-
+/* HEADER AND TOPNAV SECTION STYLING */
 .main-header {
   position: fixed;
   top: 0;
@@ -315,10 +298,7 @@ h6 {
   transition: all var(--transition-base);
 }
 
-/* ===================================
-   Hero Section
-   =================================== */
-
+/* HERO SECTION STYLING */
 .hero {
   position: relative;
   min-height: 100vh;
@@ -467,10 +447,7 @@ h6 {
   animation: fadeInUp 0.8s ease 0.5s backwards;
 }
 
-/* ===================================
-   Features Section
-   =================================== */
-
+/* FEATURES SECTION STYLING */
 .features {
   position: relative;
   margin-top: -3rem;
@@ -550,9 +527,7 @@ h6 {
   line-height: 1.6;
 }
 
-/* ===================================
-   About Section
-   =================================== */
+/* ABOUT AGAP-LINK SECTION STYLING */
 
 .about {
   padding: var(--spacing-3xl) 0;
@@ -650,9 +625,7 @@ h6 {
   position: relative;
 }
 
-/* ===================================
-   Announcements Section
-   =================================== */
+/* ANNOUNCEMENT SECTION STYLING */
 
 .announcements {
   padding: var(--spacing-3xl) 0;
@@ -757,9 +730,7 @@ h6 {
   gap: 0.5rem;
 }
 
-/* ===================================
-   CTA Section
-   =================================== */
+/* CALL-TO-ACTION  BUTTON STYLING (LOCATED AT FOOTER SECTION) */
 
 .cta {
   padding: var(--spacing-3xl) 0;
@@ -811,9 +782,7 @@ h6 {
   line-height: 1.7;
 }
 
-/* ===================================
-   Footer
-   =================================== */
+/* FOOTER SECTION STYLING */
 
 .main-footer {
   background: var(--color-darker);
@@ -859,9 +828,7 @@ h6 {
   color: var(--color-primary);
 }
 
-/* ===================================
-   Responsive Design
-   =================================== */
+/* RESPONSIVE DESIGN (@media RULE) */
 
 @media (max-width: 992px) {
   .section-title {
@@ -877,7 +844,7 @@ h6 {
     gap: var(--spacing-xl);
   }
 
-  /* Mobile Navigation */
+  /* MOBILE TOP NAV */
   .nav-menu {
     position: fixed;
     top: 73px;
