@@ -1,7 +1,10 @@
-/* CSS ROOT VARIABLES */
+/* ===================================
+   AGAP-Link Landing Page Styles
+   Modern, Bold Design with Sunset Theme
+   =================================== */
+
 :root {
   /* Color Palette - Sunset & City Theme */
-  /*COLOR PALETTE - SUNSET & CITY THEME */
   --color-primary: #ff6b35;
   --color-primary-dark: #e85a2a;
   --color-primary-light: #ff8555;
@@ -18,11 +21,11 @@
   --color-success: #10b981;
   --color-warning: #f59e0b;
 
-  /* TYPOGRAPHY OR FONTS */
+  /* Typography */
   --font-primary: "Outfit", sans-serif;
   --font-display: "Sora", sans-serif;
 
-  /* SPACINGS */
+  /* Spacing */
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
   --spacing-md: 1.5rem;
@@ -37,19 +40,22 @@
   --radius-lg: 1rem;
   --radius-xl: 1.5rem;
 
-  /* SHADOW PROPERTIES */
+  /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 
-  /* TRANSITIONS */
+  /* Transitions */
   --transition-fast: 150ms ease;
   --transition-base: 250ms ease;
   --transition-slow: 350ms ease;
 }
 
-/* FONT FACE RULE */
+/* ===================================
+   Base Styles
+   =================================== */
+
 @font-face {
   font-family: "Outfit";
   src: url("../fonts/Outfit-Regular.woff2") format("woff2");
@@ -113,7 +119,10 @@ body {
   padding: 0 var(--spacing-md);
 }
 
-/* TYPOGRAPHY */
+/* ===================================
+   Typography
+   =================================== */
+
 h1,
 h2,
 h3,
@@ -141,7 +150,10 @@ h6 {
   margin-bottom: var(--spacing-md);
 }
 
-/* BUTTONS STYLE */
+/* ===================================
+   Buttons
+   =================================== */
+
 .btn {
   display: inline-flex;
   align-items: center;
@@ -212,7 +224,10 @@ h6 {
   color: var(--color-primary);
 }
 
-/* HEADER/TOPNAV STYLE */
+/* ===================================
+   Header & Navigation
+   =================================== */
+
 .main-header {
   position: fixed;
   top: 0;
@@ -300,7 +315,9 @@ h6 {
   transition: all var(--transition-base);
 }
 
-/* HERO SECTION STYLE */
+/* ===================================
+   Hero Section
+   =================================== */
 
 .hero {
   position: relative;
@@ -450,7 +467,9 @@ h6 {
   animation: fadeInUp 0.8s ease 0.5s backwards;
 }
 
-/* FEATURES SECTION STYLE */
+/* ===================================
+   Features Section
+   =================================== */
 
 .features {
   position: relative;
@@ -531,7 +550,9 @@ h6 {
   line-height: 1.6;
 }
 
-/* ABOUT SECTION STYLE */
+/* ===================================
+   About Section
+   =================================== */
 
 .about {
   padding: var(--spacing-3xl) 0;
@@ -629,7 +650,10 @@ h6 {
   position: relative;
 }
 
-/* ANNOUNCEMENTS SECTION STYLE */
+/* ===================================
+   Announcements Section
+   =================================== */
+
 .announcements {
   padding: var(--spacing-3xl) 0;
 }
@@ -733,7 +757,9 @@ h6 {
   gap: 0.5rem;
 }
 
-/* CTA SECTION (CALL-TO-ACTION BUTTON) */
+/* ===================================
+   CTA Section
+   =================================== */
 
 .cta {
   padding: var(--spacing-3xl) 0;
@@ -785,7 +811,9 @@ h6 {
   line-height: 1.7;
 }
 
-/* FOOTER STYLE */
+/* ===================================
+   Footer
+   =================================== */
 
 .main-footer {
   background: var(--color-darker);
@@ -831,7 +859,9 @@ h6 {
   color: var(--color-primary);
 }
 
-/* RESPONSIVE DESIGN */
+/* ===================================
+   Responsive Design
+   =================================== */
 
 @media (max-width: 992px) {
   .section-title {
@@ -847,7 +877,7 @@ h6 {
     gap: var(--spacing-xl);
   }
 
-  /* MOBILE NAV */
+  /* Mobile Navigation */
   .nav-menu {
     position: fixed;
     top: 73px;

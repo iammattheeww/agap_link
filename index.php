@@ -9,7 +9,7 @@
 </head>
 
 <body>
-    <?php require_once '../agap_link/view/header.php'; ?>
+    <?php require_once __DIR__ . '/view/header.php'; ?>
 
     <!-- Hero Section -->
     <section class="hero" id="home">
@@ -19,7 +19,7 @@
                 <span class="badge">
                     <span class="badge-dot"></span>
                     Live City Updates
-                </span> 
+                </span>
                 <h1 class="hero-title">
                     Welcome to<br>
                     <span class="hero-title-highlight">AGAP-Link</span>
@@ -41,7 +41,7 @@
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon warning">
-                         <img src="assets/icons/alert_icon.png" alt="Report Hazard">
+                        <img src="assets/icons/alert_icon.png" alt="Report Hazard">
                     </div>
                     <h3 class="feature-title">Report Hazards</h3>
                     <p class="feature-description">Spot an issue? Report it instantly and help keep our city safe.</p>
@@ -49,7 +49,7 @@
 
                 <div class="feature-card">
                     <div class="feature-icon refresh">
-                       <img src="assets/icons/refresh_icon.png" alt="Refresh Updates">
+                        <img src="assets/icons/refresh_icon.png" alt="Refresh Updates">
                     </div>
                     <h3 class="feature-title">Real-Time Updates</h3>
                     <p class="feature-description">Stay informed with live notifications about your reported issues.</p>
@@ -57,7 +57,7 @@
 
                 <div class="feature-card">
                     <div class="feature-icon check">
-                       <img src="assets/icons/check_icon.png" alt="Check Status">
+                        <img src="assets/icons/check_icon.png" alt="Check Status">
                     </div>
                     <h3 class="feature-title">Track Progress</h3>
                     <p class="feature-description">Monitor the status of community projects and service requests.</p>
@@ -78,7 +78,7 @@
                     </p>
                     <ul class="about-list">
                         <li>
-                           <img src="assets/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
+                            <img src="assets/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
                             <span>Direct line to city services</span>
                         </li>
                         <li>
@@ -165,7 +165,7 @@
         </div>
     </section>
 
-    <?php require_once '../agap_link/view/footer.php'; ?>
+    <?php require_once __DIR__ . '/view/footer.php'; ?>
 
     <script src="assets/js/main.js"></script>
 </body>
