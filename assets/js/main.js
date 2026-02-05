@@ -1,14 +1,7 @@
-/**
- * AGAP-Link Landing Page JavaScript
- * Handles navigation, animations, and interactions
- */
-
 (function () {
   "use strict";
 
-  // ===================================
-  // Mobile Navigation Toggle
-  // ===================================
+  // MOBILE NAVIGATION TOGGLE 
   const mobileToggle = document.getElementById("mobileToggle");
   const navMenu = document.getElementById("navMenu");
 
@@ -18,6 +11,7 @@
       navMenu.classList.toggle("active");
 
       // Animate toggle bars
+      // ANIMATE TOGGLE BARS
       const spans = this.querySelectorAll("span");
       if (this.classList.contains("active")) {
         spans[0].style.transform = "rotate(45deg) translateY(8px)";
@@ -30,7 +24,7 @@
       }
     });
 
-    // Close menu when clicking outside
+    // CLOSE MENU WHEN CLICING OUTSIDE
     document.addEventListener("click", function (e) {
       if (!mobileToggle.contains(e.target) && !navMenu.contains(e.target)) {
         mobileToggle.classList.remove("active");
@@ -43,9 +37,7 @@
     });
   }
 
-  // ===================================
-  // Smooth Scrolling for Navigation Links
-  // ===================================
+  // SMOOTH SCROLLING FOR NAVIGATION LINKS
   const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
 
   navLinks.forEach((link) => {
@@ -78,9 +70,7 @@
     });
   });
 
-  // ===================================
-  // Header Scroll Effect
-  // ===================================
+  // HEADER SCROLL EFFECT 
   let lastScroll = 0;
   const header = document.querySelector(".main-header");
 
@@ -95,7 +85,7 @@
       header.style.padding = "1rem 0";
     }
 
-    // Hide header on scroll down, show on scroll up
+    // HIDE HEADER ON SCROLL DOWN, SHOW ON SCROLL UP 
     if (currentScroll > lastScroll && currentScroll > 500) {
       header.style.transform = "translateY(-100%)";
     } else {
@@ -105,9 +95,7 @@
     lastScroll = currentScroll;
   });
 
-  // ===================================
-  // Scroll Animation Observer
-  // ===================================
+  // SCROLL ANIMATION OBSERVER
   const observerOptions = {
     threshold: 0.1,
     rootMargin: "0px 0px -50px 0px",
@@ -122,15 +110,13 @@
     });
   }, observerOptions);
 
-  // Observe elements for animation
+  // OBSERVE ELEMENTS FOR ANIMATION
   const animatedElements = document.querySelectorAll(
     ".feature-card, .announcement-card",
   );
   animatedElements.forEach((el) => observer.observe(el));
 
-  // ===================================
-  // Parallax Effect for Hero Background
-  // ===================================
+  // PARALLAX EFFECT FOR HERO BACKGROUND
   const heroBackground = document.querySelector(".hero-background");
 
   if (heroBackground) {
@@ -144,9 +130,7 @@
     });
   }
 
-  // ===================================
-  // Counter Animation for Statistics (if needed)
-  // ===================================
+  // COUNTER ANIMATION FOR STATISTICS (IF NEEDED)
   function animateCounter(element, target, duration = 2000) {
     let current = 0;
     const increment = target / (duration / 16);
@@ -162,9 +146,7 @@
     }, 16);
   }
 
-  // ===================================
-  // Form Validation (for future contact form)
-  // ===================================
+  // FORM VALIDATION (FOR FUTURE CONTACT FORM)
   function validateEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
@@ -193,9 +175,7 @@
     return isValid;
   }
 
-  // ===================================
-  // Add Hover Effect to Cards
-  // ===================================
+  // ADD HOVER EFFECTS TO CARDS
   const cards = document.querySelectorAll(".feature-card, .announcement-card");
 
   cards.forEach((card) => {
@@ -204,9 +184,7 @@
     });
   });
 
-  // ===================================
-  // Active Navigation Highlight on Scroll
-  // ===================================
+  // ACTIVE NAVIGATION HIGHLIGHT ON SCROLL
   window.addEventListener("scroll", function () {
     const sections = document.querySelectorAll("section[id]");
     const scrollPosition = window.pageYOffset + 200;
@@ -230,9 +208,7 @@
     });
   });
 
-  // ===================================
-  // Lazy Loading Images (future enhancement)
-  // ===================================
+  // LAZY LOADING IMAGES (FUTURE ENHANCEMENT)
   if ("IntersectionObserver" in window) {
     const imageObserver = new IntersectionObserver((entries, observer) => {
       entries.forEach((entry) => {
@@ -249,9 +225,7 @@
     images.forEach((img) => imageObserver.observe(img));
   }
 
-  // ===================================
-  // Add Loading State to Buttons
-  // ===================================
+  // ADD LOADING STATE TO BUTTONS 
   function addLoadingState(button) {
     button.classList.add("loading");
     button.disabled = true;
@@ -265,9 +239,7 @@
     };
   }
 
-  // ===================================
-  // Toast Notification System (future use)
-  // ===================================
+  // TOAST NOTIFICATION SYSTEM (FUTURE USE) 
   function showToast(message, type = "info", duration = 3000) {
     const toast = document.createElement("div");
     toast.className = `toast toast-${type}`;
@@ -287,10 +259,8 @@
     }, duration);
   }
 
-  // ===================================
-  // Performance Optimization
-  // ===================================
-  // Debounce function for scroll events
+  // PERFORMANCE OPTIMIZATION 
+  // DEBOUNCE FUNCTION FOR SCROLL EVENTS 
   function debounce(func, wait = 20) {
     let timeout;
     return function executedFunction(...args) {
@@ -303,7 +273,7 @@
     };
   }
 
-  // Throttle function for resize events
+  // THROTTLE FUNCTION FOR RESIZE EVENTS
   function throttle(func, limit = 100) {
     let inThrottle;
     return function (...args) {
@@ -315,13 +285,11 @@
     };
   }
 
-  // ===================================
-  // Initialize on DOM Ready
-  // ===================================
+  // INITIALIZE ON DOM READY 
   document.addEventListener("DOMContentLoaded", function () {
     console.log("AGAP-Link initialized successfully!");
 
-    // Add fade-in animation to hero content
+    // ADD FADE-IN ANIMATION TO HERO CONTENT
     const heroContent = document.querySelector(".hero-content");
     if (heroContent) {
       setTimeout(() => {
@@ -329,12 +297,10 @@
       }, 100);
     }
 
-    // Initialize any third-party libraries here
-  });
+    // INITIALIZE ANY THIRD-PARTY LIBRARIES HERE
+  }); 
 
-  // ===================================
-  // Export functions for external use
-  // ===================================
+  // EXPORT FUNCTIONS FOR EXTERNAL USE 
   window.AGAPLink = {
     showToast,
     validateForm,
