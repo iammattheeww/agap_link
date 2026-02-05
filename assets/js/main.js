@@ -10,7 +10,6 @@
       this.classList.toggle("active");
       navMenu.classList.toggle("active");
 
-      // Animate toggle bars
       // ANIMATE TOGGLE BARS
       const spans = this.querySelectorAll("span");
       if (this.classList.contains("active")) {
@@ -24,7 +23,7 @@
       }
     });
 
-    // CLOSE MENU WHEN CLICING OUTSIDE
+    // CLOSE MENU WHEN CLICKING OUTSIDE
     document.addEventListener("click", function (e) {
       if (!mobileToggle.contains(e.target) && !navMenu.contains(e.target)) {
         mobileToggle.classList.remove("active");
