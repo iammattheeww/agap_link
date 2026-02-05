@@ -12,7 +12,7 @@
 <body>
     <?php require_once __DIR__ . '/view/header.php'; ?>
 
-    <!-- Hero Section -->
+    <!-- HERO SECTION -->
     <section class="hero" id="home">
         <div class="hero-background"></div>
         <div class="container">
@@ -36,7 +36,7 @@
         </div>
     </section>
 
-    <!-- Features Section -->
+    <!-- FEATURES SECTION -->
     <section class="features">
         <div class="container">
             <div class="features-grid">
@@ -67,7 +67,7 @@
         </div>
     </section>
 
-    <!-- About Section -->
+    <!-- ABOUT SECTION -->
     <section class="about" id="services">
         <div class="container">
             <div class="about-grid">
