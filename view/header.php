@@ -28,6 +28,7 @@
                     </div>
                     
                     <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+                        <!-- SPAN TAGS FOR HAMBURGER ICON -->
                         <span></span>
                         <span></span>
                         <span></span>
