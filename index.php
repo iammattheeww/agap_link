@@ -161,7 +161,7 @@
                 <p class="cta-description">
                     Join thousands of citizens contributing to a better city environment today.
                 </p>
-                <a href="#" class="btn btn-primary btn-lg">Create Account Now</a>
+                <a href="login/index.php" class="btn btn-primary btn-lg">Create Account Now</a>
             </div>
         </div>
     </section>
