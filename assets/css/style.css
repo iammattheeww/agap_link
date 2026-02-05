@@ -828,6 +828,17 @@ h6 {
   color: var(--color-primary);
 }
 
+/* MOBILE LOGIN BUTTON VISIBILITY */
+.mobile-only {
+  display: none;
+}
+
+.mobile-login-btn {
+  width: 100%;
+  justify-content: center;
+  margin-top: var(--spacing-sm);
+}
+
 /* RESPONSIVE BREAKPOINTS (@media rule) */
 
 /* 0px to 480px - SMALLER SMARTPHONES */
@@ -1050,6 +1061,11 @@ h6 {
   .nav-actions .btn-link {
     display: none;
   }
+
+  /* SHOW MOBILE LOGIN BUTTON */
+  .mobile-only {
+    display: block;
+  }
 }
 
 /* 481px to 768px - TABLETS AND LARGER SMARTPHONES */
@@ -1192,6 +1208,11 @@ h6 {
 
   .footer-links {
     justify-content: center;
+  }
+
+  /* SHOW MOBILE LOGIN BUTTON */
+  .mobile-only {
+    display: block;
   }
 }
 
