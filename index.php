@@ -93,11 +93,46 @@
                         </li>
                     </ul>
                 </div>
+
                 <div class="about-image">
                     <div class="image-wrapper">
-                        <div class="image-placeholder"></div>
+                        <div class="image-placeholder">
+                            <img src="assets/images/landing_announcements.jpg" alt="About Agap-Link" class="about-img">
+                        </div>
                     </div>
                 </div>
+
+                <!-- 
+                    <div class="about-image">
+                        <div class="image-wrapper">
+                            <div class="image-placeholder"></div>
+                        </div>
+                    </div> 
+                -->
+
+                <!-- 
+                    <div class="image-wrapper" style="position: relative; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-xl);">
+                        <div class="image-placeholder" style="width: 100%; padding-bottom: 100%; background: linear-gradient(135deg, rgba(26, 35, 50, 0.9), rgba(44, 62, 80, 0.8)), url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="100" height="100" fill="%231A2332" />
+                            <circle cx="30" cy="30" r="2" fill="%23FF6B35" opacity="0.6" />
+                            <circle cx="70" cy="50" r="3" fill="%23FF6B35" opacity="0.4" />
+                            <circle cx="50" cy="80" r="2" fill="%23FF6B35" opacity="0.5" /></svg>'); background-size:
+                            cover,
+                            50px 50px;
+                            position: relative;"><img src="assets/images/landing_page.png" alt="About Agap-Link" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-xl);">
+                        </div>
+                    </div> 
+                -->
+
+                <!-- 
+                <div class="about-image">
+                    <div class="image-wrapper" style="position: relative; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-xl);">
+                        <div class="image-placeholder" style="width: 100%; padding-bottom: 100%; background: linear-gradient(135deg, rgba(26, 35, 50, 0.9), rgba(44, 62, 80, 0.8)), url('data:image/svg+xml,%3Csvg width=%22100%22 height=%22100%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%231A2332%22 /%3E%3Ccircle cx=%2230%22 cy=%2230%22 r=%222%22 fill=%22%23FF6B35%22 opacity=%220.6%22 /%3E%3Ccircle cx=%2270%22 cy=%2250%22 r=%223%22 fill=%22%23FF6B35%22 opacity=%220.4%22 /%3E%3Ccircle cx=%2250%22 cy=%2280%22 r=%222%22 fill=%22%23FF6B35%22 opacity=%220.5%22 /%3E%3C/svg%3E'); background-size: cover, 50px 50px; position: relative;">
+                            <img src="assets/images/landing_announcements.jpg" alt="About Agap-Link" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-xl);">
+                        </div>
+                    </div>
+                </div> 
+                -->
             </div>
         </div>
     </section>
@@ -119,9 +154,9 @@
                         <span class="announcement-badge">News</span>
                     </div>
                     <div class="announcement-content">
-                        <time class="announcement-date">Oct. 24, 2025</time>
-                        <h3 class="announcement-title">City infrastructure upgrades starting next week</h3>
-                        <p class="announcement-description">Major renovations to the downtown district will begin this...</p>
+                        <time class="announcement-date">February 4, 2026</time>
+                        <h3 class="announcement-title">Red Alert Status: Tropical Cyclone Basyang (Penha)</h3>
+                        <p class="announcement-description">The Provincial Disaster Risk Reduction and Management Council (PDRRMC) has placed Negros Occidental under Red Alert Status. Heavy rainfall (50–100 mm) is expected to continue through the weekend, specifically targeting southern Negros and coastal areas.</p>
                         <a href="#" class="announcement-link">Read More →</a>
                     </div>
                 </article>
@@ -131,9 +166,9 @@
                         <span class="announcement-badge">News</span>
                     </div>
                     <div class="announcement-content">
-                        <time class="announcement-date">Oct. 24, 2025</time>
-                        <h3 class="announcement-title">City infrastructure upgrades starting next week</h3>
-                        <p class="announcement-description">Major renovations to the downtown district will begin this...</p>
+                        <time class="announcement-date">February 6, 2026</time>
+                        <h3 class="announcement-title">Province-Wide Class & Work Suspensions</h3>
+                        <p class="announcement-description">Due to the severe weather conditions and the Yellow Heavy Rainfall Warning issued by PAGASA, Governor Eugenio Jose Lacson and Mayor Greg Gasataya have suspended classes at all levels in Bacolod City and several other LGUs (including Silay, Talisay, and Bago) through February 6, 2026.</p>
                         <a href="#" class="announcement-link">Read More →</a>
                     </div>
                 </article>
@@ -143,9 +178,9 @@
                         <span class="announcement-badge">News</span>
                     </div>
                     <div class="announcement-content">
-                        <time class="announcement-date">Oct. 24, 2025</time>
-                        <h3 class="announcement-title">City infrastructure upgrades starting next week</h3>
-                        <p class="announcement-description">Major renovations to the downtown district will begin this...</p>
+                        <time class="announcement-date">February 6, 2026</time>
+                        <h3 class="announcement-title">Infrastructure Advisory: Landslide & Flash Flood Risk</h3>
+                        <p class="announcement-description">The infrastructure advisory for Negros Occidental is tied to the current events this week, specifically the risks of landslides and flash floods caused by Tropical Storm Basyang (Penha), which has led to widespread work and class suspensions across the province as of today, Friday, February 6.</p>
                         <a href="#" class="announcement-link">Read More →</a>
                     </div>
                 </article>
