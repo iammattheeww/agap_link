@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <?php require_once __DIR__ . '/view/partials/header.php'; ?>
+    <?php require_once 'view/partials/header.php'; ?>
 
     <!-- HERO SECTION -->
     <section class="hero" id="home">
@@ -211,7 +211,7 @@
         </div>
     </section>
 
-    <?php require_once __DIR__ . '/view/partials/footer.php'; ?>
+    <?php require_once 'view/partials/footer.php'; ?>
 </body>
 
 </html>

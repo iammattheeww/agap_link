@@ -7,9 +7,9 @@
             </div>
 
             <div class="footer-links">
-                <a href="#privacy" class="footer-link">Privacy Policy</a>
-                <a href="#terms" class="footer-link">Terms of Service</a>
-                <a href="#support" class="footer-link">Contact Support</a>
+                <a href="#" class="footer-link">Privacy Policy</a>
+                <a href="#" class="footer-link">Terms of Service</a>
+                <a href="#" class="footer-link">Contact Support</a>
             </div>
         </div>
     </div>

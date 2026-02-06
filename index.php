@@ -1,5 +1,5 @@
 <?php
-include 'config/config.php';
+include 'config/agaplinkdb.php';
 
 $page    = isset($_GET['page']) ? $_GET['page'] : '';
 $subpage = isset($_GET['subpage']) ? $_GET['subpage'] : '';
@@ -37,7 +37,7 @@ $id      = isset($_GET['id']) ? $_GET['id'] : '';
             break;
 
         default:
-            require_once 'view/landing/index.php';
+            require_once 'view/landing_module/index.php';
             break;
     }
     ?>
