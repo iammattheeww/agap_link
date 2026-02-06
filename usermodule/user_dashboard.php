@@ -9,7 +9,11 @@ if (!isset($_SESSION['user_id'])) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dashboard - AGAP-Link</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../agap_link/assets/favicon_io/favicon.ico">
+    <title>User Dashboard - AGAP-Link</title>
+    <link rel="stylesheet" href="../agap_link/assets/css/style.css">
 </head>
 <body>
     <h1>Welcome, <?= htmlspecialchars($_SESSION['user_name']) ?>!</h1>

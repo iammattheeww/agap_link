@@ -7,6 +7,7 @@
     <link rel="icon" type="image/x-icon" href="../agap_link/assets/favicon_io/favicon.ico">
     <title>AGAP-Link - Your Ultimate City Companion</title>
     <link rel="stylesheet" href="../agap_link/assets/css/style.css">
+    <script src="assets/js/main.js"></script>
 </head>
 
 <body>
@@ -211,8 +212,6 @@
     </section>
 
     <?php require_once __DIR__ . '/view/footer.php'; ?>
-
-    <script src="assets/js/main.js"></script>
 </body>
 
 </html>
