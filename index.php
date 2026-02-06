@@ -97,7 +97,7 @@
                 <div class="about-image">
                     <div class="image-wrapper">
                         <div class="image-placeholder">
-                            <img src="assets/images/landing_announcements.jpg" alt="About Agap-Link" class="about-img">
+                            <img src="assets/images/landing_about.jpg" alt="About Agap-Link" class="about-img">
                         </div>
                     </div>
                 </div>
@@ -137,7 +137,7 @@
         </div>
     </section>
 
-    <!-- Announcements Section -->
+    <!-- ANNOUNCEMENTS SECTION -->
     <section class="announcements" id="announcements">
         <div class="container">
             <div class="announcements-header">
@@ -151,6 +151,9 @@
             <div class="announcements-grid">
                 <article class="announcement-card">
                     <div class="announcement-image">
+                        <div class="announcement-img-placeholder">
+                            <img src="assets/images/landing_announcement_01.jpg" alt="Announcement Image" class="announcement-img">
+                        </div>
                         <span class="announcement-badge">News</span>
                     </div>
                     <div class="announcement-content">
@@ -163,6 +166,9 @@
 
                 <article class="announcement-card">
                     <div class="announcement-image">
+                        <div class="announcement-img-placeholder">
+                            <img src="assets/images/landing_announcement_02.jpg" alt="Announcement Image" class="announcement-img">
+                        </div>
                         <span class="announcement-badge">News</span>
                     </div>
                     <div class="announcement-content">
@@ -175,6 +181,9 @@
 
                 <article class="announcement-card">
                     <div class="announcement-image">
+                        <div class="announcement-img-placeholder">
+                            <img src="assets/images/landing_announcement_03.jpg" alt="Announcement Image" class="announcement-img">
+                        </div>
                         <span class="announcement-badge">News</span>
                     </div>
                     <div class="announcement-content">
