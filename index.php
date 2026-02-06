@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="../agap_link/assets/favicon_io/favicon.ico">
     <title>AGAP-Link - Your Ultimate City Companion</title>
-    <link rel="stylesheet" href="../agap_link/assets/css/style.css">
-    <script src="assets/js/main.js"></script>
+    <link rel="stylesheet" href="../agap_link/assets/css/landing_page/style.css">
+    <script src="assets/js/landing/main.js"></script>
 </head>
 
 <body>
-    <?php require_once __DIR__ . '/view/header.php'; ?>
+    <?php require_once __DIR__ . '/view/partials/header.php'; ?>
 
     <!-- HERO SECTION -->
     <section class="hero" id="home">
@@ -211,7 +211,7 @@
         </div>
     </section>
 
-    <?php require_once __DIR__ . '/view/footer.php'; ?>
+    <?php require_once __DIR__ . '/view/partials/footer.php'; ?>
 </body>
 
 </html>

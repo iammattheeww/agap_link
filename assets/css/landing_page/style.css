@@ -50,38 +50,51 @@
 /* FONT-FACE RULE IMPORTS */
 @font-face {
   font-family: "Outfit";
-  src: url("../fonts/Outfit-Regular.woff2") format("woff2");
+  /*  src: url("/agap_link/assets/fonts/Outfit-Regular.woff2") format("woff2"); */
+  src: url("../../fonts/Outfit-Regular.woff2") format("woff2");
   font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
-
 @font-face {
   font-family: "Outfit";
-  src: url("../fonts/Outfit-SemiBold.woff2") format("woff2");
+  /*  src: url("/agap_link/assets/fonts/Outfit-SemiBold.woff2") format("woff2"); */
+  src: url("../../fonts/Outfit-SemiBold.woff2") format("woff2");
   font-weight: 600;
+  font-style: normal;
+  font-display: swap;
 }
-
 @font-face {
   font-family: "Outfit";
-  src: url("../fonts/Outfit-Bold.woff2") format("woff2");
+  /*  src: url("/agap_link/assets/fonts/Outfit-Bold.woff2") format("woff2"); */
+  src: url("../../fonts/Outfit-Bold.woff2") format("woff2");
   font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
-
 @font-face {
   font-family: "Sora";
-  src: url("../fonts/Sora-Regular.woff2") format("woff2");
+  /*  src: url("/agap_link/assets/fonts/Sora-Regular.woff2") format("woff2"); */
+  src: url("../../fonts/Sora-Regular.woff2") format("woff2");
   font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
-
 @font-face {
   font-family: "Sora";
-  src: url("../fonts/Sora-SemiBold.woff2") format("woff2");
+  /*  src: url("/agap_link/assets/fonts/Sora-SemiBold.woff2") format("woff2"); */
+  src: url("../../fonts/Sora-SemiBold.woff2") format("woff2");
   font-weight: 600;
+  font-style: normal;
+  font-display: swap;
 }
-
 @font-face {
   font-family: "Sora";
-  src: url("../fonts/Sora-Bold.woff2") format("woff2");
+  /*  src: url("/agap_link/assets/fonts/Sora-Bold.woff2") format("woff2"); */
+  src: url("../../fonts/Sora-Bold.woff2") format("woff2");
   font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
 
 * {
@@ -316,7 +329,8 @@ h6 {
   bottom: 0;
   background:
     linear-gradient(135deg, rgba(26, 35, 50, 0.75), rgba(44, 62, 80, 0.65)),
-    url("../images/landing_page.png");
+    url("../../images/landing_page.png");
+  /* url("/agap_link/assets/images/landing_page.png"); */
 
   background-size: cover;
   background-position: center;
