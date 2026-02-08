@@ -1,7 +1,13 @@
 <?php
 session_start();
+
+// DESTROY ALL SESSION DATA
 session_unset();
 session_destroy();
 
-header("Location: /agap_link/view/auth/index.php");
+session_start();
+$_SESSION['success'] = "You have been logged out successfully.";
+
+// REDIRECT TO LANDING PAGE
+header("Location: /agap_link/index.php");
 exit;
