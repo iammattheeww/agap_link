@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['admin_logged_in'])) {
-    header("Location: /agap_link/login/index.php");
+    header("Location: /agap_link/view/auth/index.php");
     exit();
 }
 ?>
@@ -19,7 +19,7 @@ if (!isset($_SESSION['admin_logged_in'])) {
 
 <p>This is the admin dashboard.</p>
 
-<a href="/agap_link/login/logout.php">Logout</a>
+<a href="/agap_link/view/auth/index.php">Logout</a>
 
 </body>
 </html>
