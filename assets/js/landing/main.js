@@ -57,12 +57,12 @@
           behavior: "smooth",
         });
 
-        // Close mobile menu if open
+        // CLOSE MOBILE MENU IF OPEN
         if (navMenu.classList.contains("active")) {
           mobileToggle.click();
         }
 
-        // Update active state
+        // UPDATE ACTIVE STATE
         navLinks.forEach((l) => l.classList.remove("active"));
         this.classList.add("active");
       }
