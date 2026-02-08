@@ -293,6 +293,47 @@ h6 {
   gap: var(--spacing-md);
 }
 
+/* USER GREETING IN NAVIGATION */
+
+/* USER GREETING IN NAVIGATION */
+.user-greeting {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-gray-800);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  margin-right: var(--spacing-sm);
+}
+
+.user-greeting strong {
+  color: var(--color-primary);
+  margin-left: 0.25rem;
+}
+
+/* DASHBOARD BUTTON IN NAV */
+.nav-actions .btn-outline {
+  padding: 0.625rem 1.25rem;
+  font-size: 0.875rem;
+}
+
+/* RESPONSIVE ADJUSTMENTS FOR USER GREETING */
+@media (min-width: 0px) and (max-width: 768px) {
+  .user-greeting {
+    display: none; /* HIDES ON MOBILE*/ 
+  }
+
+  .nav-actions .btn-outline {
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1279px) {
+  .user-greeting {
+    font-size: 0.875rem;
+  }
+}
+
 .mobile-toggle {
   display: none;
   flex-direction: column;
