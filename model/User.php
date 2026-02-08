@@ -83,7 +83,7 @@ class User
         return false;
     }
 
-    // GET USE ID BY EMAIL
+    // GET USER ID BY EMAIL
     public function get_user_id($email)
     {
         $sql = "SELECT id FROM users WHERE email = :email";
