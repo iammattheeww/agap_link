@@ -21,7 +21,7 @@ if (!isset($_SESSION['user_id'])) {
     <h1>Welcome, <?= htmlspecialchars($_SESSION['user_name']) ?>!</h1>
     <p>You are now logged in.</p>
 
-    <a href="/agap_link/view/auth/index.php">Logout</a>
+    <a href="/agap_link/view/auth/logout.php">Logout</a>
 </body>
 
 </html>
