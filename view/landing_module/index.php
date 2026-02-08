@@ -1,3 +1,10 @@
+<?php
+session_start();
+
+// CHECK IF USER IS LOGGED IN
+$is_user_logged_in = isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true;
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -28,10 +35,24 @@
                 <p class="hero-description">
                     Your ultimate city companion! Access services, report issues, and stay connected with your community in real-time.
                 </p>
+
+                <!-- CONDITIONAL HERO BUTTONS -->
                 <div class="hero-actions">
+                    <?php if ($is_user_logged_in): ?>
+                        <!-- IF USER IS LOGGED IN, IT SHOWS THE DASHBOARD AND DOWNLOAD APP BUTTONS -->
+                        <a href="/agap_link/view/user_module/user_dashboard.php" class="btn btn-primary btn-lg">Go to Dashboard</a>
+                        <a href="#services" class="btn btn-secondary btn-lg">Learn More</a>
+                    <?php else: ?>
+                        <!-- IF USER IS NOT LOGGED IN, IT SHOWS THE DOWNLOAD APP AND LEARN MORE CTA BUTTONS -->
+                        <a href="/agap_link/view/auth/index.php" class="btn btn-primary btn-lg">Get Started</a>
+                        <a href="#services" class="btn btn-secondary btn-lg">Learn More</a>
+                    <?php endif; ?>
+                </div>
+
+                <!-- <div class="hero-actions">
                     <a href="/agap_link/login/index.php" class="btn btn-primary btn-lg">Download App</a>
                     <a href="#" class="btn btn-secondary btn-lg">Learn More</a>
-                </div>
+                </div> -->
             </div>
         </div>
     </section>
@@ -201,11 +222,27 @@
     <section class="cta" id="contact">
         <div class="container">
             <div class="cta-content">
-                <h2 class="cta-title">Ready to make a difference?</h2>
-                <p class="cta-description">
+                <?php if ($is_user_logged_in): ?>
+                    <!-- IF USER IS LOGGED IN, A DIFFERENT CTA BUTTON IS DISPLAYED -->
+                    <h2 class="cta-title">Start Making a Difference Today</h2>
+                    <p class="cta-description">
+                        Report issues, track progress, and contribute to a better city environment.
+                    </p>
+                    <a href="/agap_link/view/user_module/user_dashboard.php" class="btn btn-primary btn-lg">Go to Dashboard</a>
+                <?php else: ?>
+                    <!-- IF USER IS NOT LOGGED IN "Create Account Now" CTA IS DISPLAYED AS USUAL -->
+                    <h2 class="cta-title">Ready to make a difference?</h2>
+                    <p class="cta-description">
+                        Join thousands of citizens contributing to a better city environment today.
+                    </p>
+                    <a href="/agap_link/view/auth/index.php" class="btn btn-primary btn-lg">Create Account Now</a>
+                <?php endif; ?>
+
+                <!-- <h2 class="cta-title">Ready to make a difference?</h2> -->
+                <!-- <p class="cta-description">
                     Join thousands of citizens contributing to a better city environment today.
-                </p>
-                <a href="login/index.php" class="btn btn-primary btn-lg">Create Account Now</a>
+                </p> -->
+                <!-- <a href="login/index.php" class="btn btn-primary btn-lg">Create Account Now</a> -->
             </div>
         </div>
     </section>
