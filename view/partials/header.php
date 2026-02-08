@@ -1,3 +1,8 @@
+<?php
+$is_user_logged_in = isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true;
+$is_admin_logged_in = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true;
+$user_name = $is_user_logged_in ? $_SESSION['user_name'] : '';
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -26,12 +31,40 @@
                         <!-- LOGIN BUTTON FOR MOBILE (HIDDEN ON DESKTOP) -->
                         <!-- <li class="mobile-only"><a href="/agap_link/login/index.php" class="btn btn-primary mobile-login-btn">Login</a></li> -->
                         <li class="mobile-only"><a href="/agap_link/view/auth/index.php" class="btn btn-primary mobile-login-btn">Login</a></li>
+
+                        <!-- LOGGED IN USER BUTTONS -->
+                        <?php if ($is_user_logged_in): ?>
+                            <!-- MOBILE ONLY: DASHBOARD CTA -->
+                            <li class="mobile-only">
+                                <a href="/agap_link/view/user_module/user_dashboard.php" class="nav-link">Dashboard</a>
+                            </li>
+                            <!-- MOBILE ONLY: LOGOUT BUTTON-->
+                            <li class="mobile-only">
+                                <a href="/agap_link/view/auth/logout.php" class="nav-link">Logout</a>
+                            </li>
+                        <?php else: ?>
+                            <!-- MOBILE ONLY: LOGIN BUTTON -->
+                            <li class="mobile-only">
+                                <a href="/agap_link/view/auth/index.php" class="btn btn-primary mobile-login-btn">Login</a>
+                            </li>
+                        <?php endif; ?>
                     </ul>
 
                     <div class="nav-actions">
+                        <!-- IF USER IS LOGGED IN, IT DISPLAYS THE USERNAME, THE DASHBOARD, AND LOGOUT BUTTONS -->
+                        <?php if ($is_user_logged_in): ?>
+                            <!-- IF USER IS LOGGED IN, IT SHOWS THE USERNAME GREETING, THE DASHBOARD AND LOGOUT BUTTONS -->
+                            <span class="user-greeting">Hello, <strong><?php echo htmlspecialchars($user_name); ?></strong></span>
+                            <a href="/agap_link/view/user_module/user_dashboard.php" class="btn btn-outline">Dashboard</a>
+                            <a href="/agap_link/view/auth/logout.php" class="btn btn-link">Logout</a>
+                        <?php else: ?>
+                            <!-- IF USER IS NOT LOGGED IN, IT SHOWS THE LOGIN BUTTON -->
+                            <a href="/agap_link/view/auth/index.php" class="btn btn-primary">Login</a>
+                        <?php endif; ?>
+                        
                         <!-- <a href="/agap_link/login/index.php" class="btn-link">Login</a> -->
-                        <a href="/agap_link/view/auth/index.php" class="btn-link">Login</a>
-                        <a href="#" class="btn btn-primary">Get App</a>
+                        <!-- <a href="/agap_link/view/auth/index.php" class="btn-link">Login</a> -->
+                        <!-- <a href="#" class="btn btn-primary">Get App</a> -->
                     </div>
 
                     <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
