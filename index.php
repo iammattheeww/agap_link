@@ -21,7 +21,7 @@ $id      = isset($_GET['id']) ? $_GET['id'] : '';
 
 <body>
     <?php
-    $page = $_GET['page'] ?? 'landing';
+    $page = $_GET['page'] ?? 'landing'; // SAME AS $page = isset($_GET['page']) ? $_GET['page'] : 'landing';
 
     switch ($page) {
         case 'login':
