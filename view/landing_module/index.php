@@ -6,8 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="../agap_link/assets/favicon_io/favicon.ico">
     <title>AGAP-Link - Your Ultimate City Companion</title>
-    <link rel="stylesheet" href="../agap_link/assets/css/landing_page/style.css">
-    <script src="assets/js/landing/main.js"></script>
+    <link rel="stylesheet" href="/agap_link/assets/css/landing_page/style.css">
 </head>
 
 <body>
@@ -210,6 +209,8 @@
             </div>
         </div>
     </section>
+
+    <script src="/agap_link/assets/js/landing/main.js"></script>
 
     <?php require_once 'view/partials/footer.php'; ?>
 </body>
