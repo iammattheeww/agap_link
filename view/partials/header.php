@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AGAP-Link - Your Ultimate City Companion</title>
-    <link rel="stylesheet" href="../agap_link/assets/css/style.css">
+    <!-- <link rel="stylesheet" href="../agap_link/assets/css/style.css"> -->
+    <link rel="stylesheet" href="/agap_link/assets/css/landing_page/style.css">
 </head>
 
 <body>
@@ -23,11 +24,13 @@
                         <li><a href="#announcements" class="nav-link">Announcements</a></li>
                         <li><a href="#contact" class="nav-link">Contact</a></li>
                         <!-- LOGIN BUTTON FOR MOBILE (HIDDEN ON DESKTOP) -->
-                        <li class="mobile-only"><a href="/agap_link/login/index.php" class="btn btn-primary mobile-login-btn">Login</a></li>
+                        <!-- <li class="mobile-only"><a href="/agap_link/login/index.php" class="btn btn-primary mobile-login-btn">Login</a></li> -->
+                        <li class="mobile-only"><a href="/agap_link/view/auth/index.php" class="btn btn-primary mobile-login-btn">Login</a></li>
                     </ul>
 
                     <div class="nav-actions">
-                        <a href="/agap_link/login/index.php" class="btn-link">Login</a>
+                        <!-- <a href="/agap_link/login/index.php" class="btn-link">Login</a> -->
+                        <a href="/agap_link/view/auth/index.php" class="btn-link">Login</a>
                         <a href="#" class="btn btn-primary">Get App</a>
                     </div>
 
