@@ -10,9 +10,8 @@ unset($_SESSION['error']);
     <meta charset="UTF-8">
     <title>AGAP-Link | Authentication</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/agap_link/login/assets/css/loginstyle.css">
-    <link rel="icon" type="image/x-icon" href="../agap_link/assets/favicon_io/favicon.ico">
-    <script src="/agap_link/login/assets/js/main.js"></script>
+    <link rel="icon" type="image/x-icon" href="/agap_link/assets/favicon_io/favicon.ico">
+    <link rel="stylesheet" href="/agap_link/assets/css/login/loginstyle.css">
 </head>
 
 <body>
@@ -54,7 +53,7 @@ unset($_SESSION['error']);
                 </div>
 
                 <!-- LOGIN -->
-                <form method="POST" action="processes/auth_process.php" id="login" class="tab-content active">
+                <form method="POST" action="../../controller/auth_process.php" id="login" class="tab-content active">
                     <input type="hidden" name="action" value="login">
 
                     <label>Email</label>
@@ -69,7 +68,7 @@ unset($_SESSION['error']);
                 </form>
 
                 <!-- REGISTER -->
-                <form method="POST" action="processes/auth_process.php" id="register" class="tab-content">
+                <form method="POST" action="../../controller/auth_process.php" id="register" class="tab-content">
                     <input type="hidden" name="action" value="register">
 
                     <label>Full Name</label>
@@ -95,6 +94,7 @@ unset($_SESSION['error']);
 
     </div>
 
+    <script src="/agap_link/assets/js/login/main.js"></script>
 </body>
 
 </html>
