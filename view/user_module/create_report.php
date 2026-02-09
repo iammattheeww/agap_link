@@ -1,0 +1,152 @@
+<?php
+session_start();
+
+// PREVENT BROWSER CACHING
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
+
+if (!isset($_SESSION['user_id'])) {
+    header("Location: /agap_link/view/auth/index.php");
+    exit();
+}
+
+require_once __DIR__ . '/../../config/agaplinkdb.php';
+
+// FETCH CATEGORIES FOR DROPDOWN
+$categoriesQuery = "SELECT category_id, name FROM categories";
+$categoriesResult = $conn->query($categoriesQuery);
+$categories = [];
+
+// GET USER NAME FROM SESSION
+$userName = $_SESSION['user_name'] ?? 'User';
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/agap_link/assets/favicon_io/favicon.ico">
+    <title>Create Report - AGAP-Link</title>
+    <link rel="stylesheet" href="/agap_link/assets/css/user_module/user_module.css">
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <!-- SIDEBAR -->
+        <?php require_once __DIR__ . '/../partials/user_sidebar.php'; ?>
+
+        <!-- MAIN CONTENT -->
+        <main class="main-content">
+            <div class="create-report-container">
+                <div class="page-header">
+                    <h1 class="page-title">Create New Report</h1>
+                    <p class="page-description">
+                        Help improve your community by reporting issues. Provide as much detail as possible to help us address the problem quickly.
+                    </p>
+                </div>
+
+                <?php if (isset($_SESSION['error'])): ?>
+                    <div class="alert alert-error">
+                        <?= htmlspecialchars($_SESSION['error']) ?>
+                        <?php unset($_SESSION['error']); ?>
+                    </div>
+                <?php endif; ?>
+
+                <div class="report-form-section">
+                    <form action="/agap_link/controller/create_report_process.php" method="POST" enctype="multipart/form-data" id="createReportForm">
+
+                        <!-- CATEGORY SELECTION -->
+                        <div class="form-group">
+                            <label class="form-label" for="category_id">Report Category *</label>
+                            <select name="category_id" id="category_id" class="form-input" required>
+                                <option value="">Select a category...</option>
+                                <?php if (!empty($categories)): ?>
+                                    <?php foreach ($categories as $row): ?>
+                                        <option value="<?= $row['category_id']; ?>">
+                                            <?= htmlspecialchars($row['name']); ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                <?php endif; ?>
+
+                            </select>
+                        </div>
+
+                        <!-- DESCRIPTION -->
+                        <div class="form-group">
+                            <label class="form-label" for="description">Description *</label>
+                            <textarea
+                                name="description"
+                                id="description"
+                                class="form-input"
+                                placeholder="Please describe the issue in detail..."
+                                required
+                                maxlength="1000"></textarea>
+                            <small class="form-label-optional">Maximum 1000 characters</small>
+                        </div>
+
+                        <!-- ADDRESS -->
+                        <div class="form-group">
+                            <label class="form-label" for="address">Address/Location *</label>
+                            <input
+                                type="text"
+                                name="address"
+                                id="address"
+                                class="form-input"
+                                placeholder="Street, Barangay, City"
+                                required
+                                maxlength="255">
+                        </div>
+
+                        <!-- PHOTO UPLOAD -->
+                        <div class="form-group">
+                            <label class="form-label">Photo Evidence <span class="form-label-optional">(Optional)</span></label>
+                            <div class="file-upload-area" id="fileUploadArea">
+                                <div class="upload-icon">📷</div>
+                                <div class="upload-text">Click to upload or drag and drop</div>
+                                <div class="upload-hint">PNG, JPG, JPEG up to 5MB</div>
+                            </div>
+                            <input
+                                type="file"
+                                name="photo"
+                                id="photo"
+                                class="file-input-hidden"
+                                accept="image/png, image/jpeg, image/jpg">
+
+                            <div class="preview-container" id="previewContainer">
+                                <img src="" alt="Preview" class="preview-image" id="previewImage">
+                                <button type="button" class="remove-image-btn" id="removeImageBtn">Remove Photo</button>
+                            </div>
+                        </div>
+
+                        <!-- GPS COORDINATES -->
+                        <div class="form-group">
+                            <label class="form-label">GPS Coordinates <span class="form-label-optional">(Optional)</span></label>
+                            <button type="button" class="btn-get-location" id="getLocationBtn">
+                                <span>📍</span>
+                                Get My Current Location
+                            </button>
+                            <div id="locationStatus"></div>
+                            <input type="hidden" name="gps_lat" id="gps_lat">
+                            <input type="hidden" name="gps_long" id="gps_long">
+                        </div>
+
+                        <!-- SUBMIT BUTTONS -->
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">Submit Report</button>
+                            <a href="/agap_link/view/user_module/user_dashboard.php" class="btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="/agap_link/assets/js/user_module/create_report.js"></script>
+    <script src="/agap_link/assets/js/user_module/main.js"></script>
+</body>
+
+</html>
