@@ -28,9 +28,6 @@ $user_name = $is_user_logged_in ? $_SESSION['user_name'] : '';
                         <li><a href="#services" class="nav-link">Services</a></li>
                         <li><a href="#announcements" class="nav-link">Announcements</a></li>
                         <li><a href="#contact" class="nav-link">Contact</a></li>
-                        <!-- LOGIN BUTTON FOR MOBILE (HIDDEN ON DESKTOP) -->
-                        <!-- <li class="mobile-only"><a href="/agap_link/login/index.php" class="btn btn-primary mobile-login-btn">Login</a></li> -->
-                        <li class="mobile-only"><a href="/agap_link/view/auth/index.php" class="btn btn-primary mobile-login-btn">Login</a></li>
 
                         <!-- LOGGED IN USER BUTTONS -->
                         <?php if ($is_user_logged_in): ?>
