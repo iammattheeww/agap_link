@@ -67,6 +67,7 @@ $userName = $_SESSION['user_name'] ?? 'User';
 
                 <div class="report-form-section">
                     <form action="/agap_link/controller/create_report_process.php" method="POST" enctype="multipart/form-data" id="createReportForm">
+                        <input type="hidden" name="action" value="create_report">
 
                         <div class="form-group">
                             <label class="form-label" for="category_id">Report Category *</label>
