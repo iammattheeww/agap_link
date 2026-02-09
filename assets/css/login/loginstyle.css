@@ -290,6 +290,58 @@ form button:hover {
   font-weight: 600;
 }
 
+.name-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.name-field {
+  flex: 1;
+  min-width: 0;
+}
+
+.name-field-small {
+  flex: 0 0 70px;
+}
+
+.name-field label {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.name-field input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+.required {
+  color: #ff6b6b;
+}
+
+.success {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #c3e6cb;
+}
+
+.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #f5c6cb;
+}
+
 .create-account:hover {
   text-decoration: underline;
 }
