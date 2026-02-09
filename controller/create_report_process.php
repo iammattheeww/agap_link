@@ -84,62 +84,45 @@ $status = 'pending';
 | SQL insert
 |--------------------------------------------------------------------------
 */
-$sql = "INSERT INTO reports 
-        (user_id, category_id, description, address, photo_path, gps_lat, gps_long, status) 
+$sql = "INSERT INTO reports
+        (user_id, category_id, description, address, photo_path, gps_lat, gps_long, status)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
-// 1. Check if connection is valid MySQLi
-if (!($conn instanceof mysqli)) {
-    die("Error: agaplinkdb.php is not returning a MySQLi object. Are you using PDO?");
-}
+try {
+    $stmt = $conn->prepare($sql);
 
-$stmt = $conn->prepare($sql);
+    if (!$stmt) {
+        throw new PDOException("Prepare failed");
+    }
 
-// 2. Catch prepare errors explicitly
-if (!$stmt) {
-    // Log the actual error from MySQL
-    error_log("Prepare failed: " . $conn->error);
-    $_SESSION['error'] = 'Database error: ' . $conn->error; // Show error for debugging
-    header("Location: /agap_link/view/user_module/create_report.php");
-    exit();
-}
+    /*
+    |--------------------------------------------------------------------------
+    | Bind parameters
+    |--------------------------------------------------------------------------
+    */
+    $stmt->bindParam(1, $user_id, PDO::PARAM_INT);
+    $stmt->bindParam(2, $category_id, PDO::PARAM_INT);
+    $stmt->bindParam(3, $description, PDO::PARAM_STR);
+    $stmt->bindParam(4, $address, PDO::PARAM_STR);
+    $stmt->bindParam(5, $photo_path, PDO::PARAM_STR);
+    $stmt->bindParam(6, $gps_lat, PDO::PARAM_STR); // Use STR for NULL floats
+    $stmt->bindParam(7, $gps_long, PDO::PARAM_STR);
+    $stmt->bindParam(8, $status, PDO::PARAM_STR);
 
-/*
-|--------------------------------------------------------------------------
-| Bind parameters
-|--------------------------------------------------------------------------
-*/
-// 3. Use 's' for doubles to prevent strict type issues with NULL
-// New mapping: i (int), i (int), s (str), s (str), s (str), s (lat), s (long), s (str)
-$bindResult = $stmt->bind_param(
-    "iissssss",
-    $user_id,
-    $category_id,
-    $description,
-    $address,
-    $photo_path,
-    $gps_lat,
-    $gps_long,
-    $status
-);
-
-if (!$bindResult) {
-    die("Bind Param Failed: " . $stmt->error);
-}
-
-/*
-|--------------------------------------------------------------------------
-| Execute
-|--------------------------------------------------------------------------
-*/
-if ($stmt->execute()) {
-    $stmt->close(); // Good practice to close
-    header("Location: /agap_link/view/user_module/create_report.php?success=1");
-    exit();
-} else {
-    // Catch execute errors (like column mismatch or constraints)
-    error_log("Execute failed: " . $stmt->error);
-    $_SESSION['error'] = 'Submission failed: ' . $stmt->error;
+    /*
+    |--------------------------------------------------------------------------
+    | Execute
+    |--------------------------------------------------------------------------
+    */
+    if ($stmt->execute()) {
+        header("Location: /agap_link/view/user_module/create_report.php?success=1");
+        exit();
+    } else {
+        throw new PDOException("Execute failed");
+    }
+} catch (PDOException $e) {
+    error_log("Database error: " . $e->getMessage());
+    $_SESSION['error'] = 'Submission failed: ' . $e->getMessage();
     header("Location: /agap_link/view/user_module/create_report.php");
     exit();
 }

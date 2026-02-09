@@ -16,8 +16,13 @@ require_once __DIR__ . '/../../config/agaplinkdb.php';
 
 // FETCH CATEGORIES FOR DROPDOWN
 $categoriesQuery = "SELECT category_id, name FROM categories";
-$categoriesResult = $conn->query($categoriesQuery);
+$categoriesStmt = $conn->query($categoriesQuery);
+
 $categories = [];
+
+if ($categoriesStmt) {
+    $categories = $categoriesStmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
 // GET USER NAME FROM SESSION
 $userName = $_SESSION['user_name'] ?? 'User';
@@ -36,10 +41,8 @@ $userName = $_SESSION['user_name'] ?? 'User';
 
 <body>
     <div class="dashboard-container">
-        <!-- SIDEBAR -->
         <?php require_once __DIR__ . '/../partials/user_sidebar.php'; ?>
 
-        <!-- MAIN CONTENT -->
         <main class="main-content">
             <div class="create-report-container">
                 <div class="page-header">
@@ -56,10 +59,15 @@ $userName = $_SESSION['user_name'] ?? 'User';
                     </div>
                 <?php endif; ?>
 
+                <?php if (isset($_GET['success'])): ?>
+                    <div class="alert alert-success">
+                        Report submitted successfully!
+                    </div>
+                <?php endif; ?>
+
                 <div class="report-form-section">
                     <form action="/agap_link/controller/create_report_process.php" method="POST" enctype="multipart/form-data" id="createReportForm">
 
-                        <!-- CATEGORY SELECTION -->
                         <div class="form-group">
                             <label class="form-label" for="category_id">Report Category *</label>
                             <select name="category_id" id="category_id" class="form-input" required>
@@ -70,12 +78,12 @@ $userName = $_SESSION['user_name'] ?? 'User';
                                             <?= htmlspecialchars($row['name']); ?>
                                         </option>
                                     <?php endforeach; ?>
+                                <?php else: ?>
+                                    <option value="" disabled>No categories available</option>
                                 <?php endif; ?>
-
                             </select>
                         </div>
 
-                        <!-- DESCRIPTION -->
                         <div class="form-group">
                             <label class="form-label" for="description">Description *</label>
                             <textarea
@@ -88,7 +96,6 @@ $userName = $_SESSION['user_name'] ?? 'User';
                             <small class="form-label-optional">Maximum 1000 characters</small>
                         </div>
 
-                        <!-- ADDRESS -->
                         <div class="form-group">
                             <label class="form-label" for="address">Address/Location *</label>
                             <input
@@ -101,7 +108,6 @@ $userName = $_SESSION['user_name'] ?? 'User';
                                 maxlength="255">
                         </div>
 
-                        <!-- PHOTO UPLOAD -->
                         <div class="form-group">
                             <label class="form-label">Photo Evidence <span class="form-label-optional">(Optional)</span></label>
                             <div class="file-upload-area" id="fileUploadArea">
@@ -122,7 +128,6 @@ $userName = $_SESSION['user_name'] ?? 'User';
                             </div>
                         </div>
 
-                        <!-- GPS COORDINATES -->
                         <div class="form-group">
                             <label class="form-label">GPS Coordinates <span class="form-label-optional">(Optional)</span></label>
                             <button type="button" class="btn-get-location" id="getLocationBtn">
@@ -134,7 +139,6 @@ $userName = $_SESSION['user_name'] ?? 'User';
                             <input type="hidden" name="gps_long" id="gps_long">
                         </div>
 
-                        <!-- SUBMIT BUTTONS -->
                         <div class="form-actions">
                             <button type="submit" class="btn-primary">Submit Report</button>
                             <a href="/agap_link/view/user_module/user_dashboard.php" class="btn-secondary">Cancel</a>

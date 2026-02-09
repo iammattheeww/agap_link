@@ -28,9 +28,9 @@ $stats = $reportModel->getUserReportStats($_SESSION['user_id']);
 $userName = $_SESSION['user_name'] ?? 'User';
 
 // EXTRACT STATISTICS FROM ARRAY
-$totalReports = $stats['total'] ?? 0;
-$resolvedReports = $stats['resolved'] ?? 0;
-$pendingReports = $stats['pending'] ?? 0;
+$totalReports = $stats['total_reports'] ?? 0;
+$resolvedReports = $stats['resolved_count'] ?? 0;
+$pendingReports = $stats['pending_count'] ?? 0;
 
 // CHECK IF REPORTS ARRAY IS EMPTY OR FALSE
 $hasReports = is_array($userReports) && count($userReports) > 0;
