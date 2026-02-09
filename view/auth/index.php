@@ -1,8 +1,18 @@
 <?php
 session_start();
 $error = $_SESSION['error'] ?? '';
+$success = $_SESSION['success'] ?? '';
 unset($_SESSION['error']);
+unset($_SESSION['success']);
+
+// DESTROY ALL SESSION DATA
+session_destroy();
+session_unset();
+unset($_SESSION["logged_in"]);
+$_SESSION = array();
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -46,6 +56,10 @@ unset($_SESSION['error']);
                     <div class="error"><?= htmlspecialchars($error) ?></div>
                 <?php endif; ?>
 
+                <?php if ($success): ?>
+                    <div class="success"><?= htmlspecialchars($success) ?></div>
+                <?php endif; ?>
+
                 <!-- TABS -->
                 <div class="tabs">
                     <button class="tab-btn active" id="loginTab" onclick="showTab('login')">Log In</button>
@@ -71,22 +85,42 @@ unset($_SESSION['error']);
                 <form method="POST" action="../../controller/auth_process.php" id="register" class="tab-content">
                     <input type="hidden" name="action" value="register">
 
-                    <label>Full Name</label>
-                    <input type="text" name="name" placeholder="John Doe" required>
+                    <!-- NAME FIELDS ROW -->
+                    <div class="name-row">
+                        <div class="name-field">
+                            <label>First Name <span class="required">*</span></label>
+                            <input type="text" name="first_name" placeholder="Juan" required>
+                        </div>
 
-                    <label>Email</label>
+                        <div class="name-field name-field-small">
+                            <label>M.I.</label>
+                            <input type="text" name="middle_initial" placeholder="D" maxlength="5"
+                                style="text-transform: uppercase;">
+                        </div>
+
+                        <div class="name-field">
+                            <label>Last Name <span class="required">*</span></label>
+                            <input type="text" name="last_name" placeholder="Cruz" required>
+                        </div>
+                    </div>
+
+                    <label>Email <span class="required">*</span></label>
                     <input type="email" name="email" placeholder="name@example.com" required>
 
-                    <label>Contact Number</label>
+                    <label>Contact Number <span class="required">*</span></label>
                     <input type="tel" name="phone" placeholder="09123456789" oninput="this.value = this.value.replace(/[^0-9]/g, '')" pattern="[0-9]*" minlength="11" maxlength="11" inputmode="numeric" required>
 
-                    <label>Password</label>
+                    <label>Password <span class="required">*</span></label>
                     <input type="password" name="password" required>
 
-                    <label>Confirm Password</label>
+                    <label>Confirm Password <span class="required">*</span></label>
                     <input type="password" name="confirm_password" required>
 
                     <button type="submit">Create Account</button>
+
+                    <p class="hint" style="font-size: 0.75rem; color: #666; margin-top: 10px;">
+                        <span class="required">*</span> Required fields
+                    </p>
                 </form>
 
             </div>
