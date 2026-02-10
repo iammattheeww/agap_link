@@ -152,12 +152,15 @@ body {
   gap: 8px;
   transition: all var(--transition-fast);
   box-shadow: var(--shadow-md);
+
+  
 }
 
 .btn-report-issue:hover {
   background-color: var(--color-primary-dark);
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
+  
 }
 
 .btn-icon {

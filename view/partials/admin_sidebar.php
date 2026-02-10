@@ -11,20 +11,20 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </div>
 
     <nav class="sidebar-nav">
-        <a href="/agap_link/view/user_module/user_dashboard.php"
-            class="nav-item <?= ($current_page == 'user_dashboard.php') ? 'active' : '' ?>">
+        <a href="/agap_link/view/admin_module/admin_dashboard.php"
+            class="nav-item <?= ($current_page == 'admin_dashboard.php') ? 'active' : '' ?>">
             <span class="nav-icon"><i data-lucide="layout-dashboard"></i></span>
             <span>My Dashboard</span>
         </a>
 
-        <a href="/agap_link/view/user_module/my_reports.php"
-            class="nav-item <?= ($current_page == 'my_reports.php') ? 'active' : '' ?>">
+        <a href="/agap_link/view/admin_module/admin_reports.php"
+            class="nav-item <?= ($current_page == 'admin_reports.php') ? 'active' : '' ?>">
             <span class="nav-icon"><i data-lucide="file-text"></i></span>
             <span>Reports</span>
         </a>
 
-        <a href="/agap_link/view/user_module/profile.php"
-            class="nav-item <?= ($current_page == 'profile.php') ? 'active' : '' ?>">
+        <a href="/agap_link/view/admin_module/announcement.php"
+            class="nav-item <?= ($current_page == 'announcement.php') ? 'active' : '' ?>">
             <span class="nav-icon"><i data-lucide="user"></i></span>
             <span>Announcements</span>
         </a>

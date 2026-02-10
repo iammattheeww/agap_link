@@ -1,6 +1,9 @@
+
+
 <?php
 session_start();
 require_once __DIR__ . '/../model/User.php';
+require_once dirname(__DIR__) . '/config/agaplinkdb.php';
 
 // $user = new User();
 // $action = $_POST['action'] ?? '';
@@ -97,8 +100,8 @@ function register_user()
 // LOGIN USER
 function login_user()
 {
+    global $conn;
     $user = new User();
-
     // GET AND SANITIZE INPUT
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
@@ -111,14 +114,19 @@ function login_user()
     }
 
     // ADMIN LOGIN CREDENTIALS
-    if ($email === "admin@agap-link.com" && $password === "Admin123!") {
-        $_SESSION['admin_logged_in'] = true;
-        $_SESSION['admin_name'] = "Admin";
-        $_SESSION['admin_email'] = $email;
+     $stmt = $conn->prepare("SELECT * FROM admin_users WHERE email = :email LIMIT 1");
+    $stmt->execute(['email' => $email]);
+    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // REDIRECTS DIRECTLY TO ADMIN DASHBOARD
+    if ($admin && password_verify($password, $admin['password'])) {
+        $_SESSION['admin_logged_in'] = true;
+        $_SESSION['admin_id'] = $admin['id'];
+        $_SESSION['admin_email'] = $admin['email'];
+        $_SESSION['admin_name'] = $admin['name'];
+        
+
         header("Location: /agap_link/view/admin_module/admin_dashboard.php");
-        die();
+        exit();
     }
 
     // REGULAR USER LOGIN
@@ -150,6 +158,9 @@ function login_user()
     header("Location: /agap_link/view/auth/index.php");
     exit();
 }
+
+
+
 
 // if ($action === 'register') {
 
