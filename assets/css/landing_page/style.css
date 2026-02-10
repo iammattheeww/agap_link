@@ -319,7 +319,7 @@ h6 {
 /* RESPONSIVE ADJUSTMENTS FOR USER GREETING */
 @media (min-width: 0px) and (max-width: 768px) {
   .user-greeting {
-    display: none; /* HIDES ON MOBILE*/ 
+    display: none; /* HIDES ON MOBILE*/
   }
 
   .nav-actions .btn-outline {

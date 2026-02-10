@@ -8,8 +8,8 @@
 // OR USING THE ORIGINAL FORMAT
 $host = "localhost";
 $dbname = "agap_link";
-$username ="root";
-$password="";
+$username = "root";
+$password = "";
 
 // $host = "morty.heliohost.org";
 // $dbname = "agaplink_db";

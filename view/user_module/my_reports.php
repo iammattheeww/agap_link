@@ -135,8 +135,9 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
         </main>
     </div>
 
-    <script src="/agap_link/assets/js/user_module/sidebar.js"></script>
+    <script src="/agap_link/assets/js/user_module/main.js"></script>
     <script src="/agap_link/assets/js/user_module/reports.js"></script>
+    <button class="mobile-menu-toggle" aria-label="Toggle Menu">☰</button>
 </body>
 
 </html>

@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  // MOBILE NAVIGATION TOGGLE 
+  // MOBILE NAVIGATION TOGGLE
   const mobileToggle = document.getElementById("mobileToggle");
   const navMenu = document.getElementById("navMenu");
 
@@ -69,7 +69,7 @@
     });
   });
 
-  // HEADER SCROLL EFFECT 
+  // HEADER SCROLL EFFECT
   let lastScroll = 0;
   const header = document.querySelector(".main-header");
 
@@ -84,7 +84,7 @@
       header.style.padding = "1rem 0";
     }
 
-    // HIDE HEADER ON SCROLL DOWN, SHOW ON SCROLL UP 
+    // HIDE HEADER ON SCROLL DOWN, SHOW ON SCROLL UP
     if (currentScroll > lastScroll && currentScroll > 500) {
       header.style.transform = "translateY(-100%)";
     } else {
@@ -224,7 +224,7 @@
     images.forEach((img) => imageObserver.observe(img));
   }
 
-  // ADD LOADING STATE TO BUTTONS 
+  // ADD LOADING STATE TO BUTTONS
   function addLoadingState(button) {
     button.classList.add("loading");
     button.disabled = true;
@@ -238,7 +238,7 @@
     };
   }
 
-  // TOAST NOTIFICATION SYSTEM (FUTURE USE) 
+  // TOAST NOTIFICATION SYSTEM (FUTURE USE)
   function showToast(message, type = "info", duration = 3000) {
     const toast = document.createElement("div");
     toast.className = `toast toast-${type}`;
@@ -258,8 +258,8 @@
     }, duration);
   }
 
-  // PERFORMANCE OPTIMIZATION 
-  // DEBOUNCE FUNCTION FOR SCROLL EVENTS 
+  // PERFORMANCE OPTIMIZATION
+  // DEBOUNCE FUNCTION FOR SCROLL EVENTS
   function debounce(func, wait = 20) {
     let timeout;
     return function executedFunction(...args) {
@@ -284,7 +284,7 @@
     };
   }
 
-  // INITIALIZE ON DOM READY 
+  // INITIALIZE ON DOM READY
   document.addEventListener("DOMContentLoaded", function () {
     console.log("AGAP-Link initialized successfully!");
 
@@ -297,9 +297,9 @@
     }
 
     // INITIALIZE ANY THIRD-PARTY LIBRARIES HERE
-  }); 
+  });
 
-  // EXPORT FUNCTIONS FOR EXTERNAL USE 
+  // EXPORT FUNCTIONS FOR EXTERNAL USE
   window.AGAPLink = {
     showToast,
     validateForm,

@@ -131,7 +131,7 @@ function login_user()
         $_SESSION['user_first_name'] = $user_data['first_name'];
         $_SESSION['user_middle_initial'] = $user_data['middle_initial'];
         $_SESSION['user_last_name'] = $user_data['last_name'];
-       
+
         // STORE FULL NAME FOR EASY DISPLAY
         $_SESSION['user_name'] = trim($user_data['first_name'] . ' ' .
             (!empty($user_data['middle_initial']) ? $user_data['middle_initial'] . '. ' : '') .

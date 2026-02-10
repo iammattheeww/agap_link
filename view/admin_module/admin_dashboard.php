@@ -8,18 +8,21 @@ if (!isset($_SESSION['admin_logged_in'])) {
 ?>
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Admin Dashboard - AGAP-Link</title>
 </head>
+
 <body>
 
-<h1>
-    Welcome, <?= htmlspecialchars($_SESSION['admin_name']) ?> (Admin)
-</h1>
+    <h1>
+        Welcome, <?= htmlspecialchars($_SESSION['admin_name']) ?> (Admin)
+    </h1>
 
-<p>This is the admin dashboard.</p>
+    <p>This is the admin dashboard.</p>
 
-<a href="/agap_link/view/auth/index.php">Logout</a>
+    <a href="/agap_link/view/auth/index.php">Logout</a>
 
 </body>
+
 </html>

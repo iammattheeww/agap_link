@@ -152,6 +152,7 @@ $userName = $_SESSION['user_name'] ?? 'User';
 
     <script src="/agap_link/assets/js/user_module/create_report.js"></script>
     <script src="/agap_link/assets/js/user_module/main.js"></script>
+    <button class="mobile-menu-toggle" aria-label="Toggle Menu">☰</button>
 </body>
 
 </html>

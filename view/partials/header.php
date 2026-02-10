@@ -58,7 +58,7 @@ $user_name = $is_user_logged_in ? $_SESSION['user_name'] : '';
                             <!-- IF USER IS NOT LOGGED IN, IT SHOWS THE LOGIN BUTTON -->
                             <a href="/agap_link/view/auth/index.php" class="btn btn-primary">Login</a>
                         <?php endif; ?>
-                        
+
                         <!-- <a href="/agap_link/login/index.php" class="btn-link">Login</a> -->
                         <!-- <a href="/agap_link/view/auth/index.php" class="btn-link">Login</a> -->
                         <!-- <a href="#" class="btn btn-primary">Get App</a> -->

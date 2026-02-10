@@ -151,17 +151,7 @@ function change_password()
         header("Location: /agap_link/view/user_module/profile.php");
         exit();
     }
-
-    // VERIFY CURRENT PASSWORD
-    $email = $_SESSION['email'];
-    $userCheck = $user->check_login($email, $currentPassword);
-
-    if (!$userCheck) {
-        $_SESSION['error'] = "Current password is incorrect!";
-        header("Location: /agap_link/view/user_module/profile.php");
-        exit();
-    }
-
+    
     // HASH NEW PASSWORD
     $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
