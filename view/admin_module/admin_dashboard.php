@@ -15,14 +15,16 @@ if (!isset($_SESSION['admin_logged_in'])) {
 
 require_once __DIR__ . '/../../model/Report.php';
 
-// INITIALIZE REPORT MODEL
+// Report MODEL INSTANCE TO FETCH ALL REPORTS FOR STATISTICS AND RECENT REPORTS DISPLAY
 $reportModel = new Report();
+$userReports = $reportModel->getAllReports();
 
-// FETCH REPORTS FROM THE DATABASE - WE'LL USE FOREACH TO DISPLAY THEM LATER
-$userReports = $reportModel->getUserReports($_SESSION['admin_id']);
+$stats = [
+    'total_reports' => count($userReports),
+    'resolved_count' => count(array_filter($userReports, fn($r) => $r['status'] === 'Resolved')),
+    'pending_count' => count(array_filter($userReports, fn($r) => $r['status'] === 'Pending'))
+];
 
-// FETCH STATISTICS ARRAY FROM DATABASE
-$stats = $reportModel->getUserReportStats($_SESSION['admin_id']);
 
 // GET USER NAME FROM SESSION
 $userName = $_SESSION['admin_name'] ?? 'Admin';
@@ -42,7 +44,7 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
 
 <head>
     <title>Admin Dashboard - AGAP-Link</title>
-    <link rel="stylesheet" href="/agap_link/assets/css/user_module/user_module.css">
+    <link rel="stylesheet" href="/agap_link/assets/css/admin_module/admin_module.css">
 </head>
 
 <body>

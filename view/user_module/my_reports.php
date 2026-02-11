@@ -1,5 +1,6 @@
 <?php
-session_start();
+require_once dirname(__DIR__, 2) . "/config/init.php";
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: /agap_link/view/auth/index.php");
     exit();

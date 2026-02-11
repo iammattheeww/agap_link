@@ -1,5 +1,5 @@
 <?php
-require_once dirname(__DIR__) . '/config/init.php';
+require_once dirname(__DIR__, 2) . "/config/init.php";
 require MODEL_PATH . 'User.php';
 
 $action = isset($_POST['action']) ? $_POST['action'] : (isset($_GET['action']) ? $_GET['action'] : '');
@@ -15,7 +15,7 @@ switch ($action) {
 
     default:
         $_SESSION['error'] = "Invalid action!";
-        header("Location: " . BASE_URL . "/view/auth/index.php");
+        header("Location: " . ROOT_PATH . "/view/auth/index.php");
         die();
 }
 
@@ -38,35 +38,35 @@ function register_user()
     // VALIDATE REQUIRED FIELDS
     if (empty($first_name) || empty($last_name) || empty($email) || empty($phone)) {
         $_SESSION['error'] = "Please fill in all required fields!";
-        header("Location: " . BASE_URL . "/view/auth/index.php");
+        header("Location: " . ROOT_PATH . "/view/auth/index.php");
         die();
     }
 
     // VALIDATE MIDDLE INITIAL FORMAT (IF PROVIDED)
     if ($middle_initial !== null && strlen($middle_initial) > 5) {
         $_SESSION['error'] = "Middle initial should be 1-5 characters only!";
-        header("Location:" . BASE_URL . "/view/auth/index.php");
+        header("Location:" . ROOT_PATH . "/view/auth/index.php");
         die();
     }
 
     // CHECK IF EMAIL ALREADY EXISTS
     if ($user->email_exists($email)) {
         $_SESSION['error'] = "This email is already registered!";
-        header("Location:" . BASE_URL . "/view/auth/index.php");
+        header("Location:" . ROOT_PATH . "/view/auth/index.php");
         die();
     }
 
     // 8 CHARACTER PASSWORD VALIDATION  
     if (strlen($password) < 8) {
         $_SESSION['error'] = "Password must be at least 8 characters long!";
-        header("Location: " . BASE_URL . "/view/auth/index.php");
+        header("Location: " . ROOT_PATH . "/view/auth/index.php");
         die();
     }
 
     // VALIDATE PASSWORD MATCH 
     if ($password !== $confirm_password) {
         $_SESSION['error'] = "Passwords do not match!";
-        header("Location: " . BASE_URL . "/view/auth/index.php");
+        header("Location: " . ROOT_PATH . "/view/auth/index.php");
         die();
     }
 
@@ -79,12 +79,12 @@ function register_user()
 
         if ($result) {
             $_SESSION['success'] = "Account created successfully. Please log in.";
-            header("Location: " . BASE_URL . "/view/auth/index.php");
+            header("Location: " . ROOT_PATH . "/view/auth/index.php");
             die();
         }
     } catch (PDOException $e) {
         $_SESSION['error'] = "Registration failed: " . $e->getMessage();
-        header("Location: " . BASE_URL . "/view/auth/index.php");
+        header("Location: " . ROOT_PATH . "/view/auth/index.php");
         die();
     }
 }
@@ -101,7 +101,7 @@ function login_user()
     // VALIDATE INPUT FIELDS
     if (empty($email) || empty($password)) {
         $_SESSION['error'] = "Please fill in all fields!";
-        header("Location: " . BASE_URL . "/view/auth/index.php");
+        header("Location: " . ROOT_PATH . "/view/auth/index.php");
         die();
     }
 
@@ -125,7 +125,7 @@ function login_user()
         $_SESSION['user_phone'] = $user_data['phone_number'];
 
         // REDIRECT USER TO LANDING PAGE
-        header("Location: " . BASE_URL . "/index.php");
+        header("Location: " . ROOT_PATH . "/index.php");
         exit();
     }
 
@@ -138,12 +138,12 @@ function login_user()
         $_SESSION['admin_name'] = $admin_data['name'];
 
         // REDIRECT ADMIN TO DASHBOARD
-        header("Location: " . BASE_URL . "/view/admin_module/admin_dashboard.php");
+        header("Location: " . ROOT_PATH . "/view/admin_module/admin_dashboard.php");
         exit();
     }
 
     // LOGIN FAILED MESSAGE
     $_SESSION['error'] = "Invalid email or password!";
-    header("Location: " . BASE_URL . "/view/auth/index.php");
+    header("Location: " . ROOT_PATH . "/view/auth/index.php");
     exit();
 }

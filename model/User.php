@@ -1,13 +1,15 @@
 <?php
-require_once dirname(path: __DIR__) . '/config/agaplinkdb.php'; 
+require_once dirname(__DIR__, 2) . "/config/init.php";
+require_once __DIR__ . '/../config/agaplinkdb.php';
 class User
 {
     private $conn;
 
     // CONSTRUCTOR TO INITIALIZE DATABASE CONNECTION
-    public function __construct(){
-        global $conn; 
-        $this->conn = $conn; 
+    public function __construct()
+    {
+        global $conn;
+        $this->conn = $conn;
     }
 
     // CREATE NEW USER METHOD
@@ -57,7 +59,8 @@ class User
     }
 
     // ADMIN LOGIN CREDENTIALS METHOD
-    public function admin_check_login($email, $password){
+    public function admin_check_login($email, $password)
+    {
         $sql = "SELECT * FROM admin_users WHERE email = :email";
         $q = $this->conn->prepare($sql);
         $q->execute(['email' => $email]);

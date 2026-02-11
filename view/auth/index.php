@@ -1,5 +1,6 @@
 <?php
-session_start();
+require_once dirname(__DIR__, 2) . "/config/init.php";
+
 $error = $_SESSION['error'] ?? '';
 $success = $_SESSION['success'] ?? '';
 unset($_SESSION['error']);

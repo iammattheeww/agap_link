@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once dirname(__DIR__, 2) . "/config/init.php";
 
 // PREVENT BROWSER CACHING - CRITICAL FOR SECURITY
 header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
