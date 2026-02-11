@@ -1,5 +1,5 @@
 <?php
-session_start();
+require_once __DIR__ . '/config/init.php';
 
 // CHECK IF USER IS LOGGED IN
 $is_user_logged_in = isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true;
@@ -11,13 +11,13 @@ $is_user_logged_in = isset($_SESSION['user_logged_in']) && $_SESSION['user_logge
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="../agap_link/assets/favicon_io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="<?= BASE_URL ?>/assets/favicon_io/favicon.ico">
     <title>AGAP-Link - Your Ultimate City Companion</title>
-    <link rel="stylesheet" href="/agap_link/assets/css/landing_page/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/landing_page/style.css">
 </head>
 
 <body>
-    <?php require_once 'view/partials/header.php'; ?>
+    <?php require VIEW_PATH . 'partials/header.php'; ?>
 
     <!-- HERO SECTION -->
     <section class="hero" id="home">
@@ -40,19 +40,14 @@ $is_user_logged_in = isset($_SESSION['user_logged_in']) && $_SESSION['user_logge
                 <div class="hero-actions">
                     <?php if ($is_user_logged_in): ?>
                         <!-- IF USER IS LOGGED IN, IT SHOWS THE DASHBOARD AND DOWNLOAD APP BUTTONS -->
-                        <a href="/agap_link/view/user_module/user_dashboard.php" class="btn btn-primary btn-lg">Go to Dashboard</a>
+                        <a href="<? BASE_URL ?>/view/user_module/user_dashboard.php" class="btn btn-primary btn-lg">Go to Dashboard</a>
                         <a href="#services" class="btn btn-secondary btn-lg">Learn More</a>
                     <?php else: ?>
                         <!-- IF USER IS NOT LOGGED IN, IT SHOWS THE DOWNLOAD APP AND LEARN MORE CTA BUTTONS -->
-                        <a href="/agap_link/view/auth/index.php" class="btn btn-primary btn-lg">Get Started</a>
+                        <a href="<? BASE_URL ?>/view/auth/index.php" class="btn btn-primary btn-lg">Get Started</a>
                         <a href="#services" class="btn btn-secondary btn-lg">Learn More</a>
                     <?php endif; ?>
                 </div>
-
-                <!-- <div class="hero-actions">
-                    <a href="/agap_link/login/index.php" class="btn btn-primary btn-lg">Download App</a>
-                    <a href="#" class="btn btn-secondary btn-lg">Learn More</a>
-                </div> -->
             </div>
         </div>
     </section>
@@ -63,7 +58,7 @@ $is_user_logged_in = isset($_SESSION['user_logged_in']) && $_SESSION['user_logge
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon warning">
-                        <img src="assets/icons/alert_icon.png" alt="Report Hazard">
+                        <img src="<?= BASE_URL ?>/assets/icons/alert_icon.png" alt="Report Hazard">
                     </div>
                     <h3 class="feature-title">Report Hazards</h3>
                     <p class="feature-description">Spot an issue? Report it instantly and help keep our city safe.</p>
@@ -71,7 +66,7 @@ $is_user_logged_in = isset($_SESSION['user_logged_in']) && $_SESSION['user_logge
 
                 <div class="feature-card">
                     <div class="feature-icon refresh">
-                        <img src="assets/icons/refresh_icon.png" alt="Refresh Updates">
+                        <img src="<?= BASE_URL ?>/assets/icons/refresh_icon.png" alt="Refresh Updates">
                     </div>
                     <h3 class="feature-title">Real-Time Updates</h3>
                     <p class="feature-description">Stay informed with live notifications about your reported issues.</p>
@@ -79,7 +74,7 @@ $is_user_logged_in = isset($_SESSION['user_logged_in']) && $_SESSION['user_logge
 
                 <div class="feature-card">
                     <div class="feature-icon check">
-                        <img src="assets/icons/check_icon.png" alt="Check Status">
+                        <img src="<?= BASE_URL ?>/assets/icons/check_icon.png" alt="Check Status">
                     </div>
                     <h3 class="feature-title">Track Progress</h3>
                     <p class="feature-description">Monitor the status of community projects and service requests.</p>
@@ -100,16 +95,16 @@ $is_user_logged_in = isset($_SESSION['user_logged_in']) && $_SESSION['user_logge
                     </p>
                     <ul class="about-list">
                         <li>
-                            <img src="assets/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
+                            <img src="<?= BASE_URL ?>/assets/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
                             <span>Direct line to city services</span>
                         </li>
                         <li>
-                            <img src="assets/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
+                            <img src="<?= BASE_URL ?>/assets/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
 
                             <span>Transparent tracking of issues</span>
                         </li>
                         <li>
-                            <img src="assets/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
+                            <img src="<?= BASE_URL ?>/assets/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
                             <span>Community-driven improvements</span>
                         </li>
                     </ul>
@@ -118,42 +113,10 @@ $is_user_logged_in = isset($_SESSION['user_logged_in']) && $_SESSION['user_logge
                 <div class="about-image">
                     <div class="image-wrapper">
                         <div class="image-placeholder">
-                            <img src="assets/images/landing_about.jpg" alt="About Agap-Link" class="about-img">
+                            <img src="<?= BASE_URL ?>/assets/images/landing_about.jpg" alt="About Agap-Link" class="about-img">
                         </div>
                     </div>
                 </div>
-
-                <!-- 
-                    <div class="about-image">
-                        <div class="image-wrapper">
-                            <div class="image-placeholder"></div>
-                        </div>
-                    </div> 
-                -->
-
-                <!-- 
-                    <div class="image-wrapper" style="position: relative; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-xl);">
-                        <div class="image-placeholder" style="width: 100%; padding-bottom: 100%; background: linear-gradient(135deg, rgba(26, 35, 50, 0.9), rgba(44, 62, 80, 0.8)), url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
-                            <rect width="100" height="100" fill="%231A2332" />
-                            <circle cx="30" cy="30" r="2" fill="%23FF6B35" opacity="0.6" />
-                            <circle cx="70" cy="50" r="3" fill="%23FF6B35" opacity="0.4" />
-                            <circle cx="50" cy="80" r="2" fill="%23FF6B35" opacity="0.5" /></svg>'); background-size:
-                            cover,
-                            50px 50px;
-                            position: relative;"><img src="assets/images/landing_page.png" alt="About Agap-Link" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-xl);">
-                        </div>
-                    </div> 
-                -->
-
-                <!-- 
-                <div class="about-image">
-                    <div class="image-wrapper" style="position: relative; border-radius: var(--radius-xl); overflow: hidden; box-shadow: var(--shadow-xl);">
-                        <div class="image-placeholder" style="width: 100%; padding-bottom: 100%; background: linear-gradient(135deg, rgba(26, 35, 50, 0.9), rgba(44, 62, 80, 0.8)), url('data:image/svg+xml,%3Csvg width=%22100%22 height=%22100%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%231A2332%22 /%3E%3Ccircle cx=%2230%22 cy=%2230%22 r=%222%22 fill=%22%23FF6B35%22 opacity=%220.6%22 /%3E%3Ccircle cx=%2270%22 cy=%2250%22 r=%223%22 fill=%22%23FF6B35%22 opacity=%220.4%22 /%3E%3Ccircle cx=%2250%22 cy=%2280%22 r=%222%22 fill=%22%23FF6B35%22 opacity=%220.5%22 /%3E%3C/svg%3E'); background-size: cover, 50px 50px; position: relative;">
-                            <img src="assets/images/landing_announcements.jpg" alt="About Agap-Link" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-xl);">
-                        </div>
-                    </div>
-                </div> 
-                -->
             </div>
         </div>
     </section>
@@ -173,7 +136,7 @@ $is_user_logged_in = isset($_SESSION['user_logged_in']) && $_SESSION['user_logge
                 <article class="announcement-card">
                     <div class="announcement-image">
                         <div class="announcement-img-placeholder">
-                            <img src="assets/images/landing_announcement_01.jpg" alt="Announcement Image" class="announcement-img">
+                            <img src="<?= BASE_URL ?>/assets/images/landing_announcement_01.jpg" alt="Announcement Image" class="announcement-img">
                         </div>
                         <span class="announcement-badge">News</span>
                     </div>
@@ -188,7 +151,7 @@ $is_user_logged_in = isset($_SESSION['user_logged_in']) && $_SESSION['user_logge
                 <article class="announcement-card">
                     <div class="announcement-image">
                         <div class="announcement-img-placeholder">
-                            <img src="assets/images/landing_announcement_02.jpg" alt="Announcement Image" class="announcement-img">
+                            <img src="<?= BASE_URL ?>/assets/images/landing_announcement_02.jpg" alt="Announcement Image" class="announcement-img">
                         </div>
                         <span class="announcement-badge">News</span>
                     </div>
@@ -203,7 +166,7 @@ $is_user_logged_in = isset($_SESSION['user_logged_in']) && $_SESSION['user_logge
                 <article class="announcement-card">
                     <div class="announcement-image">
                         <div class="announcement-img-placeholder">
-                            <img src="assets/images/landing_announcement_03.jpg" alt="Announcement Image" class="announcement-img">
+                            <img src="<?= BASE_URL ?>/assets/images/landing_announcement_03.jpg" alt="Announcement Image" class="announcement-img">
                         </div>
                         <span class="announcement-badge">News</span>
                     </div>
@@ -228,14 +191,14 @@ $is_user_logged_in = isset($_SESSION['user_logged_in']) && $_SESSION['user_logge
                     <p class="cta-description">
                         Report issues, track progress, and contribute to a better city environment.
                     </p>
-                    <a href="/agap_link/view/user_module/user_dashboard.php" class="btn btn-primary btn-lg">Go to Dashboard</a>
+                    <a href="<?= BASE_URL ?>/view/user_module/user_dashboard.php" class="btn btn-primary btn-lg">Go to Dashboard</a>
                 <?php else: ?>
                     <!-- IF USER IS NOT LOGGED IN "Create Account Now" CTA IS DISPLAYED AS USUAL -->
                     <h2 class="cta-title">Ready to make a difference?</h2>
                     <p class="cta-description">
                         Join thousands of citizens contributing to a better city environment today.
                     </p>
-                    <a href="/agap_link/view/auth/index.php" class="btn btn-primary btn-lg">Create Account Now</a>
+                    <a href="<?= BASE_URL ?>/view/auth/index.php" class="btn btn-primary btn-lg">Create Account Now</a>
                 <?php endif; ?>
 
                 <!-- <h2 class="cta-title">Ready to make a difference?</h2> -->
@@ -247,9 +210,9 @@ $is_user_logged_in = isset($_SESSION['user_logged_in']) && $_SESSION['user_logge
         </div>
     </section>
 
-    <script src="/agap_link/assets/js/landing/main.js"></script>
+    <script src="<?= BASE_URL ?>/assets/js/landing/main.js"></script>
 
-    <?php require_once 'view/partials/footer.php'; ?>
+    <?php require VIEW_PATH . 'partials/footer.php'; ?>
 </body>
 
 </html>

@@ -1,32 +1,15 @@
 <?php
+require_once dirname(path: __DIR__) . '/config/agaplinkdb.php'; 
 class Report
 {
-    private $DB_SERVER = 'localhost';
-    private $DB_USERNAME = 'root';
-    private $DB_PASSWORD = '';
-    private $DB_DATABASE = 'agap_link';
     private $conn;
 
     // CONSTRUCTOR TO INITIALIZE DATABASE CONNECTION
     public function __construct()
     {
-        try {
-            $this->conn = new PDO(
-                "mysql:host=" . $this->DB_SERVER . ";dbname=" . $this->DB_DATABASE,
-                $this->DB_USERNAME,
-                $this->DB_PASSWORD
-            );
-            // Set PDO error mode to exception
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-            // ADDITIONAL ATTRIBUTES
-            $this->conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-            $this->conn->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-        } catch (PDOException $e) {
-            die("Database connection failed: " . $e->getMessage());
-        }
+        global $conn;
+        $this->conn = $conn;
     }
-
     public function getUserReports($user_id)
     {
 
@@ -50,12 +33,6 @@ class Report
         $q = $this->conn->prepare($sql);
         $q->execute(['user_id' => $user_id]);
         return $q->fetchAll(PDO::FETCH_ASSOC);
-
-        // $stmt = $this->conn->prepare(
-        //     "SELECT * FROM reports WHERE user_id = ? ORDER BY created_at DESC"
-        // );
-        // $stmt->execute([$user_id]);
-        // return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     // GET USER REPORT STATISTICS

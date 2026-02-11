@@ -17,7 +17,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <span>My Dashboard</span>
         </a>
 
-        <a href="/agap_link/view/admin_module/admin_reports.php"
+        <a href="/agap_link/view/admin_module/admin_report.php"
             class="nav-item <?= ($current_page == 'admin_reports.php') ? 'active' : '' ?>">
             <span class="nav-icon"><i data-lucide="file-text"></i></span>
             <span>Reports</span>

@@ -151,9 +151,7 @@ body {
   align-items: center;
   gap: 8px;
   transition: all var(--transition-fast);
-  box-shadow: var(--shadow-md);
-
-  
+  box-shadow: var(--shadow-md); 
 }
 
 .btn-report-issue:hover {

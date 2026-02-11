@@ -48,7 +48,7 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
 <body>
     <div class="dashboard-container">
         <!-- SIDEBAR - USING REQUIRE_ONCE -->
-       <?php require_once __DIR__ . '/../partials/admin_sidebar.php'; ?>
+        <?php require_once __DIR__ . '/../partials/admin_sidebar.php'; ?>
 
         <!-- MAIN CONTENT -->
         <main class="main-content">
@@ -59,7 +59,6 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
                     <p class="welcome-subtitle">Here's what's happening in your neighborhood.</p>
                 </div>
                 <a href="/agap_link/view/user_module/create_report.php" class="btn-report-issue" style="text-decoration: none;">
-                 
                     Generate Report
                 </a>
             </header>
@@ -100,7 +99,7 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
                     <div class="empty-state">
                         <div class="empty-icon">!</div>
                         <p class="empty-message">You haven't submitted any reports yet.</p>
-                        <a href="/agap_link/view/user_module/create_report.php" class="btn-submit-first">
+                        <a href="/agap_link/view/user_module/create_report.php" class="btn-submit-first" style="text-decoration: none;">
                             <span class="btn-icon">+</span>
                             Submit your first report
                         </a>

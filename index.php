@@ -1,5 +1,5 @@
 <?php
-include 'config/agaplinkdb.php';
+require_once __DIR__ . '/config/init.php';
 
 $page    = isset($_GET['page']) ? $_GET['page'] : '';
 $subpage = isset($_GET['subpage']) ? $_GET['subpage'] : '';
@@ -13,10 +13,10 @@ $id      = isset($_GET['id']) ? $_GET['id'] : '';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="../agap_link/assets/favicon_io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="<?= BASE_URL ?>/assets/favicon_io/favicon.ico">
     <title>AGAP-Link - Your Ultimate City Companion</title>
-    <link rel="stylesheet" href="../agap_link/assets/css/landing_page/style.css">
-    <script src="assets/js/landing/main.js"></script>
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/landing_page/style.css">
+    <script src="<?= BASE_URL ?>/assets/js/landing/main.js"></script>
 </head>
 
 <body>
@@ -25,19 +25,19 @@ $id      = isset($_GET['id']) ? $_GET['id'] : '';
 
     switch ($page) {
         case 'login':
-            require_once 'view/auth/index.php';
+            require VIEW_PATH . '/auth/index.php';
             break;
 
         case 'user-dashboard':
-            require_once 'view/user_module/user_dashboard.php';
+            require VIEW_PATH . '/user_module/user_dashboard.php';
             break;
 
         case 'admin-dashboard':
-            require_once 'view/admin_module/admin_dashboard.php';
+            require VIEW_PATH . '/admin_module/admin_dashboard.php';
             break;
 
         default:
-            require_once 'view/landing_module/index.php';
+            require VIEW_PATH . '/landing_module/index.php';
             break;
     }
     ?>

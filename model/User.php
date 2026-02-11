@@ -1,33 +1,16 @@
 <?php
+require_once dirname(path: __DIR__) . '/config/agaplinkdb.php'; 
 class User
 {
-    private $DB_SERVER = 'localhost';
-    private $DB_USERNAME = 'root';
-    private $DB_PASSWORD = '';
-    private $DB_DATABASE = 'agap_link';
     private $conn;
 
     // CONSTRUCTOR TO INITIALIZE DATABASE CONNECTION
-    public function __construct()
-    {
-        try {
-            $this->conn = new PDO(
-                "mysql:host=" . $this->DB_SERVER . ";dbname=" . $this->DB_DATABASE,
-                $this->DB_USERNAME,
-                $this->DB_PASSWORD
-            );
-            // Set PDO error mode to exception
-            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-            // ADDITIONAL ATTRIBUTES
-            $this->conn->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-            $this->conn->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, true);
-        } catch (PDOException $e) {
-            die("Database connection failed: " . $e->getMessage());
-        }
+    public function __construct(){
+        global $conn; 
+        $this->conn = $conn; 
     }
 
-    // CREATE NEW USER
+    // CREATE NEW USER METHOD
     public function new_user($first_name, $middle_initial, $last_name, $email, $phone_number, $password)
     {
         // SETTING TIMEZONE FOR DATABASE TIMESTAMP 
@@ -55,27 +38,9 @@ class User
             $this->conn->rollback();
             throw $e;
         }
-
-        // /* SETTING TIMEZONE FOR DATABASE TIMESTAMP  */
-        // $NOW = new DateTime('now', new DateTimeZone('Asia/Manila'));
-        // $NOW = $NOW->format('Y-m-d H:i:s');
-
-        // $sql = "INSERT INTO users (name, email, phone, password, created_at) VALUES (?,?,?,?,?)";
-        // $stmt = $this->conn->prepare($sql);
-
-        // try {
-        //     $this->conn->beginTransaction();
-        //     $stmt->execute([$name, $email, $phone, $password, $NOW]);
-        //     $this->conn->commit();
-        // } catch (Exception $e) {
-        //     $this->conn->rollback();
-        //     throw $e;
-        // }
-
-        // return true;
     }
 
-    // CHECK USER LOGIN CREDENTIALS
+    // CHECK USER LOGIN CREDENTIALS METHOD
     public function check_login($email, $password)
     {
         $sql = "SELECT * FROM users WHERE email = :email";
@@ -91,6 +56,21 @@ class User
         return false;
     }
 
+    // ADMIN LOGIN CREDENTIALS METHOD
+    public function admin_check_login($email, $password){
+        $sql = "SELECT * FROM admin_users WHERE email = :email";
+        $q = $this->conn->prepare($sql);
+        $q->execute(['email' => $email]);
+        $admin = $q->fetch(PDO::FETCH_ASSOC);
+
+        // VERIFY PASSWORD USING password_verify()
+        if ($admin && password_verify($password, $admin['password'])) {
+            return $admin;
+        }
+
+        return false;
+    }
+
     // GET USER ID BY EMAIL
     public function get_user_id($email)
     {
@@ -101,7 +81,7 @@ class User
         return $user_id ? $user_id : false;
     }
 
-    // GET FULL NAME BY ID (CONCATENATED)
+    // GET FULL NAME BY ID (CONCATENATED) METHOD
     public function get_user_name($id)
     {
         $sql = "SELECT CONCAT(first_name, ' ', IFNULL(CONCAT(middle_initial, '. '), ''), last_name) AS full_name FROM users WHERE user_id = :id";
@@ -109,21 +89,9 @@ class User
         $q->execute(['id' => $id]);
         $user_name = $q->fetchColumn();
         return $user_name ? $user_name : false;
-
-        // $sql = "SELECT name FROM users WHERE id = :id";
-        // $q = $this->conn->prepare($sql);
-        // $q->execute(['id' => $id]);
-        // $user_name = $q->fetchColumn();
-        // return $user_name ? $user_name : false;
-
-        // $sql = "SELECT name FROM users WHERE id = :id";
-        // $q = $this->conn->prepare($sql);
-        // $q->execute(['id' => $id]);
-        // $user_name = $q->fetchColumn();
-        // return $user_name;
     }
 
-    // GET USER FIRST NAME BY ID
+    // GET USER FIRST NAME BY ID METHOD
     public function get_user_first_name($id)
     {
         $sql = "SELECT first_name FROM users WHERE user_id = :id";
@@ -133,7 +101,7 @@ class User
         return $first_name ? $first_name : false;
     }
 
-    // GET USER LAST NAME BY ID
+    // GET USER LAST NAME BY ID METHOD
     public function get_user_last_name($id)
     {
         $sql = "SELECT last_name FROM users WHERE user_id = :id";
@@ -143,7 +111,7 @@ class User
         return $last_name ? $last_name : false;
     }
 
-    // GET USER MIDDLE INITIAL BY ID
+    // GET USER MIDDLE INITIAL BY ID METHOD
     public function get_user_middle_initial($id)
     {
         $sql = "SELECT middle_initial FROM users WHERE user_id = :id";
@@ -153,7 +121,7 @@ class User
         return $middle_initial;
     }
 
-    // GET USER EMAIL BY ID
+    // GET USER EMAIL BY ID METHOD
     public function get_user_email($id)
     {
         $sql = "SELECT email FROM users WHERE user_id = :id";
@@ -161,15 +129,9 @@ class User
         $q->execute(['id' => $id]);
         $user_email = $q->fetchColumn();
         return $user_email ? $user_email : false;
-
-        // $sql = "SELECT email FROM users WHERE id = :id";
-        // $q = $this->conn->prepare($sql);
-        // $q->execute(['id' => $id]);
-        // $user_email = $q->fetchColumn();
-        // return $user_email;
     }
 
-    // GET USER PHONE BY ID
+    // GET USER PHONE BY ID METHOD
     public function get_user_phone($id)
     {
         $sql = "SELECT phone_number FROM users WHERE user_id = :id";
@@ -177,15 +139,9 @@ class User
         $q->execute(['id' => $id]);
         $user_phone = $q->fetchColumn();
         return $user_phone ? $user_phone : false;
-
-        // $sql = "SELECT phone FROM users WHERE id = :id";
-        // $q = $this->conn->prepare($sql);
-        // $q->execute(['id' => $id]);
-        // $user_phone = $q->fetchColumn();
-        // return $user_phone;
     }
 
-    // GET COMPLETE USER DETAILS BY ID
+    // GET COMPLETE USER DETAILS BY ID METHOD
     public function get_user_details($id)
     {
         $sql = "SELECT user_id, first_name, middle_initial, last_name, CONCAT(first_name, ' ', IFNULL(CONCAT(middle_initial, '. '), ''), last_name) AS full_name, email, phone_number, created_at FROM users WHERE user_id = :id";
@@ -194,7 +150,7 @@ class User
         return $q->fetch(PDO::FETCH_ASSOC);
     }
 
-    // LIST ALL USERS
+    // LIST ALL USERS METHOD
     public function list_users()
     {
         $sql = "SELECT user_id, first_name, middle_initial, last_name, CONCAT(first_name, ' ', IFNULL(CONCAT(middle_initial, '. '), ''), last_name) AS full_name, email, phone_number, created_at FROM users ORDER BY created_at DESC";
@@ -206,20 +162,9 @@ class User
         }
 
         return empty($data) ? false : $data;
-
-        // $sql = "SELECT * FROM users";
-        // $q = $this->conn->query($sql) or die("failed!");
-        // while ($r = $q->fetch(PDO::FETCH_ASSOC)) {
-        //     $data[] = $r;
-        // }
-        // if (empty($data)) {
-        //     return false;
-        // } else {
-        //     return $data;
-        // }
     }
 
-    // UPDATE USER INFORMATION
+    // UPDATE USER INFORMATION METHOD
     public function update_user($id, $first_name, $middle_initial, $last_name, $email, $phone_number)
     {
         $sql = "UPDATE users 
@@ -241,7 +186,7 @@ class User
         return $result;
     }
 
-    // DELETE USER BY ID
+    // DELETE USER BY ID METHOD
     public function delete_user($id)
     {
         $sql = "DELETE FROM users WHERE user_id = :id";
@@ -250,7 +195,7 @@ class User
         return $result;
     }
 
-    // CHECK IF SESSION IS ACTIVE
+    // CHECK IF SESSION IS ACTIVE METHOD
     public function get_session()
     {
         if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] == true) {
@@ -261,7 +206,7 @@ class User
         return false;
     }
 
-    // CHECK IF EMAIL ALREADY EXISTS
+    // CHECK IF EMAIL ALREADY EXISTS METHOD
     public function email_exists($email)
     {
         $sql = "SELECT COUNT(*) FROM users WHERE email = :email";

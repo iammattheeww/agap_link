@@ -61,8 +61,8 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
                     <h1 class="welcome-title">Welcome back, <?= htmlspecialchars($userName) ?>!</h1>
                     <p class="welcome-subtitle">Here's what's happening in your neighborhood.</p>
                 </div>
-                <a href="/agap_link/view/user_module/create_report.php" class="btn-report-issue">
-                    <span class="btn-icon">+</span>
+                <a href="/agap_link/view/user_module/create_report.php" class="btn-report-issue" style="text-decoration: none;">
+                    <span class="btn-icon">+ </span>
                     Report Issue
                 </a>
             </header>
