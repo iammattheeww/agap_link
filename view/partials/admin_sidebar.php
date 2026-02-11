@@ -18,7 +18,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         </a>
 
         <a href="/agap_link/view/admin_module/admin_report.php"
-            class="nav-item <?= ($current_page == 'admin_reports.php') ? 'active' : '' ?>">
+            class="nav-item <?= ($current_page == 'admin_report.php') ? 'active' : '' ?>">
             <span class="nav-icon"><i data-lucide="file-text"></i></span>
             <span>All Reports</span>
         </a>
@@ -28,6 +28,13 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <span class="nav-icon"><i data-lucide="user"></i></span>
             <span>Announcements</span>
         </a>
+
+        <a href="/agap_link/view/admin_module/admin_users.php"
+   class="nav-item <?= ($current_page == 'admin_users.php') ? 'active' : '' ?>">
+    <span class="nav-icon"><i data-lucide="users"></i></span>
+    <span>Users</span>
+</a>
+
     </nav>
 
     <div class="sidebar-footer">

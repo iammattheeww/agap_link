@@ -1166,3 +1166,307 @@ select.form-input:focus {
     justify-content: center;
   }
 }
+
+/* ============================= */
+/* USERS MANAGEMENT PAGE STYLES */
+/* ============================= */
+
+.users-section {
+  background: var(--color-white);
+  padding: 30px;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.users-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.users-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--color-secondary);
+  font-family: var(--font-display);
+}
+
+.btn-add-user {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.btn-add-user:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* SEARCH BAR */
+.users-search {
+  margin-bottom: 20px;
+}
+
+.users-search input {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px 16px;
+  border: 2px solid var(--color-gray-300);
+  border-radius: var(--radius-md);
+  font-size: 0.95rem;
+  transition: var(--transition-fast);
+}
+
+.users-search input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+}
+
+/* USERS TABLE */
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-table thead {
+  text-align: left;
+  font-size: 0.85rem;
+  color: var(--color-gray-600);
+}
+
+.users-table th {
+  padding: 12px 10px;
+  font-weight: 600;
+}
+
+.users-table td {
+  padding: 15px 10px;
+  border-top: 1px solid var(--color-gray-200);
+  vertical-align: middle;
+}
+
+.users-table tr:hover {
+  background-color: var(--color-gray-100);
+}
+
+/* USER INFO */
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-fullname {
+  font-weight: 600;
+  color: var(--color-secondary);
+}
+
+.user-email {
+  font-size: 0.85rem;
+  color: var(--color-gray-600);
+}
+
+/* ROLE BADGE */
+.role-badge {
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: var(--color-gray-100);
+  color: var(--color-gray-800);
+}
+
+/* STATUS BADGES */
+.status-active {
+  background-color: #d1fae5;
+  color: #065f46;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-inactive {
+  background-color: #fee2e2;
+  color: #991b1b;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* ACTION BUTTONS */
+.user-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.user-actions a {
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  text-decoration: none;
+  font-weight: 600;
+  transition: var(--transition-fast);
+}
+
+.action-edit {
+  background-color: #dbeafe;
+  color: #1e40af;
+}
+
+.action-edit:hover {
+  background-color: #bfdbfe;
+}
+
+.action-delete {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.action-delete:hover {
+  background-color: #fecaca;
+}
+
+ /* Header styling matches dashboard */
+        .reports-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .reports-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--color-secondary);
+            font-family: var(--font-display);
+        }
+        .reports-header p {
+            font-size: 0.95rem;
+            color: var(--color-gray-600);
+        }
+
+        /* Buttons */
+        .btn-export, .btn-filter {
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: var(--font-body);
+            transition: var(--transition-fast);
+        }
+        .btn-export {
+            background-color: var(--color-gray-100);
+            color: var(--color-gray-800);
+        }
+        .btn-export:hover {
+            background-color: var(--color-gray-200);
+        }
+        .btn-filter {
+            background-color: var(--color-primary);
+            color: var(--color-white);
+        }
+        .btn-filter:hover {
+            background-color: var(--color-primary-dark);
+        }
+
+        /* Search bar */
+        .reports-search {
+            margin-bottom: 20px;
+        }
+        .reports-search input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--color-gray-300);
+            font-size: 0.95rem;
+            font-family: var(--font-body);
+        }
+        .reports-search input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(255,107,53,0.1);
+        }
+
+        /* Table styling to match dashboard fonts/colors */
+        .reports-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: var(--font-body);
+        }
+        .reports-table thead {
+            background-color: var(--color-gray-100);
+        }
+        .reports-table th, .reports-table td {
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 0.95rem;
+            color: var(--color-secondary);
+        }
+        .reports-table th {
+            font-weight: 600;
+        }
+        .reports-table tbody tr:hover {
+            background-color: var(--color-gray-50);
+        }
+
+        /* Status badges */
+        .status-pending {
+            background-color: #fef3c7;
+            color: #b45309;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .status-in-progress {
+            background-color: #dbeafe;
+            color: #1d4ed8;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+        .status-resolved {
+            background-color: #d1fae5;
+            color: #065f46;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        /* Action button */
+        .btn-action {
+            font-family: var(--font-body);
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            text-decoration: none;
+            font-weight: 600;
+            color: var(--color-secondary);  
+            background-color: var(--color-gray-100);
+            transition: var(--transition-fast);
+        }
+        .btn-action:hover {
+            background-color: var(--color-gray-200);
+        }
+
+        /* Dropdown */
+        select {
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--color-gray-300);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            cursor: pointer;
+        }

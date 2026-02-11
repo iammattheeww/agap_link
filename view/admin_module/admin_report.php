@@ -14,12 +14,12 @@ $hasReports = is_array($allReports) && count($allReports) > 0;
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>All Reports - Admin | AGAP-Link</title>
-    <link rel="stylesheet" href="/agap_link/assets/css/admin_module/admin_module.css">
+    <meta charset="UTF-8">
+    <title>Reports Management - Admin | AGAP-Link</title>
+   <link rel="stylesheet" href="/agap_link/assets/css/admin_module/admin_module.css">
 </head>
-
 <body>
 
 <div class="dashboard-container">
@@ -28,96 +28,81 @@ $hasReports = is_array($allReports) && count($allReports) > 0;
 
     <main class="main-content">
 
-        <!-- PAGE HEADER -->
+        <!-- HEADER -->
         <div class="reports-header">
-            <h1 class="page-title">All Submitted Reports</h1>
+            <div>
+                <h1>Reports Management</h1>
+                <p>Review, manage, and forward community reports to LGUs.</p>
+            </div>
+            <div class="reports-actions">
+                <button class="btn-export">Export</button>
+                <button class="btn-filter">Filter</button>
+            </div>
+        </div>
+
+        <!-- SEARCH -->
+        <div class="reports-search">
+            <input type="text" placeholder="Search reports...">
         </div>
 
         <?php if (!$hasReports): ?>
-
-            <!-- EMPTY STATE -->
-            <div class="empty-state">
-                <div class="empty-icon">📭</div>
-                <p class="empty-message">No reports have been submitted yet.</p>
+            <div class="empty-state" style="text-align:center; padding:50px; color:var(--color-gray-600);">
+                No reports submitted yet.
             </div>
-
         <?php else: ?>
-
-            <!-- REPORTS LIST -->
-            <div class="reports-list">
-
-                <?php foreach ($allReports as $report): ?>
-
-                    <div class="report-card">
-
-                        <!-- IMAGE -->
-                        <div class="report-image-container">
-                            <?php if (!empty($report['photo_path'])): ?>
-                                <img src="<?= htmlspecialchars($report['photo_path']) ?>" 
-                                     class="report-image">
-                            <?php else: ?>
-                                <div class="report-placeholder">📷</div>
-                            <?php endif; ?>
-                        </div>
-
-                        <!-- DETAILS -->
-                        <div class="report-details">
-
-                            <div class="report-header">
-                                <h3 class="report-title">
-                                    <?= htmlspecialchars($report['category_name'] ?? 'General Report') ?>
-                                </h3>
-
-                                <span class="status-badge status-<?= strtolower($report['status']) ?>">
-                                    <?= strtoupper($report['status']) ?>
+            <table class="reports-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Issue</th>
+                        <th>Status</th>
+                        <th>Forwarded To</th>
+                        <th>Forward Action</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($allReports as $report): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($report['report_id']) ?></td>
+                            <td>
+                                <?= htmlspecialchars($report['category_name'] ?? 'General') ?>
+                                <br>
+                                <span style="font-size:0.85rem; color:var(--color-gray-600);">
+                                    <?= htmlspecialchars($report['description'] ?? '') ?>
                                 </span>
-                            </div>
-
-                            <p>
-                                <strong>Reporter:</strong>
-                                <?= htmlspecialchars($report['reporter_name']) ?>
-                            </p>
-
-                            <p class="report-description">
-                                <?= htmlspecialchars($report['description']) ?>
-                            </p>
-
-                            <div class="report-meta">
-                                <div class="meta-item">
-                                    <span class="meta-icon">📍</span>
-                                    <?= htmlspecialchars($report['address']) ?>
-                                </div>
-
-                                <div class="meta-item">
-                                    <span class="meta-icon">🕒</span>
-                                    <?= date('M d, Y h:i A', strtotime($report['created_at'])) ?>
-                                </div>
-
-                                <div class="meta-item">
-                                    <span class="meta-icon">🏢</span>
-                                    <?= htmlspecialchars($report['agency_name'] ?? 'Not Assigned') ?>
-                                </div>
-                            </div>
-
-                            <!-- ACTION BUTTON -->
-                            <div class="report-actions">
-                                <a href="view_report.php?id=<?= $report['report_id'] ?>" 
-                                   class="btn-action btn-edit">
-                                    👁 View Details
-                                </a>
-                            </div>
-
-                        </div>
-                    </div>
-
-                <?php endforeach; ?>
-
-            </div>
-
+                            </td>
+                            <td>
+                                <?php
+                                $status = strtolower($report['status']);
+                                $statusClass = match($status) {
+                                    'pending' => 'status-pending',
+                                    'in progress' => 'status-in-progress',
+                                    'resolved' => 'status-resolved',
+                                    default => 'status-pending'
+                                };
+                                ?>
+                                <span class="<?= $statusClass ?>"><?= ucfirst($status) ?></span>
+                            </td>
+                            <td><?= htmlspecialchars($report['agency_name'] ?? 'Not yet forwarded') ?></td>
+                            <td>
+                                <select>
+                                    <option>Select LGU</option>
+                                    <option>Public Works Department</option>
+                                    <option>Waste Management Office</option>
+                                    <option>Police & Public Safety</option>
+                                </select>
+                            </td>
+                            <td>
+                                <a href="view_report.php?id=<?= $report['report_id'] ?>" class="btn-action">View</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
         <?php endif; ?>
 
     </main>
-
 </div>
 
 </body>
