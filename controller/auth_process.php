@@ -1,9 +1,6 @@
-
-
 <?php
 session_start();
-require_once __DIR__ . '/../model/User.php';
-require_once dirname(__DIR__) . '/config/agaplinkdb.php';
+require_once dirname(__DIR__) . '/model/User.php';
 
 // $user = new User();
 // $action = $_POST['action'] ?? '';
@@ -114,20 +111,22 @@ function login_user()
     }
 
     // ADMIN LOGIN CREDENTIALS
-     $stmt = $conn->prepare("SELECT * FROM admin_users WHERE email = :email LIMIT 1");
-    $stmt->execute(['email' => $email]);
-    $admin = $stmt->fetch(PDO::FETCH_ASSOC);
+    // $stmt = $conn->prepare("SELECT * FROM admin_users WHERE email = :email LIMIT 1");
+    // $stmt->execute(['email' => $email]);
+    // $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($admin && password_verify($password, $admin['password'])) {
-        $_SESSION['admin_logged_in'] = true;
-        $_SESSION['admin_id'] = $admin['id'];
-        $_SESSION['admin_email'] = $admin['email'];
-        $_SESSION['admin_name'] = $admin['name'];
-        
+    // if ($admin && password_verify($password, $admin['password'])) {
+    //     $_SESSION['admin_logged_in'] = true;
+    //     $_SESSION['admin_id'] = $admin['id'];
+    //     $_SESSION['admin_email'] = $admin['email'];
+    //     $_SESSION['admin_name'] = $admin['name'];
 
-        header("Location: /agap_link/view/admin_module/admin_dashboard.php");
-        exit();
-    }
+
+    //     header("Location: /agap_link/view/admin_module/admin_dashboard.php");
+    //     exit();
+    // }
+
+    
 
     // REGULAR USER LOGIN
     $user_data = $user->check_login($email, $password);
@@ -150,6 +149,19 @@ function login_user()
 
         // REDIRECT USER TO LANDING PAGE
         header("Location: /agap_link/index.php");
+        exit();
+    }
+
+    $admin_data = $user->admin_check_login($email, $password);
+    if($admin_data){
+        // SET ADMIN SESSION VARIABLES
+        $_SESSION['admin_logged_in'] = true;
+        $_SESSION['admin_id'] = $admin_data['id'];
+        $_SESSION['admin_email'] = $admin_data['email'];
+        $_SESSION['admin_name'] = $admin_data['name'];
+
+        // REDIRECT ADMIN TO DASHBOARD
+        header("Location: /agap_link/view/admin_module/admin_dashboard.php");
         exit();
     }
 
