@@ -21,7 +21,7 @@ $_SESSION = array();
     <meta charset="UTF-8">
     <title>AGAP-Link | Authentication</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="/agap_link/assets/favicon_io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="<?= ASSET_URL ?>/favicon_io/favicon.ico">
     <link rel="stylesheet" href="/agap_link/assets/css/login/loginstyle.css">
 </head>
 

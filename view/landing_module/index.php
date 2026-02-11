@@ -58,7 +58,7 @@ $is_user_logged_in = isset($_SESSION['user_logged_in']) && $_SESSION['user_logge
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon warning">
-                        <img src="<?= ASSET_URL ?>/assets/icons/alert_icon.png" alt="Report Hazard">
+                        <img src="<?= ASSET_URL ?>/icons/alert_icon.png" alt="Report Hazard">
                     </div>
                     <h3 class="feature-title">Report Hazards</h3>
                     <p class="feature-description">Spot an issue? Report it instantly and help keep our city safe.</p>

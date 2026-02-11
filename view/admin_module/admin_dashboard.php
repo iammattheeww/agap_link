@@ -22,7 +22,8 @@ $userReports = $reportModel->getAllReports();
 $stats = [
     'total_reports' => count($userReports),
     'resolved_count' => count(array_filter($userReports, fn($r) => $r['status'] === 'Resolved')),
-    'pending_count' => count(array_filter($userReports, fn($r) => $r['status'] === 'Pending'))
+    'pending_count' => count(array_filter($userReports, fn($r) => $r['status'] === 'Pending')),
+    'ongoing_count' => count(array_filter($userReports, fn($r) => $r['status'] === 'Ongoing'))
 ];
 
 

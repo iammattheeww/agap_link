@@ -13,10 +13,10 @@ $id      = isset($_GET['id']) ? $_GET['id'] : '';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="<?= ROOT_PATH ?>/assets/favicon_io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="<?= ASSET_URL ?>/favicon_io/favicon.ico">
     <title>AGAP-Link - Your Ultimate City Companion</title>
-    <link rel="stylesheet" href="<?= ROOT_PATH ?>/assets/css/landing_page/style.css">
-    <script src="<?= ROOT_PATH ?>/assets/js/landing/main.js"></script>
+    <link rel="stylesheet" href="<?= ASSET_URL ?>/css/landing_page/style.css">
+    <script src="<?= ASSET_URL?>/js/landing/main.js"></script>
 </head>
 
 <body>
