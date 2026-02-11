@@ -1,5 +1,4 @@
 <?php
-require_once dirname(__DIR__, 2) . "/config/init.php";
 require_once __DIR__ . '/../config/agaplinkdb.php';
 class User
 {
