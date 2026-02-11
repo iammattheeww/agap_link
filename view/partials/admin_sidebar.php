@@ -7,7 +7,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 <aside class="sidebar">
     <div class="sidebar-header">
         <h1 class="logo">AGAP-Link</h1>
-        <p class="user-panel-label">USER PANEL</p>
+        <p class="user-panel-label">ADMIN PANEL</p>
     </div>
 
     <nav class="sidebar-nav">
