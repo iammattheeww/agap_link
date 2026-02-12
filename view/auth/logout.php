@@ -1,18 +1,5 @@
 <?php
-// session_start();
-
-// // DESTROY ALL SESSION DATA
-// session_destroy();
-// session_unset();
-// unset($_SESSION["logged_in"]);
-// $_SESSION = array();
-
-// session_start();
-// $_SESSION['success'] = "You have been logged out successfully.";
-
-// // REDIRECT TO LANDING PAGE
-// header("Location: /agap_link/index.php");
-// exit;
+require_once dirname(__DIR__, 2) . "/config/init.php";
 
 session_start();
 
@@ -38,5 +25,5 @@ session_start();
 $_SESSION['success'] = "You have been logged out successfully.";
 
 // REDIRECT TO LANDING PAGE
-header("Location: /agap_link/index.php");
+header("Location: " . BASE_URL . "/index.php");
 exit;

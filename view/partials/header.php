@@ -11,7 +11,7 @@ $user_name = $is_user_logged_in ? $_SESSION['user_name'] : '';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AGAP-Link - Your Ultimate City Companion</title>
     <!-- <link rel="stylesheet" href="../agap_link/assets/css/style.css"> -->
-    <link rel="stylesheet" href="/agap_link/assets/css/landing_page/style.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/landing_page/style.css">
 </head>
 
 <body>
@@ -20,7 +20,7 @@ $user_name = $is_user_logged_in ? $_SESSION['user_name'] : '';
             <div class="container">
                 <div class="nav-wrapper">
                     <div class="nav-brand">
-                        <a href="index.php" class="logo">AGAP-Link</a>
+                        <a href="<?= BASE_URL ?>/view/landing_module/index.php" class="logo">AGAP-Link</a>
                     </div>
 
                     <ul class="nav-menu" id="navMenu">
@@ -33,16 +33,16 @@ $user_name = $is_user_logged_in ? $_SESSION['user_name'] : '';
                         <?php if ($is_user_logged_in): ?>
                             <!-- MOBILE ONLY: DASHBOARD CTA -->
                             <li class="mobile-only">
-                                <a href="/agap_link/view/user_module/user_dashboard.php" class="nav-link">Dashboard</a>
+                                <a href="<?= BASE_URL ?>/view/user_module/user_dashboard.php" class="nav-link">Dashboard</a>
                             </li>
                             <!-- MOBILE ONLY: LOGOUT BUTTON-->
                             <li class="mobile-only">
-                                <a href="/agap_link/view/auth/logout.php" class="nav-link">Logout</a>
+                                <a href="<?= BASE_URL ?>/view/auth/logout.php" class="nav-link">Logout</a>
                             </li>
                         <?php else: ?>
                             <!-- MOBILE ONLY: LOGIN BUTTON -->
                             <li class="mobile-only">
-                                <a href="/agap_link/view/auth/index.php" class="btn btn-primary mobile-login-btn">Login</a>
+                                <a href="<?= BASE_URL ?>/view/auth/index.php" class="btn btn-primary mobile-login-btn">Login</a>
                             </li>
                         <?php endif; ?>
                     </ul>
@@ -52,11 +52,11 @@ $user_name = $is_user_logged_in ? $_SESSION['user_name'] : '';
                         <?php if ($is_user_logged_in): ?>
                             <!-- IF USER IS LOGGED IN, IT SHOWS THE USERNAME GREETING, THE DASHBOARD AND LOGOUT BUTTONS -->
                             <span class="user-greeting">Hello, <strong><?php echo htmlspecialchars($user_name); ?></strong></span>
-                            <a href="/agap_link/view/user_module/user_dashboard.php" class="btn btn-outline">Dashboard</a>
-                            <a href="/agap_link/view/auth/logout.php" class="btn btn-link">Logout</a>
+                            <a href="<?= BASE_URL ?>/view/user_module/user_dashboard.php" class="btn btn-outline">Dashboard</a>
+                            <a href="<?= BASE_URL ?>/view/auth/logout.php" class="btn btn-link">Logout</a>
                         <?php else: ?>
                             <!-- IF USER IS NOT LOGGED IN, IT SHOWS THE LOGIN BUTTON -->
-                            <a href="/agap_link/view/auth/index.php" class="btn btn-primary">Login</a>
+                            <a href="<?= BASE_URL ?>/view/auth/index.php" class="btn btn-primary">Login</a>
                         <?php endif; ?>
 
                         <!-- <a href="/agap_link/login/index.php" class="btn-link">Login</a> -->

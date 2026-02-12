@@ -2,7 +2,7 @@
 require_once dirname(__DIR__, 2) . "/config/init.php";
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: /agap_link/view/auth/index.php");
+    header("Location: " . BASE_URL . "/view/auth/index.php");
     exit();
 }
 
@@ -27,9 +27,9 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="/agap_link/assets/favicon_io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="<?= ASSET_URL ?>/favicon_io/favicon.ico">
     <title>My Reports - AGAP-Link</title>
-    <link rel="stylesheet" href="/agap_link/assets/css/user_module/user_module.css">
+    <link rel="stylesheet" href="<?= ASSET_URL ?>/css/user_module/user_module.css">
 </head>
 
 <body>
@@ -72,7 +72,7 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
                     <div class="empty-state">
                         <div class="empty-icon">📋</div>
                         <p class="empty-message">You haven't submitted any reports yet.</p>
-                        <button class="btn-submit-first" onclick="window.location.href='/agap_link/view/user_module/user_dashboard.php'">
+                        <button class="btn-submit-first" onclick="window.location.href='<?= BASE_URL ?>/view/user_module/user_dashboard.php'">
                             <span class="btn-icon">+</span>
                             Submit your first report
                         </button>
@@ -136,8 +136,8 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
         </main>
     </div>
 
-    <script src="/agap_link/assets/js/user_module/main.js"></script>
-    <script src="/agap_link/assets/js/user_module/reports.js"></script>
+    <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
+    <script src="<?= ASSET_URL ?>/js/user_module/reports.js"></script>
     <button class="mobile-menu-toggle" aria-label="Toggle Menu">☰</button>
 </body>
 

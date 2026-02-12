@@ -1,10 +1,11 @@
 <?php
-session_start();
-require_once __DIR__ . '/../model/User.php';
+require_once dirname(__DIR__) . "/config/init.php";
+
+require_once MODEL_PATH . 'User.php';
 
 // CHECK IF USER IS LOGGED IN
 if (!isset($_SESSION['user_id'])) {
-    header("Location: /agap_link/view/auth/index.php");
+    header("Location: " . BASE_URL . "/view/auth/index.php");
     exit();
 }
 
@@ -26,7 +27,7 @@ switch ($action) {
 
     default:
         $_SESSION['error'] = "Invalid action!";
-        header("Location: /agap_link/view/user_module/profile.php");
+        header("Location: " . BASE_URL . "/view/user_module/profile.php");
         exit();
 }
 
@@ -47,28 +48,28 @@ function update_profile()
     // VALIDATE REQUIRED FIELDS
     if (empty($firstName) || empty($lastName) || empty($email) || empty($phoneNumber)) {
         $_SESSION['error'] = "Please fill in all required fields!";
-        header("Location: /agap_link/view/user_module/profile.php");
+        header("Location: " . BASE_URL . "/view/user_module/profile.php");
         exit();
     }
 
     // VALIDATE MIDDLE INITIAL FORMAT (IF PROVIDED)
     if ($middleInitial !== null && strlen($middleInitial) > 5) {
         $_SESSION['error'] = "Middle initial should be 1-5 characters only!";
-        header("Location: /agap_link/view/user_module/profile.php");
+        header("Location: " . BASE_URL . "/view/user_module/profile.php");
         exit();
     }
 
     // VALIDATE EMAIL FORMAT
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $_SESSION['error'] = "Invalid email format!";
-        header("Location: /agap_link/view/user_module/profile.php");
+        header("Location: " . BASE_URL . "/view/user_module/profile.php");
         exit();
     }
 
     // VALIDATE PHONE NUMBER FORMAT (Philippine mobile number)
     if (!preg_match('/^09[0-9]{9}$/', $phoneNumber)) {
         $_SESSION['error'] = "Invalid phone number format! Use 09XXXXXXXXX";
-        header("Location: /agap_link/view/user_module/profile.php");
+        header("Location: " . BASE_URL . "/view/user_module/profile.php");
         exit();
     }
 
@@ -107,16 +108,16 @@ function update_profile()
             }
 
             $_SESSION['success'] = "Profile updated successfully!";
-            header("Location: /agap_link/view/user_module/profile.php");
+            header("Location: " . BASE_URL . "/view/user_module/profile.php");
             exit();
         } else {
             $_SESSION['error'] = "Failed to update profile. Please try again.";
-            header("Location: /agap_link/view/user_module/profile.php");
+            header("Location: " . BASE_URL . "/view/user_module/profile.php");
             exit();
         }
     } catch (PDOException $e) {
         $_SESSION['error'] = "Update failed: " . $e->getMessage();
-        header("Location: /agap_link/view/user_module/profile.php");
+        header("Location: " . BASE_URL . "/view/user_module/profile.php");
         exit();
     }
 }
@@ -173,16 +174,16 @@ function change_password()
 
         if ($result) {
             $_SESSION['success'] = "Password changed successfully!";
-            header("Location: /agap_link/view/user_module/profile.php");
+            header("Location: " . BASE_URL . "/view/user_module/profile.php");
             exit();
         } else {
             $_SESSION['error'] = "Failed to change password. Please try again.";
-            header("Location: /agap_link/view/user_module/profile.php");
+            header("Location: " . BASE_URL . "/view/user_module/profile.php");
             exit();
         }
     } catch (PDOException $e) {
         $_SESSION['error'] = "Password change failed: " . $e->getMessage();
-        header("Location: /agap_link/view/user_module/profile.php");
+        header("Location: " . BASE_URL . "/view/user_module/profile.php");
         exit();
     }
 }
@@ -266,7 +267,7 @@ function delete_account()
         }
 
         $_SESSION['error'] = "Failed to delete account: " . $e->getMessage();
-        header("Location: /agap_link/view/user_module/profile.php");
+        header("Location: " . BASE_URL . "/view/user_module/profile.php");
         exit();
     }
 }

@@ -22,7 +22,7 @@ $_SESSION = array();
     <title>AGAP-Link | Authentication</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="<?= ASSET_URL ?>/favicon_io/favicon.ico">
-    <link rel="stylesheet" href="/agap_link/assets/css/login/loginstyle.css">
+    <link rel="stylesheet" href="<?= ASSET_URL ?>/css/login/loginstyle.css">
 </head>
 
 <body>
@@ -129,7 +129,7 @@ $_SESSION = array();
 
     </div>
 
-    <script src="/agap_link/assets/js/login/main.js"></script>
+    <script src="<?= ASSET_URL ?>/js/login/main.js"></script>
 </body>
 
 </html>

@@ -38,9 +38,9 @@ $firstInitial = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="/agap_link/assets/favicon_io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="<?= BASE_URL ?>/assets/favicon_io/favicon.ico">
     <title>Profile - AGAP-Link</title>
-    <link rel="stylesheet" href="/agap_link/assets/css/user_module/user_module.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/user_module/user_module.css">
     <style>
         /* DELETE ACCOUNT SECTION STYLES */
         .danger-zone {
@@ -201,7 +201,7 @@ $firstInitial = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U';
 <body>
     <div class="dashboard-container">
         <!-- SIDEBAR -->
-        <?php require_once __DIR__ . '/../partials/user_sidebar.php'; ?>
+        <?php require VIEW_PATH . 'partials/user_sidebar.php' ?>
 
         <!-- MAIN CONTENT -->
         <main class="main-content">
@@ -320,7 +320,7 @@ $firstInitial = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U';
                 <div class="profile-form-section" style="margin-top: 30px;">
                     <h2 class="form-section-title">Change Password</h2>
 
-                    <form action="/agap_link/controller/profile_process.php" method="POST" id="passwordForm" autocomplete="on">
+                    <form action="<?= BASE_URL ?>" method="POST" id="passwordForm" autocomplete="on">
                         <input type="hidden" name="action" value="change_password">
 
                         <div class="form-grid">

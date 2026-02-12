@@ -9,11 +9,12 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 
 // CHECK IF USER IS LOGGED IN
 if (!isset($_SESSION['user_id'])) {
-    header("Location: /agap_link/view/auth/index.php");
+    header("Location: " . BASE_URL . "/view/auth/index.php");
     exit();
 }
 
-require_once __DIR__ . '/../../model/Report.php';
+require MODEL_PATH . 'User.php';
+require MODEL_PATH . 'Report.php';
 
 // INITIALIZE REPORT MODEL
 $reportModel = new Report();
@@ -43,15 +44,15 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="/agap_link/assets/favicon_io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="<?= ASSET_URL ?>/favicon_io/favicon.ico">
     <title>User Dashboard - AGAP-Link</title>
-    <link rel="stylesheet" href="/agap_link/assets/css/user_module/user_module.css">
+    <link rel="stylesheet" href="<?= ASSET_URL ?>/css/user_module/user_module.css">
 </head>
 
 <body>
     <div class="dashboard-container">
         <!-- SIDEBAR - USING REQUIRE_ONCE -->
-        <?php require_once __DIR__ . '/../partials/user_sidebar.php'; ?>
+        <?php require VIEW_PATH . 'partials/user_sidebar.php'; ?>
 
         <!-- MAIN CONTENT -->
         <main class="main-content">
@@ -61,7 +62,7 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
                     <h1 class="welcome-title">Welcome back, <?= htmlspecialchars($userName) ?>!</h1>
                     <p class="welcome-subtitle">Here's what's happening in your neighborhood.</p>
                 </div>
-                <a href="/agap_link/view/user_module/create_report.php" class="btn-report-issue" style="text-decoration: none;">
+                <a href="<?= BASE_URL ?>/view/user_module/create_report.php" class="btn-report-issue" style="text-decoration: none;">
                     <span class="btn-icon">+ </span>
                     Report Issue
                 </a>
@@ -103,7 +104,7 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
                     <div class="empty-state">
                         <div class="empty-icon">!</div>
                         <p class="empty-message">You haven't submitted any reports yet.</p>
-                        <a href="/agap_link/view/user_module/create_report.php" class="btn-submit-first">
+                        <a href="<?= BASE_URL ?>/view/user_module/create_report.php" class="btn-submit-first"  style="text-decoration: none;">
                             <span class="btn-icon">+</span>
                             Submit your first report
                         </a>
@@ -158,7 +159,7 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
         </main>
     </div>
 
-    <script src="/agap_link/assets/js/user_module/main.js"></script>
+    <script src="<?=  BASE_URL ?>/assets/js/landing/main.js"></script>
 
     <button class="mobile-menu-toggle" aria-label="Toggle Menu">☰</button>
 </body>

@@ -1,16 +1,17 @@
 <?php
-session_start();
-require_once __DIR__ . '/../model/Report.php';
+require_once dirname(__DIR__) . "/config/init.php";
+
+require_once MODEL_PATH . 'Report.php';
 
 // AUTH CHECK
 if (!isset($_SESSION['user_id'])) {
-    header("Location: /agap_link/view/auth/index.php");
+    header("Location: " . BASE_URL . "/view/auth/index.php");
     exit();
 }
 
 // REQUEST METHOD CHECK
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: /agap_link/view/user_module/create_report.php");
+    header("Location: " . BASE_URL . "/view/user_module/create_report.php");
     exit();
 }
 
@@ -49,7 +50,7 @@ function create_report()
     $photo_path = null;
 
     if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = __DIR__ . '/../uploads/';
+        $upload_dir = UPLOAD_PATH;
 
         if (!is_dir($upload_dir)) {
             mkdir($upload_dir, 0777, true);
@@ -65,7 +66,7 @@ function create_report()
             $targetPath = $upload_dir . $filename;
 
             if (move_uploaded_file($file_tmp, $targetPath)) {
-                $photo_path = '/agap_link/uploads/' . $filename;
+                $photo_path = UPLOAD_URL . '/' . $filename;
             }
         }
     }
@@ -74,7 +75,7 @@ function create_report()
         $report_id = $report->createReport($user_id, $category_id, $description, $address, $photo_path, $gps_lat, $gps_long);
 
         if ($report_id) {
-            header("Location: /agap_link/view/user_module/create_report.php?success=1");
+            header("Location: " . BASE_URL . "/view/user_module/create_report.php?success=1");
             exit();
         } else {
             throw new Exception("Failed to create report");
@@ -82,7 +83,7 @@ function create_report()
     } catch (Exception $e) {
         error_log("Error: " . $e->getMessage());
         $_SESSION['error'] = 'Submission failed: ' . $e->getMessage();
-        header("Location: /agap_link/view/user_module/create_report.php");
+        header("Location: " . BASE_URL . "/view/user_module/create_report.php");
         exit();
     }
 }

@@ -11,34 +11,34 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </div>
 
     <nav class="sidebar-nav">
-        <a href="/agap_link/view/admin_module/admin_dashboard.php"
+        <a href="<?= BASE_URL ?>/view/admin_module/admin_dashboard.php"
             class="nav-item <?= ($current_page == 'admin_dashboard.php') ? 'active' : '' ?>">
             <span class="nav-icon"><i data-lucide="layout-dashboard"></i></span>
             <span>My Dashboard</span>
         </a>
 
-        <a href="/agap_link/view/admin_module/admin_report.php"
+        <a href="<?= BASE_URL ?>/view/admin_module/admin_report.php"
             class="nav-item <?= ($current_page == 'admin_report.php') ? 'active' : '' ?>">
             <span class="nav-icon"><i data-lucide="file-text"></i></span>
             <span>All Reports</span>
         </a>
 
-        <a href="/agap_link/view/admin_module/announcement.php"
+        <a href="<?= BASE_URL ?>/view/admin_module/announcement.php"
             class="nav-item <?= ($current_page == 'announcement.php') ? 'active' : '' ?>">
-            <span class="nav-icon"><i data-lucide="user"></i></span>
+            <span class="nav-icon"><i data-lucide="bell"></i></span>
             <span>Announcements</span>
         </a>
 
-        <a href="/agap_link/view/admin_module/admin_users.php"
-   class="nav-item <?= ($current_page == 'admin_users.php') ? 'active' : '' ?>">
-    <span class="nav-icon"><i data-lucide="users"></i></span>
-    <span>Users</span>
-</a>
+        <a href="<?= BASE_URL ?>/view/admin_module/admin_users.php"
+            class="nav-item <?= ($current_page == 'admin_users.php') ? 'active' : '' ?>">
+            <span class="nav-icon"><i data-lucide="users"></i></span>
+            <span>Users</span>
+        </a>
 
     </nav>
 
     <div class="sidebar-footer">
-        <a href="/agap_link/view/auth/logout.php" class="nav-item logout">
+        <a href="<?= BASE_URL ?>/view/auth/logout.php" class="nav-item logout">
             <span class="nav-icon"><i data-lucide="log-out"></i></span>
             <span>Sign Out</span>
         </a>
