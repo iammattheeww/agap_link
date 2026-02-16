@@ -1,6 +1,5 @@
 <?php
 require_once dirname(__DIR__) . "/config/init.php";
-
 require_once MODEL_PATH . 'Report.php';
 
 // AUTH CHECK
@@ -24,7 +23,7 @@ switch ($action) {
 
     default:
         $_SESSION['error'] = "Invalid action!";
-        header("Location: /agap_link/view/user_module/create_report.php");
+        header("Location: " . BASE_URL . "/view/user_module/create_report.php");
         exit();
 }
 
@@ -53,7 +52,8 @@ function create_report()
         $upload_dir = UPLOAD_PATH;
 
         if (!is_dir($upload_dir)) {
-            mkdir($upload_dir, 0777, true);
+            // FIXED: Using standard 0755 to prevent 403 Forbidden on live servers
+            mkdir($upload_dir, 0755, true);
         }
 
         $file_tmp = $_FILES['photo']['tmp_name'];
