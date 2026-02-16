@@ -50,16 +50,148 @@ unset($_SESSION['success'], $_SESSION['error']);
                     <span class="hero-title-highlight">AGAP-Link</span>
                 </h1>
                 <p class="hero-description">
-                    Your ultimate city companion! Report issues, track progress, and stay updated with real-time community announcements.
+                    Your ultimate city companion! Access services, report issues, and stay connected with your community in real-time.
                 </p>
+
                 <div class="hero-actions">
-                    <a href="#services" class="btn btn-secondary btn-lg">Explore Services</a>
+                    <?php if ($is_user_logged_in): ?>
+                        <a href="<?= BASE_URL ?>/view/user_module/user_dashboard.php" class="btn btn-primary btn-lg">Go to Dashboard</a>
+                        <a href="#services" class="btn btn-secondary btn-lg">Learn More</a>
+                    <?php else: ?>
+                        <a href="<?= BASE_URL ?>/view/auth/index.php" class="btn btn-primary btn-lg">Get Started</a>
+                        <a href="#services" class="btn btn-secondary btn-lg">Learn More</a>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="cta">
+    <section class="features">
+        <div class="container">
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon warning">
+                        <img src="<?= ASSET_URL ?>/icons/alert_icon.png" alt="Report Hazard">
+                    </div>
+                    <h3 class="feature-title">Report Hazards</h3>
+                    <p class="feature-description">Spot an issue? Report it instantly and help keep our city safe.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon refresh">
+                        <img src="<?= ASSET_URL ?>/icons/refresh_icon.png" alt="Refresh Updates">
+                    </div>
+                    <h3 class="feature-title">Real-Time Updates</h3>
+                    <p class="feature-description">Stay informed with live notifications about your reported issues.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon check">
+                        <img src="<?= ASSET_URL ?>/icons/check_icon.png" alt="Check Status">
+                    </div>
+                    <h3 class="feature-title">Track Progress</h3>
+                    <p class="feature-description">Monitor the status of community projects and service requests.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about" id="services">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-content">
+                    <span class="section-label">WHO WE ARE</span>
+                    <h2 class="section-title">About Agap-Link</h2>
+                    <p class="about-text">
+                        We bridge the gap between citizens and city administration. Our platform empowers you to be an active participant in your community's growth and safety.
+                    </p>
+                    <ul class="about-list">
+                        <li>
+                            <img src="<?= ASSET_URL ?>/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
+                            <span>Direct line to city services</span>
+                        </li>
+                        <li>
+                            <img src="<?= ASSET_URL ?>/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
+                            <span>Transparent tracking of issues</span>
+                        </li>
+                        <li>
+                            <img src="<?= ASSET_URL ?>/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
+                            <span>Community-driven improvements</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="about-image">
+                    <div class="image-wrapper">
+                        <div class="image-placeholder">
+                            <img src="<?= ASSET_URL ?>/images/landing_about.jpg" alt="About Agap-Link" class="about-img">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="announcements" id="announcements">
+        <div class="container">
+            <div class="announcements-header">
+                <div>
+                    <span class="section-label">STAY UPDATED</span>
+                    <h2 class="section-title">Latest Announcements</h2>
+                </div>
+                <a href="#" class="btn btn-outline">View All</a>
+            </div>
+
+            <div class="announcements-grid">
+                <article class="announcement-card">
+                    <div class="announcement-image">
+                        <div class="announcement-img-placeholder">
+                            <img src="<?= ASSET_URL ?>/images/landing_announcement_01.jpg" alt="Announcement Image" class="announcement-img">
+                        </div>
+                        <span class="announcement-badge">News</span>
+                    </div>
+                    <div class="announcement-content">
+                        <time class="announcement-date">February 4, 2026</time>
+                        <h3 class="announcement-title">Red Alert Status: Tropical Cyclone Basyang (Penha)</h3>
+                        <p class="announcement-description">The Provincial Disaster Risk Reduction and Management Council (PDRRMC) has placed Negros Occidental under Red Alert Status. Heavy rainfall (50–100 mm) is expected to continue through the weekend, specifically targeting southern Negros and coastal areas.</p>
+                        <a href="#" class="announcement-link">Read More →</a>
+                    </div>
+                </article>
+
+                <article class="announcement-card">
+                    <div class="announcement-image">
+                        <div class="announcement-img-placeholder">
+                            <img src="<?= ASSET_URL ?>/images/landing_announcement_02.jpg" alt="Announcement Image" class="announcement-img">
+                        </div>
+                        <span class="announcement-badge">News</span>
+                    </div>
+                    <div class="announcement-content">
+                        <time class="announcement-date">February 6, 2026</time>
+                        <h3 class="announcement-title">Province-Wide Class & Work Suspensions</h3>
+                        <p class="announcement-description">Due to the severe weather conditions and the Yellow Heavy Rainfall Warning issued by PAGASA, Governor Eugenio Jose Lacson and Mayor Greg Gasataya have suspended classes at all levels in Bacolod City and several other LGUs (including Silay, Talisay, and Bago) through February 6, 2026.</p>
+                        <a href="#" class="announcement-link">Read More →</a>
+                    </div>
+                </article>
+
+                <article class="announcement-card">
+                    <div class="announcement-image">
+                        <div class="announcement-img-placeholder">
+                            <img src="<?= ASSET_URL ?>/images/landing_announcement_03.jpg" alt="Announcement Image" class="announcement-img">
+                        </div>
+                        <span class="announcement-badge">News</span>
+                    </div>
+                    <div class="announcement-content">
+                        <time class="announcement-date">February 6, 2026</time>
+                        <h3 class="announcement-title">Infrastructure Advisory: Landslide & Flash Flood Risk</h3>
+                        <p class="announcement-description">The infrastructure advisory for Negros Occidental is tied to the current events this week, specifically the risks of landslides and flash floods caused by Tropical Storm Basyang (Penha), which has led to widespread work and class suspensions across the province as of today, Friday, February 6.</p>
+                        <a href="#" class="announcement-link">Read More →</a>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta" id="contact">
         <div class="container">
             <div class="cta-content">
                 <?php if ($is_user_logged_in): ?>
@@ -75,13 +207,14 @@ unset($_SESSION['success'], $_SESSION['error']);
                     </p>
                     <a href="<?= BASE_URL ?>/view/auth/index.php" class="btn btn-primary btn-lg">Create Account Now</a>
                 <?php endif; ?>
+
             </div>
         </div>
     </section>
 
     <script src="<?= ASSET_URL ?>/js/landing/main.js"></script>
 
-    <?php require VIEW_PATH . '/partials/footer.php'; ?>
+    <?php require VIEW_PATH . 'partials/footer.php'; ?>
 </body>
 
 </html>
