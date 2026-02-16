@@ -45,14 +45,14 @@ function register_user()
     // VALIDATE MIDDLE INITIAL FORMAT (IF PROVIDED)
     if ($middle_initial !== null && strlen($middle_initial) > 5) {
         $_SESSION['error'] = "Middle initial should be 1-5 characters only!";
-        header("Location:" . BASE_URL . "/view/auth/index.php");
+        header("Location: " . BASE_URL . "/view/auth/index.php");
         die();
     }
 
     // CHECK IF EMAIL ALREADY EXISTS
     if ($user->email_exists($email)) {
         $_SESSION['error'] = "This email is already registered!";
-        header("Location:" . BASE_URL . "/view/auth/index.php");
+        header("Location: " . BASE_URL . "/view/auth/index.php");
         die();
     }
 
@@ -82,7 +82,7 @@ function register_user()
             header("Location: " . BASE_URL . "/view/auth/index.php");
             die();
         }
-    } catch (PDOException $e) {
+    } catch (Exception $e) {
         $_SESSION['error'] = "Registration failed: " . $e->getMessage();
         header("Location: " . BASE_URL . "/view/auth/index.php");
         die();
@@ -94,6 +94,7 @@ function login_user()
 {
     global $conn;
     $user = new User();
+
     // GET AND SANITIZE INPUT
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
@@ -124,8 +125,8 @@ function login_user()
         $_SESSION['user_email'] = $user_data['email'];
         $_SESSION['user_phone'] = $user_data['phone_number'];
 
-        // REDIRECT USER TO LANDING PAGE
-        header("Location: " . BASE_URL . "/index.php");
+        // REDIRECT USER TO DASHBOARD
+        header("Location: " . BASE_URL . "/view/user_module/user_dashboard.php");
         exit();
     }
 
