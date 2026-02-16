@@ -1,39 +1,67 @@
-const container = document.getElementById("authContainer");
-const loginTab = document.getElementById("loginTab");
-const registerTab = document.getElementById("registerTab");
-
-if (loginTab && registerTab && container) {
-  loginTab.addEventListener("click", () => {
-    container.classList.remove("signup-active");
-    loginTab.classList.add("active");
-    registerTab.classList.remove("active");
-  });
-
-  registerTab.addEventListener("click", () => {
-    container.classList.add("signup-active");
-    registerTab.classList.add("active");
-    loginTab.classList.remove("active");
-  });
-}
-
-function showTab(tab) {
-  document
-    .querySelectorAll(".tab-content")
-    .forEach((el) => el.classList.remove("active"));
-  document
-    .querySelectorAll(".tab-btn")
-    .forEach((el) => el.classList.remove("active"));
-
-  document.getElementById(tab).classList.add("active");
-
-  if (window.event && window.event.target) {
-    window.event.target.classList.add("active");
-  }
-}
-
-// AUTO-HIDE ALERTS AND SUCCESS/ERROR MESSAGES
 document.addEventListener("DOMContentLoaded", () => {
-  // Target both the login page (.success, .error) and landing page (.alert) messages
+  // ==========================================
+  // 1. MOBILE HAMBURGER MENU TOGGLE
+  // ==========================================
+  const mobileToggle = document.getElementById("mobileToggle");
+  const navMenu = document.getElementById("navMenu");
+
+  if (mobileToggle && navMenu) {
+    // Toggle menu when clicking the hamburger icon
+    mobileToggle.addEventListener("click", function (e) {
+      e.stopPropagation(); // Prevent the click from bubbling up to the document
+      this.classList.toggle("active");
+      navMenu.classList.toggle("active");
+
+      // Animate the three span lines into an "X"
+      const spans = this.querySelectorAll("span");
+      if (this.classList.contains("active")) {
+        spans[0].style.transform = "rotate(45deg) translateY(8px)";
+        spans[1].style.opacity = "0";
+        spans[2].style.transform = "rotate(-45deg) translateY(-8px)";
+      } else {
+        spans[0].style.transform = "";
+        spans[1].style.opacity = "";
+        spans[2].style.transform = "";
+      }
+    });
+
+    // Close menu when clicking anywhere outside of it
+    document.addEventListener("click", function (e) {
+      if (!mobileToggle.contains(e.target) && !navMenu.contains(e.target)) {
+        mobileToggle.classList.remove("active");
+        navMenu.classList.remove("active");
+
+        // Reset the hamburger lines
+        const spans = mobileToggle.querySelectorAll("span");
+        if (spans.length === 3) {
+          spans[0].style.transform = "";
+          spans[1].style.opacity = "";
+          spans[2].style.transform = "";
+        }
+      }
+    });
+
+    // Close menu when clicking any navigation link inside it
+    const navLinks = navMenu.querySelectorAll(".nav-link, .btn");
+    navLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        mobileToggle.classList.remove("active");
+        navMenu.classList.remove("active");
+
+        // Reset the hamburger lines
+        const spans = mobileToggle.querySelectorAll("span");
+        if (spans.length === 3) {
+          spans[0].style.transform = "";
+          spans[1].style.opacity = "";
+          spans[2].style.transform = "";
+        }
+      });
+    });
+  }
+
+  // ==========================================
+  // 2. AUTO-HIDE FLASH MESSAGES
+  // ==========================================
   const flashMessages = document.querySelectorAll(".alert, .success, .error");
 
   flashMessages.forEach((message) => {
