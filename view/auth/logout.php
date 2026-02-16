@@ -1,8 +1,6 @@
 <?php
 require_once dirname(__DIR__, 2) . "/config/init.php";
 
-session_start();
-
 // UNSET ALL SESSION VARIABLES
 $_SESSION = array();
 
@@ -25,5 +23,5 @@ session_start();
 $_SESSION['success'] = "You have been logged out successfully.";
 
 // REDIRECT TO LANDING PAGE
-header("Location: " . BASE_URL . "/index.php");
+header("Location: " . BASE_URL . "/view/landing_module/index.php");
 exit;
