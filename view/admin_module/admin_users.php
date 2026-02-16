@@ -1,6 +1,12 @@
 <?php
 require_once dirname(__DIR__, 2) . "/config/init.php";
 
+// PREVENT BROWSER CACHING - CRITICAL FOR SECURITY
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
+
 // PREVENT ACCESS IF NOT LOGGED IN
 if (!isset($_SESSION['admin_logged_in'])) {
     header("Location: " . BASE_URL . "/view/auth/index.php");
@@ -27,13 +33,10 @@ $users   = $userObj->list_users();
 <body>
     <div class="dashboard-container">
 
-        <!-- SIDEBAR -->
         <?php require_once __DIR__ . '/../partials/admin_sidebar.php'; ?>
 
-        <!-- MAIN CONTENT -->
         <main class="main-content">
 
-            <!-- HEADER -->
             <header class="content-header">
                 <div class="welcome-section">
                     <h1 class="welcome-title">User Management</h1>
@@ -42,12 +45,10 @@ $users   = $userObj->list_users();
                 <a href="add_user.php" class="btn-report-issue">+ Add User</a>
             </header>
 
-            <!-- SEARCH BAR -->
             <div class="users-search">
                 <input type="text" placeholder="Search users by name or email...">
             </div>
 
-            <!-- USERS TABLE -->
             <section class="users-section">
                 <div class="table-wrapper">
                     <table class="users-table">
