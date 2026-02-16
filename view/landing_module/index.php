@@ -38,7 +38,7 @@ $is_user_logged_in = isset($_SESSION['user_logged_in']) && $_SESSION['user_logge
 
                 <!-- CONDITIONAL HERO BUTTONS -->
                 <div class="hero-actions">
-                    <?php if ($is_user_logged_in): ?>   
+                    <?php if ($is_user_logged_in): ?>
                         <!-- IF USER IS LOGGED IN, IT SHOWS THE DASHBOARD AND DOWNLOAD APP BUTTONS -->
                         <a href="<? VIEW_PATH ?>user_module/user_dashboard.php" class="btn btn-primary btn-lg">Go to Dashboard</a>
                         <a href="#services" class="btn btn-secondary btn-lg">Learn More</a>
