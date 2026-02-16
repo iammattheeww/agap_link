@@ -125,8 +125,8 @@ function login_user()
         $_SESSION['user_email'] = $user_data['email'];
         $_SESSION['user_phone'] = $user_data['phone_number'];
 
-        // REDIRECT USER TO DASHBOARD
-        header("Location: " . BASE_URL . "/view/user_module/user_dashboard.php");
+        // REDIRECT USER TO LANDING PAGE (FIXED PATH)
+        header("Location: " . BASE_URL . "/view/landing_module/index.php");
         exit();
     }
 
