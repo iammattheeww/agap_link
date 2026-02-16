@@ -8,21 +8,15 @@ header("Pragma: no-cache");
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: /agap_link/view/auth/index.php");
+    header("Location: " . BASE_URL . "/view/auth/index.php");
     exit();
 }
 
-require_once __DIR__ . '/../../config/agaplinkdb.php';
+require_once MODEL_PATH . 'Report.php';
 
-// FETCH CATEGORIES FOR DROPDOWN
-$categoriesQuery = "SELECT category_id, name FROM categories";
-$categoriesStmt = $conn->query($categoriesQuery);
-
-$categories = [];
-
-if ($categoriesStmt) {
-    $categories = $categoriesStmt->fetchAll(PDO::FETCH_ASSOC);
-}
+// FETCH CATEGORIES USING MODEL (MVC Compliant)
+$reportModel = new Report();
+$categories = $reportModel->getAllCategories();
 
 // GET USER NAME FROM SESSION
 $userName = $_SESSION['user_name'] ?? 'User';
@@ -34,14 +28,14 @@ $userName = $_SESSION['user_name'] ?? 'User';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="/agap_link/assets/favicon_io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="<?= ASSET_URL ?>/favicon_io/favicon.ico">
     <title>Create Report - AGAP-Link</title>
-    <link rel="stylesheet" href="/agap_link/assets/css/user_module/user_module.css">
+    <link rel="stylesheet" href="<?= ASSET_URL ?>/css/user_module/user_module.css">
 </head>
 
 <body>
     <div class="dashboard-container">
-        <?php require_once __DIR__ . '/../partials/user_sidebar.php'; ?>
+        <?php require_once VIEW_PATH . 'partials/user_sidebar.php'; ?>
 
         <main class="main-content">
             <div class="create-report-container">
@@ -66,7 +60,7 @@ $userName = $_SESSION['user_name'] ?? 'User';
                 <?php endif; ?>
 
                 <div class="report-form-section">
-                    <form action="/agap_link/controller/create_report_process.php" method="POST" enctype="multipart/form-data" id="createReportForm">
+                    <form action="<?= BASE_URL ?>/controller/create_report_process.php" method="POST" enctype="multipart/form-data" id="createReportForm">
                         <input type="hidden" name="action" value="create_report">
 
                         <div class="form-group">
@@ -142,7 +136,7 @@ $userName = $_SESSION['user_name'] ?? 'User';
 
                         <div class="form-actions">
                             <button type="submit" class="btn-primary">Submit Report</button>
-                            <a href="/agap_link/view/user_module/user_dashboard.php" class="btn-secondary">Cancel</a>
+                            <a href="<?= BASE_URL ?>/view/user_module/user_dashboard.php" class="btn-secondary">Cancel</a>
                         </div>
                     </form>
                 </div>
@@ -150,8 +144,8 @@ $userName = $_SESSION['user_name'] ?? 'User';
         </main>
     </div>
 
-    <script src="/agap_link/assets/js/user_module/create_report.js"></script>
-    <script src="/agap_link/assets/js/user_module/main.js"></script>
+    <script src="<?= ASSET_URL ?>/js/user_module/create_report.js"></script>
+    <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
     <button class="mobile-menu-toggle" aria-label="Toggle Menu">☰</button>
 </body>
 
