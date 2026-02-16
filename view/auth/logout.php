@@ -1,6 +1,8 @@
 <?php
 require_once dirname(__DIR__, 2) . "/config/init.php";
 
+session_start();
+
 // UNSET ALL SESSION VARIABLES
 $_SESSION = array();
 
@@ -22,6 +24,6 @@ header("Expires: Sat, 26 Jul 1997 05:00:00 GMT"); // Date in the past
 session_start();
 $_SESSION['success'] = "You have been logged out successfully.";
 
-// REDIRECT TO LANDING PAGE
+// REDIRECT TO LANDING PAGE (FIXED PATH)
 header("Location: " . BASE_URL . "/view/landing_module/index.php");
 exit;
