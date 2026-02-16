@@ -1,5 +1,5 @@
 /* IMPORT ROOT VARIABLES FROM LANDING PAGE STYLE */
-@import url("/assets/css/landing_page/style.css");
+@import url("../landing_page/style.css");
 
 html,
 body {
@@ -32,7 +32,7 @@ body {
   padding: var(--spacing-3xl);
   background:
     linear-gradient(135deg, rgba(26, 35, 50, 0.85), rgba(44, 62, 80, 0.75)),
-    url("/assets/images/landing_page.png");
+    url("../../images/landing_page.png");
   background-size: cover;
   background-position: center;
 }

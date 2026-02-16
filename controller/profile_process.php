@@ -1,6 +1,5 @@
 <?php
 require_once dirname(__DIR__) . "/config/init.php";
-
 require_once MODEL_PATH . 'User.php';
 
 // CHECK IF USER IS LOGGED IN
@@ -77,7 +76,7 @@ function update_profile()
     $currentEmail = $user->get_user_email($_SESSION['user_id']);
     if ($email !== $currentEmail && $user->email_exists($email)) {
         $_SESSION['error'] = "This email is already registered to another account!";
-        header("Location: /agap_link/view/user_module/profile.php");
+        header("Location: " . BASE_URL . "/view/user_module/profile.php");
         exit();
     }
 
@@ -115,7 +114,7 @@ function update_profile()
             header("Location: " . BASE_URL . "/view/user_module/profile.php");
             exit();
         }
-    } catch (PDOException $e) {
+    } catch (Exception $e) {
         $_SESSION['error'] = "Update failed: " . $e->getMessage();
         header("Location: " . BASE_URL . "/view/user_module/profile.php");
         exit();
@@ -135,42 +134,30 @@ function change_password()
     // VALIDATE REQUIRED FIELDS
     if (empty($currentPassword) || empty($newPassword) || empty($confirmPassword)) {
         $_SESSION['error'] = "Please fill in all password fields!";
-        header("Location: /agap_link/view/user_module/profile.php");
+        header("Location: " . BASE_URL . "/view/user_module/profile.php");
         exit();
     }
 
     // VALIDATE NEW PASSWORD LENGTH
     if (strlen($newPassword) < 8) {
         $_SESSION['error'] = "New password must be at least 8 characters long!";
-        header("Location: /agap_link/view/user_module/profile.php");
+        header("Location: " . BASE_URL . "/view/user_module/profile.php");
         exit();
     }
 
     // VALIDATE PASSWORD MATCH
     if ($newPassword !== $confirmPassword) {
         $_SESSION['error'] = "New passwords do not match!";
-        header("Location: /agap_link/view/user_module/profile.php");
+        header("Location: " . BASE_URL . "/view/user_module/profile.php");
         exit();
     }
-    
+
     // HASH NEW PASSWORD
     $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
-    // UPDATE PASSWORD IN DATABASE
+    // UPDATE PASSWORD USING MODEL
     try {
-        $sql = "UPDATE users SET password_hash = :password WHERE user_id = :user_id";
-        $conn = new PDO(
-            "mysql:host=localhost;dbname=agap_link",
-            "root",
-            ""
-        );
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        $stmt = $conn->prepare($sql);
-        $result = $stmt->execute([
-            ':password' => $hashedPassword,
-            ':user_id' => $_SESSION['user_id']
-        ]);
+        $result = $user->update_password($_SESSION['user_id'], $hashedPassword);
 
         if ($result) {
             $_SESSION['success'] = "Password changed successfully!";
@@ -181,65 +168,48 @@ function change_password()
             header("Location: " . BASE_URL . "/view/user_module/profile.php");
             exit();
         }
-    } catch (PDOException $e) {
+    } catch (Exception $e) {
         $_SESSION['error'] = "Password change failed: " . $e->getMessage();
         header("Location: " . BASE_URL . "/view/user_module/profile.php");
         exit();
     }
 }
 
-// DELETE USER ACCOUNT - UPDATED TO USE MODEL METHOD
+// DELETE USER ACCOUNT
 function delete_account()
 {
-    global $user; // INSTANCE NI SIYA
+    global $user;
 
     // VERIFY CONFIRMATION INPUT
     $confirmation = trim($_POST['delete_confirmation'] ?? '');
 
     if ($confirmation !== 'DELETE') {
         $_SESSION['error'] = "Account deletion cancelled. Confirmation text did not match.";
-        header("Location: /agap_link/view/user_module/profile.php");
+        header("Location: " . BASE_URL . "/view/user_module/profile.php");
         exit();
     }
 
     $user_id = $_SESSION['user_id'];
 
     try {
-        // CONNECT TO DATABASE FOR PHOTO DELETION AND TRANSACTION
-        $conn = new PDO(
-            "mysql:host=localhost;dbname=agap_link",
-            "root",
-            ""
-        );
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        // BEGIN TRANSACTION
-        $conn->beginTransaction();
-
-        // GET USER'S REPORTS TO DELETE ASSOCIATED PHOTOS
-        $getReportsQuery = "SELECT photo_path FROM reports WHERE user_id = :user_id AND photo_path IS NOT NULL";
-        $getReportsStmt = $conn->prepare($getReportsQuery);
-        $getReportsStmt->execute([':user_id' => $user_id]);
-        $reports = $getReportsStmt->fetchAll(PDO::FETCH_ASSOC);
+        // GET USER'S REPORTS TO DELETE ASSOCIATED PHOTOS USING MODEL
+        $reports = $user->get_user_reports_photos($user_id);
 
         // DELETE REPORT PHOTOS FROM FILESYSTEM
         foreach ($reports as $report) {
-            $photo_path = __DIR__ . '/..' . $report['photo_path'];
-            if (file_exists($photo_path)) {
-                unlink($photo_path);
+            // Strip BASE_URL from the photo_path to get the real relative path
+            $relative_path = str_replace(BASE_URL, '', $report['photo_path']);
+            $photo_file_path = ROOT_PATH . $relative_path;
+
+            if (file_exists($photo_file_path)) {
+                unlink($photo_file_path);
             }
         }
 
-        // DELETE USER REPORTS (manually, before user deletion)
-        $deleteReportsQuery = "DELETE FROM reports WHERE user_id = :user_id";
-        $deleteReportsStmt = $conn->prepare($deleteReportsQuery);
-        $deleteReportsStmt->execute([':user_id' => $user_id]);
+        // DELETE USER REPORTS
+        $user->delete_user_reports($user_id);
 
-        // COMMIT TRANSACTION
-        $conn->commit();
-
-        // NOW USE THE MODEL'S delete_user METHOD
-        // This follows proper MVC pattern - Controller uses Model
+        // DELETE USER
         $deleteResult = $user->delete_user($user_id);
 
         if ($deleteResult) {
@@ -255,17 +225,12 @@ function delete_account()
             $_SESSION['success'] = "Your account has been successfully deleted. We're sorry to see you go.";
 
             // REDIRECT TO LANDING PAGE
-            header("Location: /agap_link/index.php");
+            header("Location: " . BASE_URL . "/index.php");
             exit();
         } else {
             throw new Exception("Failed to delete user from database.");
         }
     } catch (Exception $e) {
-        // ROLLBACK ON ERROR
-        if (isset($conn) && $conn->inTransaction()) {
-            $conn->rollBack();
-        }
-
         $_SESSION['error'] = "Failed to delete account: " . $e->getMessage();
         header("Location: " . BASE_URL . "/view/user_module/profile.php");
         exit();

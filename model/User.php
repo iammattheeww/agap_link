@@ -32,7 +32,7 @@ class User
                 $phone_number,
                 $password,
                 $NOW
-            ]);;
+            ]);
             $this->conn->commit();
             return true;
         } catch (Exception $e) {
@@ -186,6 +186,34 @@ class User
             ':id' => $id
         ]);
         return $result;
+    }
+
+    // UPDATE USER PASSWORD METHOD (NEW)
+    public function update_password($user_id, $hashed_password)
+    {
+        $sql = "UPDATE users SET password_hash = :password WHERE user_id = :user_id";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([
+            ':password' => $hashed_password,
+            ':user_id' => $user_id
+        ]);
+    }
+
+    // GET USER REPORT PHOTOS FOR DELETION (NEW)
+    public function get_user_reports_photos($user_id)
+    {
+        $sql = "SELECT photo_path FROM reports WHERE user_id = :user_id AND photo_path IS NOT NULL";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([':user_id' => $user_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // DELETE USER REPORTS (NEW)
+    public function delete_user_reports($user_id)
+    {
+        $sql = "DELETE FROM reports WHERE user_id = :user_id";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([':user_id' => $user_id]);
     }
 
     // DELETE USER BY ID METHOD
