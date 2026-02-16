@@ -1,5 +1,6 @@
 <?php
-require_once dirname(path: __DIR__) . '/config/agaplinkdb.php'; 
+require_once dirname(__DIR__) . '/config/agaplinkdb.php';
+
 class Report
 {
     private $conn;
@@ -10,9 +11,17 @@ class Report
         global $conn;
         $this->conn = $conn;
     }
+
+    // GET ALL CATEGORIES FOR DROPDOWNS (NEW)
+    public function getAllCategories()
+    {
+        $sql = "SELECT category_id, name FROM categories ORDER BY name ASC";
+        $q = $this->conn->query($sql);
+        return $q->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function getUserReports($user_id)
     {
-
         $sql = "SELECT 
                     r.*,
                     c.name as category_name,
