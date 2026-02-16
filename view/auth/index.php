@@ -1,17 +1,19 @@
 <?php
 require_once dirname(__DIR__, 2) . "/config/init.php";
 
+// If a user is already logged in, redirect them away instead of destroying their session!
+if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) {
+    header("Location: " . BASE_URL . "/view/user_module/user_dashboard.php");
+    exit();
+} elseif (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
+    header("Location: " . BASE_URL . "/view/admin_module/admin_dashboard.php");
+    exit();
+}
+
 $error = $_SESSION['error'] ?? '';
 $success = $_SESSION['success'] ?? '';
 unset($_SESSION['error']);
 unset($_SESSION['success']);
-
-// DESTROY ALL SESSION DATA
-session_destroy();
-session_unset();
-unset($_SESSION["logged_in"]);
-$_SESSION = array();
-
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +31,6 @@ $_SESSION = array();
 
     <div class="auth-container" id="authContainer">
 
-        <!-- LEFT HERO -->
         <div class="auth-left">
             <div class="overlay"></div>
             <div class="hero-content">
@@ -47,7 +48,6 @@ $_SESSION = array();
             </div>
         </div>
 
-        <!-- RIGHT FORM -->
         <div class="auth-right">
             <div class="auth-box">
                 <h1>Welcome!</h1>
@@ -61,14 +61,12 @@ $_SESSION = array();
                     <div class="success"><?= htmlspecialchars($success) ?></div>
                 <?php endif; ?>
 
-                <!-- TABS -->
                 <div class="tabs">
                     <button class="tab-btn active" id="loginTab" onclick="showTab('login')">Log In</button>
                     <button class="tab-btn" id="registerTab" onclick="showTab('register')">Sign Up</button>
                 </div>
 
-                <!-- LOGIN -->
-                <form method="POST" action="../../controller/auth_process.php" id="login" class="tab-content active">
+                <form method="POST" action="<?= BASE_URL ?>/controller/auth_process.php" id="login" class="tab-content active">
                     <input type="hidden" name="action" value="login">
 
                     <label>Email</label>
@@ -82,11 +80,9 @@ $_SESSION = array();
                     <p class="hint">Don’t have an account? <span class="create-account" onclick="showTab('register')">Create Account</span></p>
                 </form>
 
-                <!-- REGISTER -->
-                <form method="POST" action="../../controller/auth_process.php" id="register" class="tab-content">
+                <form method="POST" action="<?= BASE_URL ?>/controller/auth_process.php" id="register" class="tab-content">
                     <input type="hidden" name="action" value="register">
 
-                    <!-- NAME FIELDS ROW -->
                     <div class="name-row">
                         <div class="name-field">
                             <label>First Name <span class="required">*</span></label>
