@@ -4,6 +4,7 @@
     # Prevent directory browsing
     Options -Indexes
 
-    # Block direct URL access to config, controller, and model folders
-    RewriteRule ^(config|controller|model)/ - [F,L]
+    # Block direct URL access to config and model folders ONLY
+    RewriteRule ^(config|model)/ - [F,L]
+
 </IfModule>
