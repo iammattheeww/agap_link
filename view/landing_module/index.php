@@ -34,12 +34,6 @@ unset($_SESSION['success'], $_SESSION['error']);
                 </div>
             <?php endif; ?>
 
-            <?php if ($error): ?>
-                <div class="alert alert-error" style="position: relative; z-index: 10; margin-bottom: 20px; text-align: center; background: #fee2e2; color: #991b1b; padding: 15px; border-radius: 8px; border-left: 4px solid #ef4444;">
-                    <?= htmlspecialchars($error) ?>
-                </div>
-            <?php endif; ?>
-
             <div class="hero-content">
                 <span class="badge">
                     <span class="badge-dot"></span>
