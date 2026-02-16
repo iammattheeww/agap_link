@@ -1,6 +1,12 @@
 <?php
 require_once dirname(__DIR__, 2) . "/config/init.php";
 
+// PREVENT BROWSER CACHING - CRITICAL FOR SECURITY
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: " . BASE_URL . "/view/auth/index.php");
     exit();
@@ -34,12 +40,9 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
 
 <body>
     <div class="dashboard-container">
-        <!-- SIDEBAR -->
         <?php require_once __DIR__ . '/../partials/user_sidebar.php'; ?>
 
-        <!-- MAIN CONTENT -->
         <main class="main-content">
-            <!-- HEADER -->
             <div class="reports-header">
                 <h1 class="page-title">My Reports</h1>
                 <div class="reports-filters">
@@ -65,10 +68,8 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
                 </div>
             <?php endif; ?>
 
-            <!-- REPORTS SECTION -->
             <section class="recent-reports-section">
                 <?php if (!$hasReports): ?>
-                    <!-- EMPTY STATE -->
                     <div class="empty-state">
                         <div class="empty-icon">📋</div>
                         <p class="empty-message">You haven't submitted any reports yet.</p>
@@ -78,7 +79,6 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
                         </button>
                     </div>
                 <?php else: ?>
-                    <!-- REPORTS LIST -->
                     <div class="reports-list">
                         <?php foreach ($userReports as $report): ?>
                             <div class="report-card" data-status="<?= strtolower($report['status']) ?>">
