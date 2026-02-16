@@ -1,6 +1,12 @@
 <?php
 require_once dirname(__DIR__, 2) . "/config/init.php";
 
+// PREVENT BROWSER CACHING - CRITICAL FOR SECURITY
+header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+header("Cache-Control: post-check=0, pre-check=0", false);
+header("Pragma: no-cache");
+header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
+
 if (!isset($_SESSION['admin_logged_in'])) {
     header("Location: " . BASE_URL . "/view/auth/index.php");
     exit();
@@ -21,13 +27,10 @@ if (!isset($_SESSION['admin_logged_in'])) {
 <body>
     <div class="dashboard-container">
 
-        <!-- SIDEBAR -->
         <?php require_once __DIR__ . '/../partials/admin_sidebar.php'; ?>
 
-        <!-- MAIN CONTENT -->
         <main class="main-content">
 
-            <!-- HEADER -->
             <header class="content-header">
                 <div class="welcome-section">
                     <h1 class="welcome-title">Announcements</h1>
@@ -38,7 +41,6 @@ if (!isset($_SESSION['admin_logged_in'])) {
                 </button>
             </header>
 
-            <!-- ANNOUNCEMENTS SECTION -->
             <section class="announcements-section">
                 <h2 class="section-title">Published Announcements</h2>
 
