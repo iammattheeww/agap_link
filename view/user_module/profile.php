@@ -202,7 +202,7 @@ $firstInitial = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U';
     <div class="dashboard-container">
         <!-- SIDEBAR -->
         <?php require VIEW_PATH . 'partials/user_sidebar.php' ?>
-
+<div class="page-transition">
         <!-- MAIN CONTENT -->
         <main class="main-content">
             <div class="profile-container">
@@ -378,6 +378,7 @@ $firstInitial = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U';
             </div>
         </main>
     </div>
+       </div>
 
     <!-- DELETE CONFIRMATION MODAL -->
     <div id="deleteModal" class="modal">

@@ -2,7 +2,15 @@
 $is_user_logged_in = isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true;
 $is_admin_logged_in = isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true;
 $user_name = $is_user_logged_in ? $_SESSION['user_name'] : '';
+
+$first_name = '';
+if (!empty($user_name)) {
+    $name_parts = explode(' ', trim($user_name));
+    $first_name = $name_parts[0];
+}
+
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -51,7 +59,7 @@ $user_name = $is_user_logged_in ? $_SESSION['user_name'] : '';
                         <!-- IF USER IS LOGGED IN, IT DISPLAYS THE USERNAME, THE DASHBOARD, AND LOGOUT BUTTONS -->
                         <?php if ($is_user_logged_in): ?>
                             <!-- IF USER IS LOGGED IN, IT SHOWS THE USERNAME GREETING, THE DASHBOARD AND LOGOUT BUTTONS -->
-                            <span class="user-greeting">Hello, <strong><?php echo htmlspecialchars($user_name); ?></strong></span>
+                        <span class="user-greeting">Hello, <strong><?php echo htmlspecialchars($first_name); ?></strong></span>
                             <a href="<?= BASE_URL ?>/view/user_module/user_dashboard.php" class="btn btn-outline">Dashboard</a>
                             <a href="<?= BASE_URL ?>/view/auth/logout.php" class="btn btn-link">Logout</a>
                         <?php else: ?>

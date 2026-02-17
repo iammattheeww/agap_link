@@ -10,7 +10,7 @@ if (!isset($_SESSION['user_id'])) {
 
 // REQUEST METHOD CHECK
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header("Location: " . BASE_URL . "/view/user_module/create_report.php");
+  header("Location: " . BASE_URL . "/view/user_module/user_dashboard.php");
     exit();
 }
 
@@ -23,7 +23,7 @@ switch ($action) {
 
     default:
         $_SESSION['error'] = "Invalid action!";
-        header("Location: " . BASE_URL . "/view/user_module/create_report.php");
+       header("Location: " . BASE_URL . "/view/user_module/user_dashboard.php?report_error=1");
         exit();
 }
 
@@ -75,7 +75,7 @@ function create_report()
         $report_id = $report->createReport($user_id, $category_id, $description, $address, $photo_path, $gps_lat, $gps_long);
 
         if ($report_id) {
-            header("Location: " . BASE_URL . "/view/user_module/create_report.php?success=1");
+           header("Location: " . BASE_URL . "/view/user_module/user_dashboard.php?report_success=1");
             exit();
         } else {
             throw new Exception("Failed to create report");
@@ -83,7 +83,7 @@ function create_report()
     } catch (Exception $e) {
         error_log("Error: " . $e->getMessage());
         $_SESSION['error'] = 'Submission failed: ' . $e->getMessage();
-        header("Location: " . BASE_URL . "/view/user_module/create_report.php");
+       header("Location: " . BASE_URL . "/view/user_module/user_dashboard.php?report_error=1");
         exit();
     }
 }

@@ -72,21 +72,36 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
             <!-- STATISTICS CARDS -->
             <div class="stats-grid">
                 <div class="stat-card stat-card-blue">
-                    <h3 class="stat-label">Total Reports</h3>
-                    <p class="stat-value"><?= $totalReports ?></p>
-                    <p class="stat-sublabel">All submissions</p>
+                    <div class="stat-icon-wrapper">
+                        <i data-lucide="layers" class="stat-icon"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 class="stat-label">Total Reports</h3>
+                        <p class="stat-value"><?= $totalReports ?></p>
+                        <p class="stat-sublabel">All submissions</p>
+                    </div>
                 </div>
 
                 <div class="stat-card stat-card-green">
-                    <h3 class="stat-label">Resolved</h3>
-                    <p class="stat-value"><?= $resolvedReports ?></p>
-                    <p class="stat-sublabel">Successfully resolved</p>
+                    <div class="stat-icon-wrapper">
+                        <i data-lucide="check-circle" class="stat-icon"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 class="stat-label">Resolved</h3>
+                        <p class="stat-value"><?= $resolvedReports ?></p>
+                        <p class="stat-sublabel">Successfully resolved</p>
+                    </div>
                 </div>
 
                 <div class="stat-card stat-card-orange">
-                    <h3 class="stat-label">Pending</h3>
-                    <p class="stat-value"><?= $pendingReports ?></p>
-                    <p class="stat-sublabel">Awaiting action</p>
+                    <div class="stat-icon-wrapper">
+                        <i data-lucide="clock" class="stat-icon"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 class="stat-label">Pending</h3>
+                        <p class="stat-value"><?= $pendingReports ?></p>
+                        <p class="stat-sublabel">Awaiting action</p>
+                    </div>
                 </div>
             </div>
 

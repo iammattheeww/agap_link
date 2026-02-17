@@ -26,7 +26,11 @@ $userReports = $reportModel->getUserReports($_SESSION['user_id']);
 $stats = $reportModel->getUserReportStats($_SESSION['user_id']);
 
 // GET USER NAME FROM SESSION
-$userName = $_SESSION['user_name'] ?? 'User';
+$fullName = $_SESSION['user_name'] ?? 'User';
+
+// Extract first name only
+$firstName = explode(' ', trim($fullName))[0];
+
 
 // EXTRACT STATISTICS FROM ARRAY
 $totalReports = $stats['total_reports'] ?? 0;
@@ -37,6 +41,19 @@ $pendingReports = $stats['pending_count'] ?? 0;
 $hasReports = is_array($userReports) && count($userReports) > 0;
 
 ?>
+<?php if (isset($_GET['report_success'])): ?>
+    <div class="alert alert-success">
+        Report submitted successfully!
+    </div>
+<?php endif; ?>
+
+<?php if (isset($_GET['report_error'])): ?>
+    <div class="alert alert-error">
+        <?= $_SESSION['error'] ?? 'Something went wrong.' ?>
+    </div>
+    <?php unset($_SESSION['error']); ?>
+<?php endif; ?>
+
 
 <!DOCTYPE html>
 <html>
@@ -53,115 +70,252 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
     <div class="dashboard-container">
         <!-- SIDEBAR - USING REQUIRE_ONCE -->
         <?php require VIEW_PATH . 'partials/user_sidebar.php'; ?>
-
         <!-- MAIN CONTENT -->
-        <main class="main-content">
-            <!-- HEADER -->
-            <header class="content-header">
-                <div class="welcome-section">
-                    <h1 class="welcome-title">Welcome back, <?= htmlspecialchars($userName) ?>!</h1>
-                    <p class="welcome-subtitle">Here's what's happening in your neighborhood.</p>
-                </div>
-                <a href="<?= BASE_URL ?>/view/user_module/create_report.php" class="btn-report-issue" style="text-decoration: none;">
-                    <span class="btn-icon">+ </span>
-                    Report Issue
-                </a>
-            </header>
+       <main class="main-content page-transition">
 
-            <!-- STATISTICS CARDS -->
-            <div class="stats-grid">
-                <div class="stat-card stat-card-blue">
-                    <div class="stat-content">
-                        <h3 class="stat-label">My Reports</h3>
-                        <p class="stat-value"><?= $totalReports ?></p>
-                        <p class="stat-sublabel">Total Submissions</p>
-                    </div>
-                </div>
+    <!-- HEADER -->
+    <header class="content-header">
+        <div class="welcome-section">
+            <h1 class="welcome-title">
+                Welcome back, <?= htmlspecialchars($firstName) ?>!
+            </h1>
+            <p class="welcome-subtitle">create_report.php
+                Here's what's happening in your neighborhood.
+            </p>
+        </div>
 
-                <div class="stat-card stat-card-green">
-                    <div class="stat-content">
-                        <h3 class="stat-label">Resolved</h3>
-                        <p class="stat-value"><?= $resolvedReports ?></p>
-                        <p class="stat-sublabel">In progress</p>
-                    </div>
-                </div>
+       <button type="button" class="btn-report-issue" id="openReportModal">
+    <span class="btn-icon">+</span>
+    Report Issue
+</button>
 
-                <div class="stat-card stat-card-orange">
-                    <div class="stat-content">
-                        <h3 class="stat-label">Pending</h3>
-                        <p class="stat-value"><?= $pendingReports ?></p>
-                        <p class="stat-sublabel">In progress</p>
-                    </div>
-                </div>
+    </header>
+
+
+    <!-- STATISTICS -->
+    <section class="stats-grid">
+
+        <!-- ORANGE MAIN CARD -->
+        <div class="stat-card stat-card-main">
+            <div class="stat-content">
+                <h3 class="stat-label">My Reports</h3>
+                <p class="stat-value"><?= $totalReports ?></p>
+                <p class="stat-sublabel">Total submissions</p>
+            </div>
+        </div>
+
+        <!-- RESOLVED -->
+        <div class="stat-card stat-card-light stat-card-green">
+            <div class="stat-content">
+                <h3 class="stat-label">Resolved</h3>
+                <p class="stat-value"><?= $resolvedReports ?></p>
+                <p class="stat-sublabel">Issues fixed</p>
+            </div>
+        </div>
+
+        <!-- PENDING -->
+        <div class="stat-card stat-card-light stat-card-orange">
+            <div class="stat-content">
+                <h3 class="stat-label">Pending</h3>
+                <p class="stat-value"><?= $pendingReports ?></p>
+                <p class="stat-sublabel">In progress</p>
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- RECENT ACTIVITY -->
+    <section class="recent-reports-section">
+
+        <h2 class="section-title">Recent Activity</h2>
+
+        <?php if (!$hasReports): ?>
+
+            <div class="empty-state">
+                <div class="empty-icon">!</div>
+                <p class="empty-message">
+                    You haven't submitted any reports yet.
+                </p>
             </div>
 
-            <!-- RECENT REPORTS SECTION -->
-            <section class="recent-reports-section">
-                <h2 class="section-title">Recent Reports</h2>
+        <?php else: ?>
 
-                <?php if (!$hasReports): ?>
-                    <!-- EMPTY STATE - NO REPORTS IN ARRAY -->
-                    <div class="empty-state">
-                        <div class="empty-icon">!</div>
-                        <p class="empty-message">You haven't submitted any reports yet.</p>
-                        <a href="<?= BASE_URL ?>/view/user_module/create_report.php" class="btn-submit-first"  style="text-decoration: none;">
-                            <span class="btn-icon">+</span>
-                            Submit your first report
-                        </a>
-                    </div>
-                <?php else: ?>
-                    <!-- REPORTS LIST - USING FOREACH LOOP TO ITERATE THROUGH ARRAY -->
-                    <div class="reports-list">
-                        <?php
-                        // LOOP THROUGH EACH REPORT IN THE ARRAY
-                        foreach ($userReports as $index => $report):
-                        ?>
-                            <div class="report-card">
-                                <div class="report-image-container">
-                                    <?php if (!empty($report['photo_path'])): ?>
-                                        <img src="<?= htmlspecialchars($report['photo_path']) ?>" alt="Report photo" class="report-image">
-                                    <?php else: ?>
-                                        <!-- PLACEHOLDER IF NO IMAGE IN ARRAY -->
-                                        <div class="report-placeholder">
-                                            <span class="placeholder-icon">&#x1F4F7;</span>
-                                        </div>
-                                    <?php endif; ?>
-                                </div>
+            <div class="reports-list-activity">
 
-                                <div class="report-details">
-                                    <div class="report-header">
-                                        <!-- DISPLAY DATA FROM CURRENT ARRAY ELEMENT -->
-                                        <h3 class="report-title"><?= htmlspecialchars($report['category_name'] ?? 'General Report') ?></h3>
-                                        <span class="status-badge status-<?= strtolower($report['status']) ?>">
-                                            <?= strtoupper($report['status']) ?>
-                                        </span>
-                                    </div>
-                                    <p class="report-description"><?= htmlspecialchars($report['description']) ?></p>
-                                    <div class="report-meta">
-                                        <span class="meta-item">
-                                            <span class="meta-icon">&#x1F4CD;</span>
-                                            <?= htmlspecialchars($report['address']) ?>
-                                        </span>
-                                        <span class="meta-item">
-                                            <span class="meta-icon">&#x1F551;</span>
-                                            <?= date('M. d, Y', strtotime($report['created_at'])) ?>
-                                        </span>
-                                    </div>
-                                </div>
+                <?php foreach ($userReports as $report): ?>
+
+                    <div class="activity-card">
+
+                        <!-- STATUS ICON -->
+                        <div class="activity-icon 
+                            <?= strtolower($report['status']) === 'resolved' ? 'icon-success' : 'icon-pending' ?>">
+                            
+                            <?= strtolower($report['status']) === 'resolved' ? '✓' : '⏱' ?>
+                        </div>
+
+                        <!-- DETAILS -->
+                        <div class="activity-content">
+                            <h3 class="activity-title">
+                                <?= htmlspecialchars($report['description']) ?>
+                            </h3>
+
+                            <div class="activity-meta">
+                                <span>📍 <?= htmlspecialchars($report['address']) ?></span>
+                                <span>• <?= date('Y-m-d', strtotime($report['created_at'])) ?></span>
                             </div>
-                        <?php
-                        endforeach;
-                        // END OF FOREACH LOOP
-                        ?>
+                        </div>
+
+                        <!-- BADGE -->
+                        <span class="status-badge status-<?= strtolower($report['status']) ?>">
+                            <?= strtolower($report['status']) ?>
+                        </span>
+
                     </div>
-                <?php endif; ?>
-            </section>
-        </main>
+
+                <?php endforeach; ?>
+
+            </div>
+
+        <?php endif; ?>
+
+    </section>
+<!-- REPORT MODAL -->
+<div class="report-modal-overlay" id="reportModal">
+    <div class="report-modal">
+
+        <div class="modal-header">
+            <h2>Report an Issue</h2>
+            <button type="button" class="modal-close" id="closeReportModal">&times;</button>
+        </div>
+
+        <p class="modal-subtitle">
+            Help improve your community by reporting issues.
+        </p>
+
+        <?php require __DIR__ . '/create_report_form_partial.php'; ?>
+
+    </div>
+</div>
+
+</main>
     </div>
 
     <script src="<?=  BASE_URL ?>/assets/js/landing/main.js"></script>
 
     <button class="mobile-menu-toggle" aria-label="Toggle Menu">☰</button>
 </body>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const modal = document.getElementById("reportModal");
+    const openBtn = document.getElementById("openReportModal");
+    const closeBtn = document.getElementById("closeReportModal");
+
+    if (openBtn) {
+        openBtn.addEventListener("click", function () {
+            modal.classList.add("active");
+        });
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener("click", function () {
+            modal.classList.remove("active");
+        });
+    }
+
+    if (modal) {
+        modal.addEventListener("click", function (e) {
+            if (e.target === modal) {
+                modal.classList.remove("active");
+            }
+        });
+    }
+
+});
+</script>
+<script>
+    const cancelBtn = document.getElementById("cancelReportBtn");
+
+if (cancelBtn) {
+    cancelBtn.addEventListener("click", function () {
+        modal.classList.remove("active");
+    });
+}
+
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const getLocationBtn = document.getElementById("getLocationBtn");
+    const status = document.getElementById("locationStatus");
+    const latInput = document.getElementById("gps_lat");
+    const longInput = document.getElementById("gps_long");
+
+    if (getLocationBtn) {
+        getLocationBtn.addEventListener("click", function () {
+
+            if (!navigator.geolocation) {
+                status.innerHTML = "Geolocation is not supported.";
+                return;
+            }
+
+            status.innerHTML = "Getting location...";
+
+            navigator.geolocation.getCurrentPosition(
+                function (position) {
+                    latInput.value = position.coords.latitude;
+                    longInput.value = position.coords.longitude;
+                    status.innerHTML = "Location captured successfully.";
+                },
+                function () {
+                    status.innerHTML = "Unable to retrieve location.";
+                }
+            );
+        });
+    }
+
+});
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const fileUploadArea = document.getElementById("fileUploadArea");
+    const fileInput = document.getElementById("photo");
+    const previewContainer = document.getElementById("previewContainer");
+    const previewImage = document.getElementById("previewImage");
+    const removeBtn = document.getElementById("removeImageBtn");
+
+    if (fileUploadArea) {
+        fileUploadArea.addEventListener("click", () => fileInput.click());
+    }
+
+    if (fileInput) {
+        fileInput.addEventListener("change", function () {
+            const file = this.files[0];
+
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                previewImage.src = e.target.result;
+                previewContainer.style.display = "block";
+            };
+
+            reader.readAsDataURL(file);
+        });
+    }
+
+    if (removeBtn) {
+        removeBtn.addEventListener("click", function () {
+            fileInput.value = "";
+            previewContainer.style.display = "none";
+        });
+    }
+
+});
+</script>
 
 </html>
