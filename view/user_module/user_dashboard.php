@@ -79,7 +79,7 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
             <h1 class="welcome-title">
                 Welcome back, <?= htmlspecialchars($firstName) ?>!
             </h1>
-            <p class="welcome-subtitle">create_report.php
+            <p class="welcome-subtitle">
                 Here's what's happening in your neighborhood.
             </p>
         </div>
