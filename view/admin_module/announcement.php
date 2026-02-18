@@ -75,7 +75,10 @@ unset($_SESSION['success'], $_SESSION['error']);
                                     <div class="announcement-meta">
                                         <span>&#x1F4C5; <?= date('M d, Y', strtotime($a['created_at'])) ?></span>
                                         <span>&#x1F464; <?= htmlspecialchars($a['author_name'] ?? 'Admin') ?></span>
+<<<<<<< HEAD
                                         <span><?= Announcement::relativeDate($a['created_at']) ?></span>
+=======
+>>>>>>> 1a1e72c74c0c73546b17d950311e1555a11c0339
                                     </div>
                                 </div>
                                 <span class="status-badge status-active">Published</span>
