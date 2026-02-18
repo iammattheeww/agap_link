@@ -204,179 +204,129 @@ $firstInitial = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U';
         <?php require VIEW_PATH . 'partials/user_sidebar.php' ?>
 <div class="page-transition">
         <!-- MAIN CONTENT -->
-        <main class="main-content">
-            <div class="profile-container">
-                <!-- PROFILE HEADER -->
-                <div class="profile-header">
-                    <div class="profile-avatar">
-                        <?= $firstInitial ?>
-                    </div>
-                    <h1 class="profile-name"><?= htmlspecialchars($fullName) ?></h1>
-                    <p class="profile-email"><?= htmlspecialchars($email) ?></p>
-                </div>
+    <main class="main-content">
+  <!-- SUCCESS OUTSIDE LAYOUT -->
+  <?php if (isset($_SESSION['success'])): ?>
+    <div class="alert alert-success fade-alert" style="margin:20px;">
+      <?= htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?>
+    </div>
+  <?php endif; ?>
 
-                <?php if (isset($_SESSION['success'])): ?>
-                    <div class="alert alert-success">
-                        <?= htmlspecialchars($_SESSION['success']) ?>
-                        <?php unset($_SESSION['success']); ?>
-                    </div>
-                <?php endif; ?>
+  <div class="profile-settings-wrapper">
 
-                <?php if (isset($_SESSION['error'])): ?>
-                    <div class="alert alert-error">
-                        <?= htmlspecialchars($_SESSION['error']) ?>
-                        <?php unset($_SESSION['error']); ?>
-                    </div>
-                <?php endif; ?>
+    <!-- TOP ROW -->
+    <div class="profile-top-grid">
 
-                <!-- PERSONAL INFORMATION FORM -->
-                <div class="profile-form-section">
-                    <h2 class="form-section-title">Personal Information</h2>
+      <!-- PROFILE CARD -->
+      <div class="profile-card-ui">
+        <div class="profile-avatar-ui"><?= $firstInitial ?></div>
+        <div class="profile-name-ui"><?= htmlspecialchars($fullName) ?></div>
+        <div class="profile-meta-ui">Resident</div>
+        <button class="btn-secondary">Edit Profile Photo</button>
+      </div>
 
-                    <form action="/agap_link/controller/profile_process.php" method="POST" id="profileForm" autocomplete="on">
-                        <input type="hidden" name="action" value="update_profile">
+      <!-- ACCOUNT INFO -->
+      <div class="profile-form-card">
+        <h2 class="form-section-title">Account Information</h2>
 
-                        <div class="form-grid form-grid-2">
-                            <div class="form-group">
-                                <label class="form-label" for="first_name">First Name *</label>
-                                <input
-                                    type="text"
-                                    id="first_name"
-                                    name="first_name"
-                                    class="form-input"
-                                    value="<?= htmlspecialchars($firstName) ?>"
-                                    required
-                                    autocomplete="given-name"
-                                    maxlength="50">
-                            </div>
+        <form action="/agap_link/controller/profile_process.php" method="POST">
+          <input type="hidden" name="action" value="update_profile">
 
-                            <div class="form-group">
-                                <label class="form-label" for="middle_initial">
-                                    Middle Initial
-                                    <span class="form-label-optional">(Optional)</span>
-                                </label>
-                                <input
-                                    type="text"
-                                    id="middle_initial"
-                                    name="middle_initial"
-                                    class="form-input form-input-small"
-                                    value="<?= htmlspecialchars($middleInitial) ?>"
-                                    autocomplete="additional-name"
-                                    maxlength="5"
-                                    placeholder="e.g., M">
-                            </div>
-                        </div>
-
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label class="form-label" for="last_name">Last Name *</label>
-                                <input
-                                    type="text"
-                                    id="last_name"
-                                    name="last_name"
-                                    class="form-input"
-                                    value="<?= htmlspecialchars($lastName) ?>"
-                                    required
-                                    autocomplete="family-name"
-                                    maxlength="50">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="email">Email Address *</label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    class="form-input"
-                                    value="<?= htmlspecialchars($email) ?>"
-                                    autocomplete="email"
-                                    required>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="phone_number">Phone Number *</label>
-                                <input
-                                    type="tel"
-                                    id="phone_number"
-                                    name="phone_number"
-                                    class="form-input"
-                                    value="<?= htmlspecialchars($phoneNumber) ?>"
-                                    required
-                                    autocomplete="tel"
-                                    pattern="09[0-9]{9}"
-                                    placeholder="09XXXXXXXXX"
-                                    title="Please enter a valid Philippine mobile number (09XXXXXXXXX)">
-                            </div>
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="submit" class="btn-primary">Save Changes</button>
-                            <button type="reset" class="btn-secondary">Cancel</button>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- CHANGE PASSWORD FORM -->
-                <div class="profile-form-section" style="margin-top: 30px;">
-                    <h2 class="form-section-title">Change Password</h2>
-
-                    <form action="<?= BASE_URL ?>" method="POST" id="passwordForm" autocomplete="on">
-                        <input type="hidden" name="action" value="change_password">
-
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label class="form-label" for="current_password">Current Password *</label>
-                                <input
-                                    type="password"
-                                    id="current_password"
-                                    name="current_password"
-                                    class="form-input"
-                                    autocomplete="current-password"
-                                    required>
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="new_password">New Password *</label>
-                                <input
-                                    type="password"
-                                    id="new_password"
-                                    name="new_password"
-                                    class="form-input"
-                                    autocomplete="new-password"
-                                    required
-                                    minlength="8">
-                            </div>
-
-                            <div class="form-group">
-                                <label class="form-label" for="confirm_password">Confirm New Password *</label>
-                                <input
-                                    type="password"
-                                    id="confirm_password"
-                                    name="confirm_password"
-                                    class="form-input"
-                                    autocomplete="new-password"
-                                    required>
-                            </div>
-                        </div>
-
-                        <div class="form-actions">
-                            <button type="submit" class="btn-primary">Update Password</button>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- DANGER ZONE - DELETE ACCOUNT -->
-                <div class="danger-zone">
-                    <h2 class="danger-zone-title">⚠ Danger Zone</h2>
-                    <p class="danger-zone-description">
-                        Once you delete your account, there is no going back. All your reports and personal data will be permanently removed from our system. Please be certain.
-                    </p>
-                    <button type="button" class="btn-danger" onclick="openDeleteModal()">
-                        Delete My Account
-                    </button>
-                </div>
+          <div class="form-grid form-grid-2">
+            <div class="form-group">
+              <label class="form-label">First Name</label>
+              <input type="text" name="first_name" class="form-input"
+                value="<?= htmlspecialchars($firstName) ?>" required>
             </div>
-        </main>
+
+            <div class="form-group">
+              <label class="form-label">Middle Initial</label>
+              <input type="text" name="middle_initial" class="form-input form-input-small"
+                value="<?= htmlspecialchars($middleInitial) ?>">
+            </div>
+          </div>
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Last Name</label>
+              <input type="text" name="last_name" class="form-input"
+                value="<?= htmlspecialchars($lastName) ?>" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Email</label>
+              <input type="email" name="email" class="form-input"
+                value="<?= htmlspecialchars($email) ?>" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Phone</label>
+              <input type="tel" name="phone_number" class="form-input"
+                value="<?= htmlspecialchars($phoneNumber) ?>" required>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Save Changes</button>
+            <button type="reset" class="btn-secondary">Cancel</button>
+          </div>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- CHANGE PASSWORD FULL WIDTH -->
+    <div class="profile-full-width">
+      <div class="profile-form-card">
+        <h2 class="form-section-title">Change Password</h2>
+
+        <form action="/agap_link/controller/profile_process.php" method="POST">
+          <input type="hidden" name="action" value="change_password">
+
+          <div class="form-grid">
+            <div class="form-group">
+              <label class="form-label">Current Password</label>
+              <input type="password" name="current_password" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">New Password</label>
+              <input type="password" name="new_password" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Confirm Password</label>
+              <input type="password" name="confirm_password" class="form-input" required>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">Update Password</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- DELETE FULL WIDTH -->
+    <div class="profile-full-width">
+      <div class="profile-form-card danger-zone">
+        <h2 class="form-section-title text-danger">Delete Account</h2>
+
+        <p class="danger-text">
+          This action permanently deletes your account and all data.
+        </p>
+
+        <button class="btn-danger" onclick="openDeleteModal()">
+          Delete Account
+        </button>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+
+
     </div>
        </div>
 

@@ -47,7 +47,7 @@
                 <div class="reports-filters">
         <div class="filter-dropdown" id="statusDropdown">
             <button class="filter-toggle" id="filterToggle">
-                 <span id="selectedFilter"></span> 
+                 <span id="selectedFilter">▼</span> 
             </button>
 
             <div class="filter-menu">
@@ -113,7 +113,8 @@
         data-category="<?= htmlspecialchars($report['category_name']) ?>"
         data-address="<?= htmlspecialchars($report['address']) ?>"
         data-date="<?= date('F d, Y', strtotime($report['created_at'])) ?>"
-        data-status-text="<?= strtoupper($status) ?>">
+        data-status-text="<?= strtoupper($status) ?>"
+        data-description="<?= htmlspecialchars($report['description']) ?>">
 
         <!-- LEFT ICON -->
         <div class="activity-icon <?= $iconClass ?>">
@@ -166,38 +167,105 @@
         <button class="modal-close" id="closeModal">×</button>
         </div>
 
-        <div class="modal-body">
+       <div class="modal-body">
+
+    <div class="report-info">
         <p><strong>Status:</strong> <span id="modalStatus"></span></p>
         <p><strong>Location:</strong> <span id="modalAddress"></span></p>
-        <p><strong>Date:</strong> <span id="modalDate"></span></p>
-        </div>
-    </div>
+        <p><strong>Date Submitted:</strong> <span id="modalDate"></span></p>
+         <p><strong>Description:</strong></p>
+    <div id="modalDescription" class="report-description"></div> 
     </div>
 
+    <!-- DELIVERY STYLE TIMELINE -->
+    <div class="timeline">
+
+        <div class="timeline-item" data-step="1">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <div class="timeline-title">Report Submitted</div>
+                <div class="timeline-date" id="timelineSubmitted"></div>
+            </div>
+        </div>
+
+        <div class="timeline-item" data-step="2">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <div class="timeline-title">Under Review / Ongoing</div>
+                <div class="timeline-date" id="timelineOngoing"></div>
+            </div>
+        </div>
+
+        <div class="timeline-item" data-step="3">
+            <div class="timeline-dot"></div>
+            <div class="timeline-content">
+                <div class="timeline-title">Resolved</div>
+                <div class="timeline-date" id="timelineResolved"></div>
+            </div>
+        </div>
+
+        <!-- PROGRESS LINE -->
+        <div class="timeline-progress">
+            <div class="timeline-progress-fill" id="timelineProgress"></div>
+        </div>
+
+    </div>
+
+</div>
+
+    </div>
+    </div>
+   <button class="mobile-menu-toggle" aria-label="Toggle Menu">☰</button>
     </body>
 
     <script> 
-        // OPEN MODAL WHEN CARD CLICKED
-    document.querySelectorAll(".report-card").forEach(card => {
+document.querySelectorAll(".report-card").forEach(card => {
     card.addEventListener("click", function () {
 
         const modal = document.getElementById("reportModal");
 
-        document.getElementById("modalCategory").textContent =
-        this.dataset.category;
+        // Populate existing fields
+        document.getElementById("modalCategory").textContent = this.dataset.category;
+        document.getElementById("modalStatus").textContent = this.dataset.statusText;
+        document.getElementById("modalAddress").textContent = this.dataset.address;
+        document.getElementById("modalDate").textContent = this.dataset.date;
 
-        document.getElementById("modalStatus").textContent =
-        this.dataset.statusText;
+        // Populate the new description field
+        document.getElementById("modalDescription").textContent = this.dataset.description;
 
-        document.getElementById("modalAddress").textContent =
-        this.dataset.address;
+        // Timeline logic (existing)
+        const status = this.dataset.status.toLowerCase();
+        const submittedDate = this.dataset.date;
 
-        document.getElementById("modalDate").textContent =
-        this.dataset.date;
+        document.querySelectorAll(".timeline-item").forEach(item => {
+            item.classList.remove("active");
+        });
+
+        let progressHeight = 0;
+        document.querySelector('[data-step="1"]').classList.add("active");
+        document.getElementById("timelineSubmitted").textContent = submittedDate;
+        progressHeight = 33;
+
+        if (status === "ongoing") {
+            document.querySelector('[data-step="2"]').classList.add("active");
+            document.getElementById("timelineOngoing").textContent = "In Progress";
+            progressHeight = 66;
+        }
+
+        if (status === "resolved") {
+            document.querySelector('[data-step="2"]').classList.add("active");
+            document.querySelector('[data-step="3"]').classList.add("active");
+            document.getElementById("timelineOngoing").textContent = "Processed";
+            document.getElementById("timelineResolved").textContent = "Completed";
+            progressHeight = 100;
+        }
+
+        document.getElementById("timelineProgress").style.height = progressHeight + "%";
 
         modal.style.display = "flex";
     });
-    });
+});
+
 
     // CLOSE MODAL
     document.getElementById("closeModal").addEventListener("click", () => {
@@ -212,4 +280,92 @@
     });
 
     </script>
+    <script>
+document.querySelectorAll(".report-card").forEach(card => {
+    card.addEventListener("click", function () {
+
+        const modal = document.getElementById("reportModal");
+
+        const status = this.dataset.status.toLowerCase();
+        const submittedDate = this.dataset.date;
+
+        document.getElementById("modalCategory").textContent =
+            this.dataset.category;
+
+        document.getElementById("modalStatus").textContent =
+            this.dataset.statusText;
+
+        document.getElementById("modalAddress").textContent =
+            this.dataset.address;
+
+        document.getElementById("modalDate").textContent =
+            submittedDate;
+
+        // RESET TIMELINE
+        document.querySelectorAll(".timeline-item").forEach(item => {
+            item.classList.remove("active");
+        });
+
+        let progressHeight = 0;
+
+        // STEP 1 ALWAYS ACTIVE
+        document.querySelector('[data-step="1"]').classList.add("active");
+        document.getElementById("timelineSubmitted").textContent = submittedDate;
+        progressHeight = 33;
+
+        if (status === "ongoing") {
+            document.querySelector('[data-step="2"]').classList.add("active");
+            document.getElementById("timelineOngoing").textContent = "In Progress";
+            progressHeight = 66;
+        }
+
+        if (status === "resolved") {
+            document.querySelector('[data-step="2"]').classList.add("active");
+            document.querySelector('[data-step="3"]').classList.add("active");
+
+            document.getElementById("timelineOngoing").textContent = "Processed";
+            document.getElementById("timelineResolved").textContent = "Completed";
+
+            progressHeight = 100;
+        }
+
+        document.getElementById("timelineProgress").style.height = progressHeight + "%";
+
+        modal.style.display = "flex";
+    });
+});
+
+// CLOSE
+document.getElementById("closeModal").addEventListener("click", () => {
+    document.getElementById("reportModal").style.display = "none";
+});
+
+document.getElementById("reportModal").addEventListener("click", e => {
+    if (e.target.id === "reportModal") {
+        e.currentTarget.style.display = "none";
+    }
+});
+
+// SEARCH FUNCTIONALITY
+const reportSearchInput = document.getElementById('reportSearch');
+
+reportSearchInput.addEventListener('input', () => {
+    const searchTerm = reportSearchInput.value.toLowerCase().trim();
+
+    document.querySelectorAll('.report-card').forEach(card => {
+        const category = card.dataset.category.toLowerCase();
+        const address = card.dataset.address.toLowerCase();
+        const description = card.dataset.description.toLowerCase();
+
+        if (category.includes(searchTerm) || address.includes(searchTerm) || description.includes(searchTerm)) {
+            card.style.display = ''; // ✅ keeps original CSS display (grid)
+        } else {
+            card.style.display = 'none'; // hide the card
+        }
+    });
+});
+
+</script>
+
+
     </html>
