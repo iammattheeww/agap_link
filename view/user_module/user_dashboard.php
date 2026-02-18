@@ -71,6 +71,25 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
         <!-- SIDEBAR - USING REQUIRE_ONCE -->
         <?php require VIEW_PATH . 'partials/user_sidebar.php'; ?>
         <!-- MAIN CONTENT -->
+
+           <!-- REPORT MODAL -->
+            <div class="report-modal-overlay" id="reportModal">
+                <div class="report-modal">
+
+                    <div class="modal-header">
+                        <h2>Report an Issue</h2>
+                        <button type="button" class="modal-close" id="closeReportModal">&times;</button>
+                    </div>
+
+                    <p class="modal-subtitle">
+                        Help improve your community by reporting issues.
+                    </p>
+
+                    <?php require __DIR__ . '/create_report_form_partial.php'; ?>
+
+                </div>
+            </div>
+
         <main class="main-content page-transition">
 
             <!-- HEADER -->
@@ -180,24 +199,6 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
                 <?php endif; ?>
 
             </section>
-
-            <!-- REPORT MODAL -->
-            <div class="report-modal-overlay" id="reportModal">
-                <div class="report-modal">
-
-                    <div class="modal-header">
-                        <h2>Report an Issue</h2>
-                        <button type="button" class="modal-close" id="closeReportModal">&times;</button>
-                    </div>
-
-                    <p class="modal-subtitle">
-                        Help improve your community by reporting issues.
-                    </p>
-
-                    <?php require __DIR__ . '/create_report_form_partial.php'; ?>
-
-                </div>
-            </div>
 
         </main>
     </div>
