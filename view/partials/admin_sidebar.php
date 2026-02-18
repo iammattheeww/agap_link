@@ -3,7 +3,7 @@
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 
-<!-- USER DASHBOARD SIDEBAR -->
+<!-- ADMIN DASHBOARD SIDEBAR -->
 <aside class="sidebar">
     <div class="sidebar-header">
         <h1 class="logo">AGAP-Link</h1>
@@ -11,30 +11,32 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </div>
 
     <nav class="sidebar-nav">
+        <!-- Sliding active indicator -->
+        <span class="active-indicator"></span>
+
         <a href="<?= BASE_URL ?>/view/admin_module/admin_dashboard.php"
-            class="nav-item <?= ($current_page == 'admin_dashboard.php') ? 'active' : '' ?>">
+           class="nav-item <?= ($current_page == 'admin_dashboard.php') ? 'active' : '' ?>">
             <span class="nav-icon"><i data-lucide="layout-dashboard"></i></span>
-            <span>My Dashboard</span>
+            <span>Dashboard</span>
         </a>
 
         <a href="<?= BASE_URL ?>/view/admin_module/admin_report.php"
-            class="nav-item <?= ($current_page == 'admin_report.php') ? 'active' : '' ?>">
+           class="nav-item <?= ($current_page == 'admin_report.php') ? 'active' : '' ?>">
             <span class="nav-icon"><i data-lucide="file-text"></i></span>
-            <span>All Reports</span>
-        </a>
-
-        <a href="<?= BASE_URL ?>/view/admin_module/announcement.php"
-            class="nav-item <?= ($current_page == 'announcement.php') ? 'active' : '' ?>">
-            <span class="nav-icon"><i data-lucide="bell"></i></span>
-            <span>Announcements</span>
+            <span>Reports</span>
         </a>
 
         <a href="<?= BASE_URL ?>/view/admin_module/admin_users.php"
-            class="nav-item <?= ($current_page == 'admin_users.php') ? 'active' : '' ?>">
+           class="nav-item <?= ($current_page == 'admin_users.php') ? 'active' : '' ?>">
             <span class="nav-icon"><i data-lucide="users"></i></span>
             <span>Users</span>
         </a>
 
+        <a href="<?= BASE_URL ?>/view/admin_module/announcement.php"
+           class="nav-item <?= ($current_page == 'announcement.php') ? 'active' : '' ?>">
+            <span class="nav-icon"><i data-lucide="bell"></i></span>
+            <span>Announcements</span>
+        </a>
     </nav>
 
     <div class="sidebar-footer">
@@ -45,8 +47,23 @@ $current_page = basename($_SERVER['PHP_SELF']);
     </div>
 </aside>
 
-<!-- LUCIDE ICONS SCRIPT -->
+<!-- LUCIDE ICONS -->
 <script src="https://unpkg.com/lucide@latest"></script>
+
 <script>
-    lucide.createIcons();
+lucide.createIcons();
+
+function moveIndicator() {
+    const active = document.querySelector(".sidebar-nav .nav-item.active");
+    const indicator = document.querySelector(".active-indicator");
+    if (!active || !indicator) return;
+    indicator.style.height = active.offsetHeight + "px";
+    indicator.style.transform = `translateY(${active.offsetTop}px)`;
+}
+
+window.addEventListener("DOMContentLoaded", () => {
+    moveIndicator();
+    setTimeout(moveIndicator, 50);
+});
+window.addEventListener("resize", moveIndicator);
 </script>

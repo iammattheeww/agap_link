@@ -69,6 +69,22 @@ body {
 .sidebar-nav {
   flex: 1;
   padding: 20px 0;
+  position: relative;
+}
+
+/* Active indicator sliding background */
+.active-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  background: rgba(255, 107, 53, 0.08);
+  border-radius: 8px;
+  pointer-events: none;
+  transition:
+    transform 0.35s cubic-bezier(.4,0,.2,1),
+    height 0.35s cubic-bezier(.4,0,.2,1);
+  z-index: 0;
 }
 
 
@@ -553,7 +569,6 @@ body {
   display: flex;
   gap: 15px;
   margin-top: 30px;
-  margin-left: 125px; /* align with input fields */
 }
 
 .btn-primary {
@@ -834,6 +849,10 @@ select.form-input:focus {
 
 /* 0px to 480px - SMALLER SMARTPHONES */
 @media (max-width: 480px) {
+  .mobile-menu-toggle {
+    display: flex;
+  }
+
   .sidebar {
     transform: translateX(-100%);
     width: 100%;
@@ -1136,26 +1155,25 @@ select.form-input:focus {
 .mobile-menu-toggle {
   display: none;
   position: fixed;
-  top: 10px;
-  left: 300px;
+  top: 15px;
+  left: 15px;
   z-index: 101;
   background: var(--color-primary);
   color: var(--color-white);
   border: none;
-  width: 50px;
-  height: 50px;
+  width: 46px;
+  height: 46px;
   border-radius: 50%;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   cursor: pointer;
   box-shadow: var(--shadow-lg);
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition-fast);
 }
 
-@media (max-width: 480px) {
-  .mobile-menu-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.mobile-menu-toggle:hover {
+  background: var(--color-primary-dark);
 }
 
 
@@ -1192,6 +1210,7 @@ select.form-input:focus {
   text-decoration: none;
   overflow: hidden;
   border-radius: 8px;
+  z-index: 1;
 
   transition: 
     color 0.45s ease,
@@ -1254,22 +1273,63 @@ select.form-input:focus {
   transform: scaleX(1);
 }
 
+/* My Reports card — white default, blue left border, orange on hover */
 .stat-card-main {
-  background: var(--color-primary);
-  color: var(--color-white);
-  border-left: none;
+  background: var(--color-white);
+  border-left-color: #3b82f6;
 }
 
 .stat-card-main .stat-label,
 .stat-card-main .stat-sublabel {
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--color-gray-600);
 }
 
 .stat-card-main .stat-value {
+  color: var(--color-secondary);
+}
+
+.stat-card-main:hover {
+  background: #3b82f6;
+}
+
+.stat-card-main:hover .stat-label,
+.stat-card-main:hover .stat-sublabel {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.stat-card-main:hover .stat-value {
   color: var(--color-white);
 }
 .stat-card-light {
-  background: var(--color-gray-100);
+  background: var(--color-white);
+}
+
+/* Hover state for stat-card-green: fill with green */
+.stat-card-light.stat-card-green:hover {
+  background: var(--color-success);
+}
+
+.stat-card-light.stat-card-green:hover .stat-label,
+.stat-card-light.stat-card-green:hover .stat-sublabel {
+  color: rgba(255,255,255,0.85);
+}
+
+.stat-card-light.stat-card-green:hover .stat-value {
+  color: var(--color-white);
+}
+
+/* Hover state for stat-card-orange: fill with orange */
+.stat-card-light.stat-card-orange:hover {
+  background: var(--color-primary);
+}
+
+.stat-card-light.stat-card-orange:hover .stat-label,
+.stat-card-light.stat-card-orange:hover .stat-sublabel {
+  color: rgba(255,255,255,0.85);
+}
+
+.stat-card-light.stat-card-orange:hover .stat-value {
+  color: var(--color-white);
 }
 
 .reports-list-activity {
@@ -1338,95 +1398,73 @@ select.form-input:focus {
 .report-modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.55);
+  background: rgba(0, 0, 0, 0.55);
   display: none;
-  align-items: center;     /* keep vertical center */
-  justify-content: flex-end; /* push modal to right */
-  padding-right: 40px;     /* spacing from edge */
-  z-index: 999;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
 }
 
 .report-modal-overlay.active {
   display: flex;
 }
 
-/* =========================
-   FLOATING REPORT MODAL
-========================= */
-.report-modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  display: none;
-  z-index: 9999;
-}
-
-.report-modal-overlay.active {
-  display: block;
-}
-
-/* Modal positioned top-right */
+/* Modal centered */
 .report-modal {
-  position: fixed;
-
-  top: 80px;         /* distance from top */
-  right: 250px;       /* distance from right */
-
+  position: relative;
   width: 100%;
-  max-width: 550px;
-  max-height: 85vh;
+  min-width: 560px;
+  max-width: 680px;
+  max-height: 90vh;
   overflow-y: auto;
 
   background: var(--color-white);
-  border-radius: 25px;
+  border-radius: 16px;
   padding: 30px;
   box-shadow: var(--shadow-lg);
 
-  animation: slideInRight 0.35s ease;
-   scrollbar-width: none;        /* Firefox */
-  -ms-overflow-style: none;     /* IE */
+  animation: modalFadeIn 0.3s ease;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
 .report-modal::-webkit-scrollbar {
-  display: none;                /* Chrome, Safari */
+  display: none;
 }
 
-/* Smooth slide animation */
-@keyframes slideInRight {
+@keyframes modalFadeIn {
   from {
     opacity: 0;
-    transform: translateX(40px);
+    transform: translateY(-20px) scale(0.97);
   }
   to {
     opacity: 1;
-    transform: translateX(0);
+    transform: translateY(0) scale(1);
   }
 }
 
-@media (max-width: 768px) {
+@media (min-width: 481px) and (max-width: 768px) {
   .report-modal {
-    top: 60px;
-    right: 50%;
-    transform: translateX(50%);
-    width: 92%;
-    max-width: 500px;
+    min-width: unset;
+    width: 90vw;
+    max-width: 90vw;
+    padding: 24px;
   }
 }
 
 @media (max-width: 480px) {
   .report-modal {
-    top: 75px;
-    right: 50%;
-    transform: translateX(50%);
-    width: 95%;
+    min-width: unset;
+    width: 95vw;
+    max-width: 95vw;
     padding: 20px;
+    max-height: 85vh;
   }
 
-  .form-actions{
+  .form-actions {
     flex-direction: column;
-    margin-left: 0px;
+    margin-left: 0;
   }
-
 }
 
 .modal-header {
