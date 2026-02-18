@@ -8,6 +8,16 @@ $is_user_logged_in = isset($_SESSION['user_logged_in']) && $_SESSION['user_logge
 $success = $_SESSION['success'] ?? '';
 $error = $_SESSION['error'] ?? '';
 unset($_SESSION['success'], $_SESSION['error']);
+
+// Fetch 3 most recent announcements via model
+require_once MODEL_PATH . 'Announcement.php';
+$latestAnnouncements = [];
+try {
+    $announcementModel   = new Announcement();
+    $latestAnnouncements = $announcementModel->getLatest(3);
+} catch (Exception $e) {
+    // Table may not exist yet; silently fail — hardcoded fallback below
+}
 ?>
 
 <!DOCTYPE html>
@@ -126,6 +136,7 @@ unset($_SESSION['success'], $_SESSION['error']);
         </div>
     </section>
 
+    <!-- ANNOUNCEMENTS — Dynamic from DB, fallback to hardcoded if empty -->
     <section class="announcements" id="announcements">
         <div class="container">
             <div class="announcements-header">
@@ -133,54 +144,85 @@ unset($_SESSION['success'], $_SESSION['error']);
                     <span class="section-label">STAY UPDATED</span>
                     <h2 class="section-title">Latest Announcements</h2>
                 </div>
-                <a href="#" class="btn btn-outline">View All</a>
+                <a href="<?= BASE_URL ?>/view/landing_module/announcements.php" class="btn btn-outline">View All</a>
             </div>
 
             <div class="announcements-grid">
-                <article class="announcement-card">
-                    <div class="announcement-image">
-                        <div class="announcement-img-placeholder">
-                            <img src="<?= ASSET_URL ?>/images/landing_announcement_01.jpg" alt="Announcement Image" class="announcement-img">
-                        </div>
-                        <span class="announcement-badge">News</span>
-                    </div>
-                    <div class="announcement-content">
-                        <time class="announcement-date">February 4, 2026</time>
-                        <h3 class="announcement-title">Red Alert Status: Tropical Cyclone Basyang (Penha)</h3>
-                        <p class="announcement-description">The Provincial Disaster Risk Reduction and Management Council (PDRRMC) has placed Negros Occidental under Red Alert Status. Heavy rainfall (50–100 mm) is expected to continue through the weekend, specifically targeting southern Negros and coastal areas.</p>
-                        <a href="#" class="announcement-link">Read More →</a>
-                    </div>
-                </article>
 
-                <article class="announcement-card">
-                    <div class="announcement-image">
-                        <div class="announcement-img-placeholder">
-                            <img src="<?= ASSET_URL ?>/images/landing_announcement_02.jpg" alt="Announcement Image" class="announcement-img">
-                        </div>
-                        <span class="announcement-badge">News</span>
-                    </div>
-                    <div class="announcement-content">
-                        <time class="announcement-date">February 6, 2026</time>
-                        <h3 class="announcement-title">Province-Wide Class & Work Suspensions</h3>
-                        <p class="announcement-description">Due to the severe weather conditions and the Yellow Heavy Rainfall Warning issued by PAGASA, Governor Eugenio Jose Lacson and Mayor Greg Gasataya have suspended classes at all levels in Bacolod City and several other LGUs (including Silay, Talisay, and Bago) through February 6, 2026.</p>
-                        <a href="#" class="announcement-link">Read More →</a>
-                    </div>
-                </article>
+                <?php if (!empty($latestAnnouncements)): ?>
+                    <?php foreach ($latestAnnouncements as $ann): ?>
+                        <article class="announcement-card">
+                            <div class="announcement-image">
+                                <div class="announcement-img-placeholder">
+                                    <?php if (!empty($ann['image_path'])): ?>
+                                        <img src="<?= ASSET_URL . '/../uploads/announcements/' . htmlspecialchars(basename($ann['image_path'])) ?>"
+                                             alt="Announcement Image" class="announcement-img">
+                                    <?php else: ?>
+                                        <img src="<?= ASSET_URL ?>/images/landing_announcement_01.jpg"
+                                             alt="Announcement Image" class="announcement-img">
+                                    <?php endif; ?>
+                                </div>
+                                <span class="announcement-badge">News</span>
+                            </div>
+                            <div class="announcement-content">
+                                <time class="announcement-date"><?= date('F j, Y', strtotime($ann['created_at'])) ?></time>
+                                <h3 class="announcement-title"><?= htmlspecialchars($ann['title']) ?></h3>
+                                <p class="announcement-description">
+                                    <?= htmlspecialchars(mb_strimwidth($ann['content'], 0, 120, '…')) ?>
+                                </p>
+                                <a href="<?= BASE_URL ?>/view/landing_module/announcements.php" class="announcement-link">Read More →</a>
+                            </div>
+                        </article>
+                    <?php endforeach; ?>
 
-                <article class="announcement-card">
-                    <div class="announcement-image">
-                        <div class="announcement-img-placeholder">
-                            <img src="<?= ASSET_URL ?>/images/landing_announcement_03.jpg" alt="Announcement Image" class="announcement-img">
+                <?php else: ?>
+                    <!-- Fallback: hardcoded announcements shown when DB is empty -->
+                    <article class="announcement-card">
+                        <div class="announcement-image">
+                            <div class="announcement-img-placeholder">
+                                <img src="<?= ASSET_URL ?>/images/landing_announcement_01.jpg" alt="Announcement Image" class="announcement-img">
+                            </div>
+                            <span class="announcement-badge">News</span>
                         </div>
-                        <span class="announcement-badge">News</span>
-                    </div>
-                    <div class="announcement-content">
-                        <time class="announcement-date">February 6, 2026</time>
-                        <h3 class="announcement-title">Infrastructure Advisory: Landslide & Flash Flood Risk</h3>
-                        <p class="announcement-description">The infrastructure advisory for Negros Occidental is tied to the current events this week, specifically the risks of landslides and flash floods caused by Tropical Storm Basyang (Penha), which has led to widespread work and class suspensions across the province as of today, Friday, February 6.</p>
-                        <a href="#" class="announcement-link">Read More →</a>
-                    </div>
-                </article>
+                        <div class="announcement-content">
+                            <time class="announcement-date">February 4, 2026</time>
+                            <h3 class="announcement-title">Red Alert Status: Tropical Cyclone Basyang (Penha)</h3>
+                            <p class="announcement-description">The Provincial Disaster Risk Reduction and Management Council (PDRRMC) has placed Negros Occidental under Red Alert Status.</p>
+                            <a href="#" class="announcement-link">Read More →</a>
+                        </div>
+                    </article>
+
+                    <article class="announcement-card">
+                        <div class="announcement-image">
+                            <div class="announcement-img-placeholder">
+                                <img src="<?= ASSET_URL ?>/images/landing_announcement_02.jpg" alt="Announcement Image" class="announcement-img">
+                            </div>
+                            <span class="announcement-badge">News</span>
+                        </div>
+                        <div class="announcement-content">
+                            <time class="announcement-date">February 6, 2026</time>
+                            <h3 class="announcement-title">Province-Wide Class & Work Suspensions</h3>
+                            <p class="announcement-description">Due to severe weather conditions and a Yellow Heavy Rainfall Warning, classes and work have been suspended at all levels in Bacolod City.</p>
+                            <a href="#" class="announcement-link">Read More →</a>
+                        </div>
+                    </article>
+
+                    <article class="announcement-card">
+                        <div class="announcement-image">
+                            <div class="announcement-img-placeholder">
+                                <img src="<?= ASSET_URL ?>/images/landing_announcement_03.jpg" alt="Announcement Image" class="announcement-img">
+                            </div>
+                            <span class="announcement-badge">News</span>
+                        </div>
+                        <div class="announcement-content">
+                            <time class="announcement-date">February 6, 2026</time>
+                            <h3 class="announcement-title">Infrastructure Advisory: Landslide & Flash Flood Risk</h3>
+                            <p class="announcement-description">Risks of landslides and flash floods caused by Tropical Storm Basyang have led to widespread work and class suspensions across the province.</p>
+                            <a href="#" class="announcement-link">Read More →</a>
+                        </div>
+                    </article>
+                <?php endif; ?>
+
             </div>
         </div>
     </section>
