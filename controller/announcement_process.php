@@ -11,14 +11,16 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
 }
 
-require_once dirname(__DIR__) . "/config/agaplinkdb.php";
+require_once MODEL_PATH . 'Announcement.php';
 
+$announcementModel = new Announcement();
 $action = $_POST['action'] ?? '';
 
+// ── CREATE ────────────────────────────────────────────────────────────────────
 if ($action === 'create') {
-    $title   = trim($_POST['title'] ?? '');
-    $content = trim($_POST['content'] ?? '');
-    $admin_id = $_SESSION['admin_id'] ?? 1;
+    $title    = trim($_POST['title']   ?? '');
+    $content  = trim($_POST['content'] ?? '');
+    $admin_id = (int)($_SESSION['admin_id'] ?? 1);
 
     if (empty($title) || empty($content)) {
         $_SESSION['error'] = 'Title and content are required.';
@@ -30,44 +32,38 @@ if ($action === 'create') {
 
     if (!empty($_FILES['image']['name'])) {
         $uploadDir = UPLOAD_PATH . 'announcements/';
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0755, true);
-        }
+        if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
 
-        $allowed = ['image/png', 'image/jpeg', 'image/jpg'];
-        $fileType = mime_content_type($_FILES['image']['tmp_name']);
+        $allowed  = ['image/png', 'image/jpeg', 'image/jpg'];
+        $mimeType = mime_content_type($_FILES['image']['tmp_name']);
 
-        if (!in_array($fileType, $allowed)) {
-            $_SESSION['error'] = 'Invalid image type. Only PNG and JPG allowed.';
+        if (!in_array($mimeType, $allowed)) {
+            $_SESSION['error'] = 'Invalid image type. Only PNG and JPG are allowed.';
             header("Location: " . BASE_URL . "/view/admin_module/announcement.php");
             exit();
         }
 
         if ($_FILES['image']['size'] > 5 * 1024 * 1024) {
-            $_SESSION['error'] = 'Image too large. Maximum 5MB.';
+            $_SESSION['error'] = 'Image exceeds the 5MB limit.';
             header("Location: " . BASE_URL . "/view/admin_module/announcement.php");
             exit();
         }
 
-        $ext      = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
-        $filename = 'ann_' . uniqid() . '.' . $ext;
-        $dest     = $uploadDir . $filename;
+        $ext        = pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION);
+        $filename   = 'ann_' . uniqid() . '.' . $ext;
 
-        if (move_uploaded_file($_FILES['image']['tmp_name'], $dest)) {
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $uploadDir . $filename)) {
             $image_path = $filename;
         }
     }
 
-    try {
-        $stmt = $conn->prepare(
-            "INSERT INTO announcements (title, content, image_path, created_by) VALUES (?, ?, ?, ?)"
-        );
-        $stmt->execute([$title, $content, $image_path, $admin_id]);
+    if ($announcementModel->create($title, $content, $admin_id, $image_path)) {
         $_SESSION['success'] = 'Announcement published successfully.';
-    } catch (PDOException $e) {
+    } else {
         $_SESSION['error'] = 'Failed to publish announcement. Please try again.';
     }
 
+// ── DELETE ────────────────────────────────────────────────────────────────────
 } elseif ($action === 'delete') {
     $announcement_id = filter_var($_POST['announcement_id'] ?? 0, FILTER_VALIDATE_INT);
 
@@ -77,25 +73,15 @@ if ($action === 'create') {
         exit();
     }
 
-    try {
-        // Get image path first to delete the file
-        $imgStmt = $conn->prepare("SELECT image_path FROM announcements WHERE announcement_id = ?");
-        $imgStmt->execute([$announcement_id]);
-        $row = $imgStmt->fetch();
+    $imagePath = $announcementModel->delete($announcement_id);
 
-        if (!empty($row['image_path'])) {
-            $filePath = UPLOAD_PATH . 'announcements/' . basename($row['image_path']);
-            if (file_exists($filePath)) {
-                unlink($filePath);
-            }
-        }
-
-        $stmt = $conn->prepare("DELETE FROM announcements WHERE announcement_id = ?");
-        $stmt->execute([$announcement_id]);
-        $_SESSION['success'] = 'Announcement deleted.';
-    } catch (PDOException $e) {
-        $_SESSION['error'] = 'Failed to delete announcement.';
+    // Delete associated image file if one exists
+    if ($imagePath) {
+        $filePath = UPLOAD_PATH . 'announcements/' . basename($imagePath);
+        if (file_exists($filePath)) unlink($filePath);
     }
+
+    $_SESSION['success'] = 'Announcement deleted.';
 }
 
 header("Location: " . BASE_URL . "/view/admin_module/announcement.php");

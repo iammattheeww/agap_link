@@ -203,9 +203,12 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
     </div>
 
     <script src="<?= BASE_URL ?>/assets/js/landing/main.js"></script>
+<<<<<<< HEAD
+=======
     <script src="<?= BASE_URL ?>/assets/js/landing/main.js"></script>
     <script src="<?= BASE_URL ?>/assets/js/landing/main.js"></script>
 
+>>>>>>> 1a1e72c74c0c73546b17d950311e1555a11c0339
 
     <button class="mobile-menu-toggle" aria-label="Toggle Menu">☰</button>
 </body>

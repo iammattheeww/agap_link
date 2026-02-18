@@ -9,18 +9,13 @@ $success = $_SESSION['success'] ?? '';
 $error = $_SESSION['error'] ?? '';
 unset($_SESSION['success'], $_SESSION['error']);
 
-// Fetch 3 most recent announcements from DB
-require_once dirname(__DIR__, 2) . "/config/agaplinkdb.php";
+// Fetch 3 most recent announcements via model
+require_once MODEL_PATH . 'Announcement.php';
 $latestAnnouncements = [];
 try {
-    $annStmt = $conn->query(
-        "SELECT announcement_id, title, content, image_path, created_at
-         FROM announcements
-         ORDER BY created_at DESC
-         LIMIT 3"
-    );
-    $latestAnnouncements = $annStmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
+    $announcementModel   = new Announcement();
+    $latestAnnouncements = $announcementModel->getLatest(3);
+} catch (Exception $e) {
     // Table may not exist yet; silently fail — hardcoded fallback below
 }
 ?>

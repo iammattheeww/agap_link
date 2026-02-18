@@ -11,22 +11,15 @@ if (!isset($_SESSION['admin_logged_in'])) {
     exit();
 }
 
-require_once dirname(__DIR__, 2) . "/config/agaplinkdb.php";
+require_once MODEL_PATH . 'Announcement.php';
 
-// Fetch announcements dynamically
-$announcements = [];
-try {
-    $stmt = $conn->query("SELECT a.*, ad.name AS author_name FROM announcements a LEFT JOIN admin_users ad ON a.created_by = ad.id ORDER BY a.created_at DESC");
-    $announcements = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    // Table may not exist yet; silently fail
-}
+$announcementModel = new Announcement();
+$announcements     = $announcementModel->getAll();
 
 $success = $_SESSION['success'] ?? '';
-$error   = $_SESSION['error'] ?? '';
+$error   = $_SESSION['error']   ?? '';
 unset($_SESSION['success'], $_SESSION['error']);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -82,12 +75,16 @@ unset($_SESSION['success'], $_SESSION['error']);
                                     <div class="announcement-meta">
                                         <span>&#x1F4C5; <?= date('M d, Y', strtotime($a['created_at'])) ?></span>
                                         <span>&#x1F464; <?= htmlspecialchars($a['author_name'] ?? 'Admin') ?></span>
+<<<<<<< HEAD
+                                        <span><?= Announcement::relativeDate($a['created_at']) ?></span>
+=======
+>>>>>>> 1a1e72c74c0c73546b17d950311e1555a11c0339
                                     </div>
                                 </div>
                                 <span class="status-badge status-active">Published</span>
                             </div>
                             <?php if (!empty($a['image_path'])): ?>
-                                <img src="<?= htmlspecialchars(UPLOAD_URL . '/announcements/' . basename($a['image_path'])) ?>"
+                                <img src="<?= UPLOAD_URL ?>/announcements/<?= htmlspecialchars(basename($a['image_path'])) ?>"
                                      alt="Announcement image"
                                      style="width:100%; max-height:220px; object-fit:cover;">
                             <?php endif; ?>
@@ -95,11 +92,15 @@ unset($_SESSION['success'], $_SESSION['error']);
                                 <?= nl2br(htmlspecialchars($a['content'])) ?>
                             </div>
                             <div class="announcement-footer">
-                                <form method="POST" action="<?= BASE_URL ?>/controller/announcement_process.php"
-                                      onsubmit="return confirm('Delete this announcement?');">
+                                <form method="POST"
+                                      action="<?= BASE_URL ?>/controller/announcement_process.php"
+                                      onsubmit="return confirm('Delete this announcement? This cannot be undone.');">
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="announcement_id" value="<?= $a['announcement_id'] ?>">
-                                    <button type="submit" class="action-delete" style="border:none; cursor:pointer; padding:6px 12px; border-radius:6px; font-size:0.82rem; font-weight:600;">Delete</button>
+                                    <button type="submit" class="action-delete"
+                                            style="border:none; cursor:pointer; padding:6px 12px; border-radius:6px; font-size:0.82rem; font-weight:600;">
+                                        Delete
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -131,12 +132,14 @@ unset($_SESSION['success'], $_SESSION['error']);
                 <div class="form-group">
                     <label class="form-label" for="ann_content">Content / Body *</label>
                     <textarea id="ann_content" name="content" class="form-input"
-                              placeholder="Write the announcement details here..." required
-                              style="min-height: 140px;"></textarea>
+                              placeholder="Write the announcement details here..."
+                              required style="min-height: 140px;"></textarea>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Image <span class="form-label-optional">(Optional)</span></label>
+                    <label class="form-label">
+                        Image <span class="form-label-optional">(Optional)</span>
+                    </label>
                     <div class="file-upload-area" id="annFileUploadArea">
                         <div class="upload-icon">🖼️</div>
                         <div class="upload-text">Click to upload an image</div>
@@ -160,12 +163,10 @@ unset($_SESSION['success'], $_SESSION['error']);
 
     <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">☰</button>
     <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
-
     <script>
         const annModal = document.getElementById('announcementModal');
-
-        function openModal() { annModal.classList.add('active'); }
-        function closeModal() { annModal.classList.remove('active'); }
+        const openModal  = () => annModal.classList.add('active');
+        const closeModal = () => annModal.classList.remove('active');
 
         document.getElementById('openAnnouncementModal').addEventListener('click', openModal);
         document.getElementById('closeAnnouncementModal').addEventListener('click', closeModal);
@@ -174,9 +175,7 @@ unset($_SESSION['success'], $_SESSION['error']);
         const emptyBtn = document.getElementById('openAnnouncementModalEmpty');
         if (emptyBtn) emptyBtn.addEventListener('click', openModal);
 
-        annModal.addEventListener('click', function(e) {
-            if (e.target === this) closeModal();
-        });
+        annModal.addEventListener('click', e => { if (e.target === annModal) closeModal(); });
 
         // File upload preview
         const uploadArea = document.getElementById('annFileUploadArea');
@@ -187,21 +186,15 @@ unset($_SESSION['success'], $_SESSION['error']);
 
         uploadArea.addEventListener('click', () => fileInput.click());
 
-        fileInput.addEventListener('change', function() {
+        fileInput.addEventListener('change', function () {
             const file = this.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = e => {
-                previewImg.src = e.target.result;
-                preview.style.display = 'block';
-            };
+            reader.onload = e => { previewImg.src = e.target.result; preview.style.display = 'block'; };
             reader.readAsDataURL(file);
         });
 
-        removeBtn.addEventListener('click', function() {
-            fileInput.value = '';
-            preview.style.display = 'none';
-        });
+        removeBtn.addEventListener('click', () => { fileInput.value = ''; preview.style.display = 'none'; });
     </script>
 </body>
 
