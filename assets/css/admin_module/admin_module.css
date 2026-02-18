@@ -69,30 +69,85 @@ body {
   flex: 1;
   padding: 20px 0;
   overflow-y: auto;
+  position: relative;
 }
 
+/* ACTIVE INDICATOR (sliding highlight bar) */
+.active-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  background: rgba(255, 107, 53, 0.08);
+  border-radius: 8px;
+  pointer-events: none;
+  transition: transform 0.35s cubic-bezier(.4,0,.2,1), height 0.35s cubic-bezier(.4,0,.2,1);
+  z-index: 0;
+}
+
+/* NAV ITEM BASE */
 .nav-item {
+  position: relative;
   display: flex;
   align-items: center;
   padding: 15px 20px;
+  font-size: 0.95rem;
   color: var(--color-gray-300);
   text-decoration: none;
-  transition: all var(--transition-fast);
-  font-size: 0.95rem;
-  border-left: 3px solid transparent;
+  overflow: hidden;
+  border-radius: 8px;
+  z-index: 1;
+  transition:
+    color 0.45s ease,
+    transform 0.25s ease;
+}
+
+/* LEFT TO RIGHT ANIMATION LINE */
+.nav-item::before {
+  content: "";
+  position: absolute;
+  bottom: 8px;
+  left: 20px;
+  height: 2px;
+  width: calc(100% - 40px);
+  background: var(--color-primary);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.6s cubic-bezier(.4,0,.2,1);
+}
+
+.nav-item:hover::before {
+  transform: scaleX(1);
 }
 
 .nav-item:hover {
-  background-color: rgba(255, 255, 255, 0.05);
-  color: var(--color-white);
-  border-left-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
 .nav-item.active {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  border-left-color: var(--color-primary-light);
+  color: var(--color-primary);
   font-weight: 600;
+}
+
+.nav-item.active::before {
+  transform: scaleX(1);
+}
+
+/* LOGOUT */
+.nav-item.logout {
+  color: var(--color-gray-300);
+}
+
+.nav-item.logout::before {
+  background: #ef4444;
+}
+
+.nav-item.logout:hover {
+  color: #ef4444;
+}
+
+.nav-item.logout:hover::before {
+  transform: scaleX(1);
 }
 
 .nav-icon {
@@ -107,18 +162,55 @@ body {
   padding: 20px 0;
 }
 
-.logout {
-  color: var(--color-gray-300);
+/* =============================== */
+/* PAGE TRANSITION & FADE IN       */
+/* =============================== */
+.page-transition {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: pageFadeIn 0.5s ease forwards;
 }
 
-.logout:hover {
-  background-color: rgba(220, 38, 38, 0.1);
-  color: #ef4444;
-  border-left-color: #ef4444;
+@keyframes pageFadeIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ADMIN-4: Stat card hover — fills with accent color */
+.stat-card-blue:hover {
+  background: #3b82f6;
+}
+
+.stat-card-green:hover {
+  background: var(--color-success);
+}
+
+.stat-card-orange:hover {
+  background: var(--color-primary);
+}
+
+.stat-card-red:hover {
+  background: #ef4444;
+}
+
+.stat-card:hover .stat-label,
+.stat-card:hover .stat-sublabel {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.stat-card:hover .stat-value {
+  color: var(--color-white);
+}
+
+/* Keep transition smooth */
+.stat-card {
+  transition: all 0.25s ease;
 }
 
 /* =============================== */
-/* MOBILE MENU TOGGLE BUTTON       */
+/* MOBILE MENU TOGGLE              */
 /* =============================== */
 .mobile-menu-toggle {
   display: none;
