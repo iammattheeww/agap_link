@@ -1677,7 +1677,7 @@ textarea.form-input {
   left: 0;
   right: 0;
   height: 56px;
-  background: var(--color-secondary, #2c3e50);
+  background: var(--color-dark);
   z-index: 200;
   align-items: center;
   justify-content: space-between;
@@ -1686,7 +1686,7 @@ textarea.form-input {
 }
 
 .mobile-topnav .topnav-brand {
-  color: #fff;
+  color: var(--color-primary);
   font-size: 1.2rem;
   font-weight: 800;
   letter-spacing: 0.02em;
