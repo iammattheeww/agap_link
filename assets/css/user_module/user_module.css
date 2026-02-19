@@ -105,7 +105,7 @@ body {
   color: var(--color-gray-300);
 }
 
-.logout:hover {
+.logout:hover { 
   color: #ef4444;
   border-left-color: #ef4444;
 }
