@@ -92,7 +92,7 @@ unset($_SESSION['success']);
                         <div class="name-field name-field-small">
                             <label>M.I.</label>
                                <input type="text" name="middle_initial" placeholder="D" maxlength="1"
-        style="text-transform: uppercase;" required>
+        style="text-transform: uppercase;">
                         </div>
 
                         <div class="name-field">
