@@ -33,6 +33,7 @@ unset($_SESSION['success'], $_SESSION['error']);
 </head>
 
 <body>
+    <?php require VIEW_PATH . 'partials/mobile_topnav_admin.php'; ?>
     <div class="dashboard-container">
 
         <?php require_once __DIR__ . '/../partials/admin_sidebar.php'; ?>

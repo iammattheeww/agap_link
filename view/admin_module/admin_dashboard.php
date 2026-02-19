@@ -50,6 +50,7 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
 </head>
 
 <body>
+    <?php require VIEW_PATH . 'partials/mobile_topnav_admin.php'; ?>
     <div class="dashboard-container">
 
         <!-- SIDEBAR -->

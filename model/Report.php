@@ -61,14 +61,14 @@ class Report
     }
 
     // CREATE NEW REPORT
-    public function createReport($user_id, $category_id, $description, $address, $photo_path = null, $gps_lat = null, $gps_long = null, $priority = 'Medium')
+    public function createReport($user_id, $category_id, $description, $address, $photo_path = null, $gps_lat = null, $gps_long = null, $priority = 'Medium', $assigned_agency_id = null)
     {
         $NOW = new DateTime('now', new DateTimeZone('Asia/Manila'));
         $NOW = $NOW->format('Y-m-d H:i:s');
 
         $sql = "INSERT INTO reports 
-                (user_id, category_id, description, address, photo_path, gps_lat, gps_long, priority, status, created_at) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'Pending', ?)";
+                (user_id, category_id, assigned_agency_id, description, address, photo_path, gps_lat, gps_long, priority, status, created_at) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pending', ?)";
 
         $stmt = $this->conn->prepare($sql);
 
@@ -77,6 +77,7 @@ class Report
             $stmt->execute([
                 $user_id,
                 $category_id,
+                $assigned_agency_id,
                 $description,
                 $address,
                 $photo_path,
@@ -189,5 +190,48 @@ class Report
 
         $q = $this->conn->query($sql);
         return $q->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // GET ALL REPORTS WITH OPTIONAL FILTERS (replaces raw query in admin_report.php)
+    public function getFilteredReports($filterStatus = '', $filterCategory = '', $filterSearch = '')
+    {
+        $sql = "SELECT r.*, c.name AS category_name, a.name AS agency_name,
+                       CONCAT(u.first_name, ' ', IFNULL(CONCAT(u.middle_initial, '. '), ''), u.last_name) AS full_name
+                FROM reports r
+                LEFT JOIN categories c ON r.category_id = c.category_id
+                LEFT JOIN agencies   a ON r.assigned_agency_id = a.agency_id
+                LEFT JOIN users      u ON r.user_id = u.user_id
+                WHERE 1=1";
+
+        $params = [];
+
+        if ($filterStatus !== '') {
+            $sql .= " AND r.status = ?";
+            $params[] = $filterStatus;
+        }
+
+        if ($filterCategory !== '') {
+            $sql .= " AND r.category_id = ?";
+            $params[] = $filterCategory;
+        }
+
+        if ($filterSearch !== '') {
+            $sql .= " AND (r.description LIKE ? OR r.address LIKE ? OR c.name LIKE ? OR CONCAT(u.first_name,' ',u.last_name) LIKE ?)";
+            $like = "%{$filterSearch}%";
+            $params[] = $like; $params[] = $like; $params[] = $like; $params[] = $like;
+        }
+
+        $sql .= " ORDER BY r.created_at DESC";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // GET ALL AGENCIES
+    public function getAllAgencies()
+    {
+        $stmt = $this->conn->query("SELECT agency_id, name FROM agencies ORDER BY name");
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

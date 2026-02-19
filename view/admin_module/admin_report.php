@@ -19,47 +19,12 @@ $filterStatus   = $_GET['status']   ?? '';
 $filterCategory = $_GET['category'] ?? '';
 $filterSearch   = trim($_GET['search'] ?? '');
 
-// ─── BUILD QUERY WITH FILTERS ───────────────────────────────────────────
-$sql = "SELECT r.*, c.name AS category_name, a.name AS agency_name,
-               CONCAT(u.first_name, ' ', IFNULL(CONCAT(u.middle_initial, '. '), ''), u.last_name) AS full_name
-        FROM reports r
-        LEFT JOIN categories c ON r.category_id = c.category_id
-        LEFT JOIN agencies   a ON r.assigned_agency_id = a.agency_id
-        LEFT JOIN users      u ON r.user_id = u.user_id
-        WHERE 1=1";
-
-$params = [];
-
-if ($filterStatus !== '') {
-    $sql .= " AND r.status = ?";
-    $params[] = $filterStatus;
-}
-
-if ($filterCategory !== '') {
-    $sql .= " AND r.category_id = ?";
-    $params[] = $filterCategory;
-}
-
-if ($filterSearch !== '') {
-    $sql .= " AND (r.description LIKE ? OR r.address LIKE ? OR c.name LIKE ? OR CONCAT(u.first_name,' ',u.last_name) LIKE ?)";
-    $like = "%{$filterSearch}%";
-    $params[] = $like; $params[] = $like; $params[] = $like; $params[] = $like;
-}
-
-$sql .= " ORDER BY r.created_at DESC";
-
-$stmt = $conn->prepare($sql);
-$stmt->execute($params);
-$allReports = $stmt->fetchAll(PDO::FETCH_ASSOC);
-$hasReports = !empty($allReports);
-
-// Categories for filter dropdown
-$catStmt = $conn->query("SELECT category_id, name FROM categories ORDER BY name");
-$categories = $catStmt->fetchAll(PDO::FETCH_ASSOC);
-
-// Agencies for forwarding
-$agencyStmt = $conn->query("SELECT agency_id, name FROM agencies ORDER BY name");
-$agencies = $agencyStmt->fetchAll(PDO::FETCH_ASSOC);
+// ─── USE MODEL FOR ALL QUERIES ───────────────────────────────────────────
+$reportModel = new Report();
+$allReports  = $reportModel->getFilteredReports($filterStatus, $filterCategory, $filterSearch);
+$hasReports  = !empty($allReports);
+$categories  = $reportModel->getAllCategories();
+$agencies    = $reportModel->getAllAgencies();
 
 $success = $_SESSION['success'] ?? '';
 $error   = $_SESSION['error']   ?? '';
@@ -169,6 +134,7 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
 </head>
 
 <body>
+    <?php require VIEW_PATH . 'partials/mobile_topnav_admin.php'; ?>
 
     <div class="dashboard-container">
 

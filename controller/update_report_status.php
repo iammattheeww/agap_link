@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
 }
 
-require_once dirname(__DIR__) . "/config/agaplinkdb.php";
+require_once MODEL_PATH . 'Report.php';
 
 $report_id  = filter_var($_POST['report_id'] ?? 0, FILTER_VALIDATE_INT);
 $new_status = $_POST['new_status'] ?? '';
@@ -26,40 +26,20 @@ if (!$report_id || !in_array($new_status, $allowed_statuses)) {
 }
 
 try {
-    $conn->beginTransaction();
+    $reportModel = new Report();
+    $reportModel->updateReportStatus($report_id, $new_status, $remarks ?: null);
 
-    // Update report status
-    $updateStmt = $conn->prepare("UPDATE reports SET status = ?, updated_at = NOW() WHERE report_id = ?");
-    $updateStmt->execute([$new_status, $report_id]);
-
-    // Insert into report_logs
-    $logStmt = $conn->prepare(
-        "INSERT INTO report_logs (report_id, status_change, remarks, timestamp) VALUES (?, ?, ?, NOW())"
-    );
-    $logStmt->execute([$report_id, $new_status, $remarks ?: null]);
-
-    $conn->commit();
-
-    // Attempt email notification (ADD-2) — failure won't block status update
+    // Send SMS notification
     try {
-        require_once dirname(__DIR__) . "/model/Mailer.php";
-        sendStatusUpdateEmail($conn, $report_id, $new_status, $remarks);
+        require_once MODEL_PATH . 'SmsNotifier.php';
+        SmsNotifier::sendStatusUpdate($report_id, $new_status);
     } catch (Exception $e) {
-        // Log email failure to report_logs
-        try {
-            $errStmt = $conn->prepare(
-                "INSERT INTO report_logs (report_id, status_change, remarks, timestamp) VALUES (?, ?, ?, NOW())"
-            );
-            $errStmt->execute([$report_id, 'EMAIL_FAILED', 'Email error: ' . $e->getMessage()]);
-        } catch (Exception $inner) {
-            // silent
-        }
+        error_log("SMS notification failed for report #$report_id: " . $e->getMessage());
     }
 
     $_SESSION['success'] = "Report #$report_id status updated to $new_status.";
 
 } catch (PDOException $e) {
-    $conn->rollBack();
     $_SESSION['error'] = 'Failed to update status. Please try again.';
 }
 
