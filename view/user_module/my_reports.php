@@ -29,8 +29,8 @@
 
     <?php require_once __DIR__ . '/../partials/user_sidebar.php'; ?>
 
-    <div class="page-transition">
-    <main class="main-content">
+<main class="main-content page-transition">
+
 
         <!-- HEADER -->
         <div class="content-header">
@@ -219,6 +219,11 @@
     </body>
 
     <script> 
+
+    
+    document.body.scrollWidth
+document.body.clientWidth
+
 document.querySelectorAll(".report-card").forEach(card => {
     card.addEventListener("click", function () {
 
