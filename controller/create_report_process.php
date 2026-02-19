@@ -76,23 +76,49 @@ function create_report()
     $gps_long = ($gps_long !== false) ? (float) $gps_long : null;
 
     // FILE UPLOAD
-    $photo_path = null;
-    if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
-        $upload_dir = UPLOAD_PATH;
-        if (!is_dir($upload_dir)) {
-            mkdir($upload_dir, 0755, true);
-        }
-        $file_tmp = $_FILES['photo']['tmp_name'];
-        $file_ext = strtolower(pathinfo($_FILES['photo']['name'], PATHINFO_EXTENSION));
-        $allowed  = ['jpg', 'jpeg', 'png'];
-        if (in_array($file_ext, $allowed, true)) {
+  // FILE UPLOAD
+$photo_path = null;
+if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
+    // Ensure upload directory exists
+    $upload_dir = rtrim(UPLOAD_PATH, '/') . '/';
+    if (!is_dir($upload_dir)) {
+        mkdir($upload_dir, 0755, true);
+    }
+
+    $file_tmp  = $_FILES['photo']['tmp_name'];
+    $file_name = $_FILES['photo']['name'];
+    $file_ext  = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+
+    // Only allow png, jpg, jpeg
+    $allowed_exts = ['png', 'jpg', 'jpeg'];
+
+    // Check file extension
+    if (!in_array($file_ext, $allowed_exts, true)) {
+        error_log("Invalid file extension: $file_ext");
+    } else {
+        // Check MIME type for safety
+        $file_mime = mime_content_type($file_tmp);
+        $allowed_mimes = ['image/png', 'image/jpeg'];
+
+        if (!in_array($file_mime, $allowed_mimes, true)) {
+            error_log("Invalid MIME type: $file_mime");
+        } else {
+            // Normalize extension: always save JPEG as jpg
+            if ($file_ext === 'jpeg') $file_ext = 'jpg';
+
             $filename   = uniqid('report_', true) . '.' . $file_ext;
             $targetPath = $upload_dir . $filename;
+
             if (move_uploaded_file($file_tmp, $targetPath)) {
-                $photo_path = UPLOAD_URL . '/' . $filename;
+                $photo_path = rtrim(UPLOAD_URL, '/') . '/' . $filename;
+            } else {
+                error_log("Failed to move uploaded file to $targetPath");
             }
         }
     }
+} elseif (isset($_FILES['photo']) && $_FILES['photo']['error'] !== UPLOAD_ERR_NO_FILE) {
+    error_log("File upload error code: " . $_FILES['photo']['error']);
+}
 
     // AUTO-ASSIGN AGENCY BASED ON CATEGORY
     $agencyName = getAgencyForCategory($category_id);
