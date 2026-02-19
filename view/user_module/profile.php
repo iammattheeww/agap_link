@@ -202,9 +202,8 @@ $firstInitial = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U';
     <div class="dashboard-container">
         <!-- SIDEBAR -->
         <?php require VIEW_PATH . 'partials/user_sidebar.php' ?>
-<div class="page-transition">
-        <!-- MAIN CONTENT -->
-    <main class="main-content">
+<main class="main-content page-transition">
+
   <!-- SUCCESS OUTSIDE LAYOUT -->
   <?php if (isset($_SESSION['success'])): ?>
     <div class="alert alert-success fade-alert" style="margin:20px;">
@@ -222,7 +221,6 @@ $firstInitial = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U';
         <div class="profile-avatar-ui"><?= $firstInitial ?></div>
         <div class="profile-name-ui"><?= htmlspecialchars($fullName) ?></div>
         <div class="profile-meta-ui">Resident</div>
-        <button class="btn-secondary">Edit Profile Photo</button>
       </div>
 
       <!-- ACCOUNT INFO -->

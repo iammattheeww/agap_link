@@ -210,6 +210,10 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
 </body>
 
 <script>
+
+    document.body.scrollWidth
+document.body.clientWidth
+
     document.addEventListener("DOMContentLoaded", function() {
 
         const modal = document.getElementById("reportModal");
