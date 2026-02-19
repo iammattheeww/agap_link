@@ -230,54 +230,96 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
                                     <th>Update Status</th>
                                     <th>Forwarded To</th>
                                     <th>Date</th>
+                                     <th></th> 
                                 </tr>
                             </thead>
-                            <tbody>
-                                <?php foreach ($allReports as $report): ?>
-                                    <tr>
-                                        <td>#<?= htmlspecialchars($report['report_id']) ?></td>
-                                        <td>
-                                            <?= htmlspecialchars($report['category_name'] ?? 'General') ?>
-                                            <span class="report-cell-sub">
-                                                <?= htmlspecialchars(mb_strimwidth($report['description'] ?? '', 0, 70, '…')) ?>
-                                            </span>
-                                        </td>
-                                        <td><?= htmlspecialchars($report['full_name'] ?? 'N/A') ?></td>
-                                        <td>
-                                            <?php
-                                            $status = strtolower($report['status']);
-                                            $statusClass = match ($status) {
-                                                'pending'   => 'status-pending',
-                                                'ongoing'   => 'status-ongoing',
-                                                'verified'  => 'status-verified',
-                                                'forwarded' => 'status-forwarded',
-                                                'resolved'  => 'status-resolved',
-                                                default     => 'status-pending'
-                                            };
-                                            ?>
-                                            <span class="<?= $statusClass ?>"><?= ucfirst($status) ?></span>
-                                        </td>
-                                        <td>
-                                            <form method="POST"
-                                                  action="<?= BASE_URL ?>/controller/update_report_status.php"
-                                                  class="status-update-form">
-                                                <input type="hidden" name="report_id" value="<?= $report['report_id'] ?>">
-                                                <select name="new_status">
-                                                    <?php foreach ($statuses as $s): ?>
-                                                        <option value="<?= $s ?>"
-                                                            <?= $report['status'] === $s ? 'selected' : '' ?>>
-                                                            <?= $s ?>
-                                                        </option>
-                                                    <?php endforeach; ?>
-                                                </select>
-                                                <button type="submit" class="btn-update-status">Update</button>
-                                            </form>
-                                        </td>
-                                        <td><?= htmlspecialchars($report['agency_name'] ?? '—') ?></td>
-                                        <td><?= date('M d, Y', strtotime($report['created_at'])) ?></td>
-                                    </tr>
-                                <?php endforeach; ?>
-                            </tbody>
+                          ...
+<tbody>
+<?php foreach ($allReports as $report): ?>
+<tr>
+    <td>#<?= htmlspecialchars($report['report_id']) ?></td>
+
+    <td>
+        <?= htmlspecialchars($report['category_name'] ?? 'General') ?>
+        <span class="report-cell-sub">
+            <?= htmlspecialchars(mb_strimwidth($report['description'] ?? '', 0, 70, '…')) ?>
+        </span>
+    </td>
+
+    <td><?= htmlspecialchars($report['full_name'] ?? 'N/A') ?></td>
+
+    <td>
+        <?php
+        $status = strtolower($report['status']);
+        $statusClass = match ($status) {
+            'pending'   => 'status-pending',
+            'ongoing'   => 'status-ongoing',
+            'verified'  => 'status-verified',
+            'forwarded' => 'status-forwarded',
+            'resolved'  => 'status-resolved',
+            default     => 'status-pending'
+        };
+        ?>
+        <span class="<?= $statusClass ?>"><?= ucfirst($status) ?></span>
+    </td>
+
+    <td>
+        <form method="POST"
+              action="<?= BASE_URL ?>/controller/update_report_status.php"
+              class="status-update-form">
+            <input type="hidden" name="report_id" value="<?= $report['report_id'] ?>">
+            <select name="new_status">
+                <?php foreach ($statuses as $s): ?>
+                    <option value="<?= $s ?>"
+                        <?= $report['status'] === $s ? 'selected' : '' ?>>
+                        <?= $s ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <button type="submit" class="btn-update-status">Update</button>
+        </form>
+    </td>
+
+    <td><?= htmlspecialchars($report['agency_name'] ?? '—') ?></td>
+    <td><?= date('M d, Y', strtotime($report['created_at'])) ?></td>
+
+    <!-- ⭐ ACTIONS COLUMN -->
+    <td class="action-cell">
+        <div class="meatballs-container">
+
+            <button type="button" class="meatballs-btn">⋮</button>
+
+            <div class="meatballs-menu">
+
+                <!-- VIEW DETAILS -->
+                <button type="button"
+                        class="view-details-btn"
+                        data-id="<?= $report['report_id'] ?>"
+                        data-category="<?= htmlspecialchars($report['category_name']) ?>"
+                        data-description="<?= htmlspecialchars($report['description']) ?>"
+                        data-reporter="<?= htmlspecialchars($report['full_name']) ?>"
+                        data-status="<?= htmlspecialchars($report['status']) ?>"
+                        data-agency="<?= htmlspecialchars($report['agency_name']) ?>"
+                        data-date="<?= date('M d, Y', strtotime($report['created_at'])) ?>">
+                    View Details
+                </button>
+
+                <!-- DELETE -->
+                <form method="POST"
+                      action="<?= BASE_URL ?>/controller/delete_report.php"
+                      onsubmit="return confirm('Delete this report?');">
+                    <input type="hidden" name="report_id" value="<?= $report['report_id'] ?>">
+                    <button type="submit" class="delete-btn">Delete</button>
+                </form>
+
+            </div>
+        </div>
+    </td>
+
+</tr>
+<?php endforeach; ?>
+</tbody>
+
                         </table>
                     </div>
                 <?php endif; ?>
@@ -288,6 +330,70 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
 
     <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">☰</button>
     <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
+<div id="reportModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+
+        <h2 id="modalTitle">Report</h2>
+
+        <div class="modal-body">
+            <p><strong>Category:</strong> <span id="modalCategory"></span></p>
+            <p><strong>Description:</strong></p>
+            <p id="modalDescription"></p>
+            <p><strong>Reporter:</strong> <span id="modalReporter"></span></p>
+            <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+            <p><strong>Forwarded To:</strong> <span id="modalAgency"></span></p>
+            <p><strong>Date:</strong> <span id="modalDate"></span></p>
+        </div>
+
+        <div class="modal-footer">
+            <a id="messageCitizenBtn" class="btn-primary">Message Citizen</a>
+        </div>
+    </div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    // TOGGLE MEATBALLS
+    document.querySelectorAll(".meatballs-btn").forEach(btn => {
+        btn.addEventListener("click", e => {
+            e.stopPropagation();
+            document.querySelectorAll(".meatballs-menu").forEach(m => m.style.display = "none");
+            btn.nextElementSibling.style.display = "block";
+        });
+    });
+
+    document.addEventListener("click", () => {
+        document.querySelectorAll(".meatballs-menu").forEach(m => m.style.display = "none");
+    });
+
+    // MODAL
+    const modal = document.getElementById("reportModal");
+
+    document.querySelectorAll(".view-details-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+
+            document.getElementById("modalTitle").textContent = "Report #" + btn.dataset.id;
+            document.getElementById("modalCategory").textContent = btn.dataset.category;
+            document.getElementById("modalDescription").textContent = btn.dataset.description;
+            document.getElementById("modalReporter").textContent = btn.dataset.reporter;
+            document.getElementById("modalStatus").textContent = btn.dataset.status;
+            document.getElementById("modalAgency").textContent = btn.dataset.agency || "—";
+            document.getElementById("modalDate").textContent = btn.dataset.date;
+
+            document.getElementById("messageCitizenBtn").href =
+                "<?= BASE_URL ?>/view/admin_module/message_citizen.php?report_id=" + btn.dataset.id;
+
+            modal.style.display = "flex";
+        });
+    });
+
+    document.querySelector(".close-modal").addEventListener("click", () => {
+        modal.style.display = "none";
+    });
+
+});
+</script>
 
 </body>
 
