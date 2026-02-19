@@ -40,20 +40,33 @@ $userName = $_SESSION['user_name'] ?? 'User';
                 placeholder="Street, Barangay, City" required maxlength="255">
         </div>
 
-        <div class="form-group">
-            <label class="form-label">Photo Evidence <span class="form-label-optional">(Optional)</span></label>
-            <div class="file-upload-area" id="fileUploadArea">
-                <div class="upload-icon">📷</div>
-                <div class="upload-text">Click to upload or drag and drop</div>
-                <div class="upload-hint">PNG, JPG, JPEG up to 5MB</div>
-            </div>
-            <input type="file" name="photo" id="photo" class="file-input-hidden"
-                accept="image/png, image/jpeg, image/jpg">
-            <div class="preview-container" id="previewContainer">
-                <img src="" alt="Preview" class="preview-image" id="previewImage">
-                <button type="button" class="remove-image-btn" id="removeImageBtn">Remove Photo</button>
-            </div>
+      <div class="form-group">
+    <label class="form-label">Photo Evidence <span class="form-label-optional">(Optional)</span></label>
+
+    <div class="file-upload-area" id="fileUploadArea">
+
+        <!-- Upload Placeholder -->
+        <div class="upload-placeholder" id="uploadPlaceholder">
+            <div class="upload-icon">📷</div>
+            <div class="upload-text">Click to upload or drag and drop</div>
+            <div class="upload-hint">PNG, JPG, JPEG up to 5MB</div>
         </div>
+
+        <!-- Hidden File Input -->
+        <input type="file" name="photo" id="photo"
+            class="file-input-hidden"
+            accept="image/png, image/jpeg, image/jpg">
+
+        <!-- Preview INSIDE upload box -->
+        <div class="preview-container" id="previewContainer">
+            <img src="" alt="Preview" class="preview-image" id="previewImage">
+            <button type="button" class="remove-image-btn" id="removeImageBtn">
+                Remove Photo
+            </button>
+        </div>
+
+    </div>
+</div>
 
         <div class="form-group">
             <label class="form-label">GPS Coordinates <span class="form-label-optional">(Optional)</span></label>

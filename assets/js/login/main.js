@@ -25,3 +25,9 @@ function showTab(tab) {
   document.getElementById(tab).classList.add("active");
   event.target.classList.add("active");
 }
+
+const miInput = document.querySelector('input[name="middle_initial"]');
+
+miInput.addEventListener('input', () => {
+  miInput.value = miInput.value.toUpperCase().slice(0, 1); // Uppercase and limit to 1 char
+});

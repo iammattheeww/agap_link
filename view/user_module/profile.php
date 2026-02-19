@@ -64,8 +64,9 @@ $firstInitial  = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U'
 
                     <!-- ACCOUNT INFORMATION -->
                     <div class="profile-form-card">
-                        <h2 class="form-section-title">Account Information</h2>
-                        <form action="<?= BASE_URL ?>/controller/profile_process.php" method="POST">
+                        <h1 class="welcome-title">Account Information</h1>
+                        <br>
+                 <form id="profileForm" action="<?= BASE_URL ?>/controller/profile_process.php" method="POST">
                             <input type="hidden" name="action" value="update_profile">
                             <div class="form-grid form-grid-2">
                                 <div class="form-group">
@@ -75,8 +76,13 @@ $firstInitial  = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U'
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Middle Initial</label>
-                                    <input type="text" name="middle_initial" class="form-input form-input-small"
-                                        value="<?= htmlspecialchars($middleInitial) ?>">
+                                    <input type="text" 
+           name="middle_initial" 
+           class="form-input form-input-small"
+           value="<?= htmlspecialchars($middleInitial) ?>"
+           maxlength="1" 
+           style="text-transform: uppercase;"
+           oninput="this.value = this.value.toUpperCase().slice(0,1);">
                                 </div>
                             </div>
                             <div class="form-grid">
@@ -92,8 +98,16 @@ $firstInitial  = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U'
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Phone</label>
-                                    <input type="tel" name="phone_number" class="form-input"
-                                        value="<?= htmlspecialchars($phoneNumber) ?>" required>
+                                       <input type="text" 
+           name="phone_number" 
+           class="form-input"
+           value="<?= htmlspecialchars($phoneNumber) ?>"
+           maxlength="11" 
+           pattern="\d{11}" 
+           inputmode="numeric" 
+           oninput="this.value = this.value.replace(/\D/g, '')" 
+           placeholder="09123456789" 
+           required>
                                 </div>
                             </div>
                             <div class="form-actions">
@@ -106,7 +120,7 @@ $firstInitial  = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U'
                     <!-- CHANGE PASSWORD -->
                     <div class="profile-form-card">
                         <h2 class="form-section-title">Change Password</h2>
-                        <form action="<?= BASE_URL ?>/controller/profile_process.php" method="POST">
+                 <form id="profileForm" action="<?= BASE_URL ?>/controller/profile_process.php" method="POST">
                             <input type="hidden" name="action" value="change_password">
                             <div class="form-grid">
                                 <div class="form-group">
@@ -158,7 +172,7 @@ $firstInitial  = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U'
                 <p style="margin-bottom: 15px; color: var(--color-gray-800);">
                     To confirm deletion, please type <strong style="color: var(--color-secondary);">DELETE</strong> in the field below:
                 </p>
-                <form action="<?= BASE_URL ?>/controller/profile_process.php" method="POST" id="deleteAccountForm">
+                <form id="profileForm" form action="<?= BASE_URL ?>/controller/profile_process.php" method="POST" id="deleteAccountForm">
                     <input type="hidden" name="action" value="delete_account">
                     <div class="form-group">
                         <input type="text" id="delete_confirmation" name="delete_confirmation"
