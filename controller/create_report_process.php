@@ -27,43 +27,13 @@ switch ($action) {
 }
 
 // ─── CATEGORY → AGENCY AUTO-ASSIGNMENT ──────────────────────────────────
-// Maps category_id to agency name (matches agencies.name in DB)
-function getAgencyForCategory(int $category_id): ?string
-{
-    $map = [
-        1 => 'DPWH',          // Infrastructure
-        2 => 'CENRO',         // Waste Management
-        3 => 'LWUA',          // Water & Sanitation
-        4 => 'PNP',           // Public Safety
-        5 => 'DENR',          // Environment
-        6 => 'MERALCO',       // Utilities
-        7 => 'LTO',           // Traffic
-        8 => 'DOH',           // Public Health
-        9 => 'Brgy. Granada', // Community Facilities → Barangay/LGU
-    ];
-    return $map[$category_id] ?? 'Brgy. Granada';
-}
-
-// Lookup agency_id from agencies table by name
-function resolveAgencyId(\PDO $conn, string $agencyName): ?int
-{
-    $stmt = $conn->prepare("SELECT agency_id FROM agencies WHERE name = ? LIMIT 1");
-    $stmt->execute([$agencyName]);
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
-    if ($row) return (int) $row['agency_id'];
-
-    // Fallback: try Brgy. Granada (agency_id 0)
-    $stmt2 = $conn->prepare("SELECT agency_id FROM agencies ORDER BY agency_id ASC LIMIT 1");
-    $stmt2->execute();
-    $row2 = $stmt2->fetch(PDO::FETCH_ASSOC);
-    return $row2 ? (int) $row2['agency_id'] : null;
-}
+// Uses model method getAgencyByCategory() to look up the primary agency
 
 // CREATE REPORT FUNCTION
 function create_report()
 {
     global $conn;
-    $report = new Report();
+    $reportModel = new Report();
 
     $user_id     = (int) $_SESSION['user_id'];
     $category_id = isset($_POST['category_id']) ? (int) $_POST['category_id'] : 0;
@@ -120,12 +90,12 @@ if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
     error_log("File upload error code: " . $_FILES['photo']['error']);
 }
 
-    // AUTO-ASSIGN AGENCY BASED ON CATEGORY
-    $agencyName = getAgencyForCategory($category_id);
-    $assigned_agency_id = resolveAgencyId($conn, $agencyName);
+    // AUTO-ASSIGN AGENCY BASED ON CATEGORY (via model)
+    $reportModel = new Report();
+    $assigned_agency_id = $reportModel->getAgencyByCategory((int)$category_id);
 
     try {
-        $report_id = $report->createReport(
+        $report_id = $reportModel->createReport(
             $user_id, $category_id, $description, $address,
             $photo_path, $gps_lat, $gps_long,
             'Medium', $assigned_agency_id

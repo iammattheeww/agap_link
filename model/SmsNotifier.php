@@ -68,6 +68,19 @@ class SmsNotifier
     }
 
     /**
+     * Send a custom SMS message to a phone number.
+     * Used by admin to message a citizen with a custom text.
+     */
+    public static function sendCustomSms(string $phone, string $message): void
+    {
+        $phone = preg_replace('/\D/', '', $phone);
+        if (empty($phone)) {
+            throw new Exception('No valid phone number provided.');
+        }
+        self::sendSms($phone, $message);
+    }
+
+    /**
      * Send a raw SMS via Semaphore API.
      *
      * @param string $to      Recipient number (digits only, e.g. 09171234567)

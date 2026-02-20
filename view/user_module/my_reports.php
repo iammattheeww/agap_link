@@ -112,6 +112,15 @@ $hasReports  = is_array($userReports) && count($userReports) > 0;
                                     <span class="status-badge <?= $statusClass ?>"><?= strtolower($status) ?></span>
                                     <span class="activity-arrow">›</span>
                                 </div>
+
+                                <!-- DELETE REPORT BUTTON -->
+                                <form method="POST"
+                                      action="<?= BASE_URL ?>/controller/delete_report.php"
+                                      class="delete-report-form"
+                                      onsubmit="return confirm('Are you sure you want to delete this report? This cannot be undone.');">
+                                    <input type="hidden" name="report_id" value="<?= $report['report_id'] ?>">
+                                    <button type="submit" class="btn-delete-report" title="Delete Report">🗑</button>
+                                </form>
                             </div>
                         <?php endforeach; ?>
                     </div>

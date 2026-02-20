@@ -77,7 +77,7 @@ function update_profile()
     $currentEmail = $user->get_user_email($_SESSION['user_id']);
     if ($email !== $currentEmail && $user->email_exists($email)) {
         $_SESSION['error'] = "This email is already registered to another account!";
-        header("Location: /agap_link/view/user_module/profile.php");
+        header("Location: " . BASE_URL . "/view/user_module/profile.php");
         exit();
     }
 
@@ -127,65 +127,49 @@ function change_password()
 {
     global $user;
 
-    // GET AND SANITIZE INPUT
-    $currentPassword = $_POST['current_password'];
-    $newPassword = $_POST['new_password'];
-    $confirmPassword = $_POST['confirm_password'];
+    $currentPassword = $_POST['current_password']  ?? '';
+    $newPassword     = $_POST['new_password']       ?? '';
+    $confirmPassword = $_POST['confirm_password']   ?? '';
 
-    // VALIDATE REQUIRED FIELDS
     if (empty($currentPassword) || empty($newPassword) || empty($confirmPassword)) {
-        $_SESSION['error'] = "Please fill in all password fields!";
-        header("Location: /agap_link/view/user_module/profile.php");
+        $_SESSION['error'] = 'Please fill in all password fields!';
+        header('Location: ' . BASE_URL . '/view/user_module/profile.php');
         exit();
     }
-
-    // VALIDATE NEW PASSWORD LENGTH
     if (strlen($newPassword) < 8) {
-        $_SESSION['error'] = "New password must be at least 8 characters long!";
-        header("Location: /agap_link/view/user_module/profile.php");
+        $_SESSION['error'] = 'New password must be at least 8 characters long!';
+        header('Location: ' . BASE_URL . '/view/user_module/profile.php');
+        exit();
+    }
+    if ($newPassword !== $confirmPassword) {
+        $_SESSION['error'] = 'New passwords do not match!';
+        header('Location: ' . BASE_URL . '/view/user_module/profile.php');
         exit();
     }
 
-    // VALIDATE PASSWORD MATCH
-    if ($newPassword !== $confirmPassword) {
-        $_SESSION['error'] = "New passwords do not match!";
-        header("Location: /agap_link/view/user_module/profile.php");
+    // Verify current password
+    $userDetails = $user->get_user_details($_SESSION['user_id']);
+    if (!$userDetails || !password_verify($currentPassword, $userDetails['password_hash'])) {
+        $_SESSION['error'] = 'Current password is incorrect!';
+        header('Location: ' . BASE_URL . '/view/user_module/profile.php');
         exit();
     }
-    
-    // HASH NEW PASSWORD
+
     $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
-    // UPDATE PASSWORD IN DATABASE
     try {
-        $sql = "UPDATE users SET password_hash = :password WHERE user_id = :user_id";
-        $conn = new PDO(
-            "mysql:host=localhost;dbname=agap_link",
-            "root",
-            ""
-        );
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        $stmt = $conn->prepare($sql);
-        $result = $stmt->execute([
-            ':password' => $hashedPassword,
-            ':user_id' => $_SESSION['user_id']
-        ]);
-
+        $result = $user->update_password((int)$_SESSION['user_id'], $hashedPassword);
         if ($result) {
-            $_SESSION['success'] = "Password changed successfully!";
-            header("Location: " . BASE_URL . "/view/user_module/profile.php");
-            exit();
+            $_SESSION['success'] = 'Password changed successfully!';
         } else {
-            $_SESSION['error'] = "Failed to change password. Please try again.";
-            header("Location: " . BASE_URL . "/view/user_module/profile.php");
-            exit();
+            $_SESSION['error'] = 'Failed to change password. Please try again.';
         }
     } catch (PDOException $e) {
-        $_SESSION['error'] = "Password change failed: " . $e->getMessage();
-        header("Location: " . BASE_URL . "/view/user_module/profile.php");
-        exit();
+        $_SESSION['error'] = 'Password change failed: ' . $e->getMessage();
     }
+
+    header('Location: ' . BASE_URL . '/view/user_module/profile.php');
+    exit();
 }
 
 // DELETE USER ACCOUNT - UPDATED TO USE MODEL METHOD
@@ -198,7 +182,7 @@ function delete_account()
 
     if ($confirmation !== 'DELETE') {
         $_SESSION['error'] = "Account deletion cancelled. Confirmation text did not match.";
-        header("Location: /agap_link/view/user_module/profile.php");
+        header("Location: " . BASE_URL . "/view/user_module/profile.php");
         exit();
     }
 
@@ -255,7 +239,7 @@ function delete_account()
             $_SESSION['success'] = "Your account has been successfully deleted. We're sorry to see you go.";
 
             // REDIRECT TO LANDING PAGE
-            header("Location: /agap_link/index.php");
+            header("Location: " . BASE_URL . "/index.php");
             exit();
         } else {
             throw new Exception("Failed to delete user from database.");

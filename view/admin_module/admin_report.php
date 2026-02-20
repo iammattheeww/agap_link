@@ -42,98 +42,9 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
     <link rel="icon" type="image/x-icon" href="<?= ASSET_URL ?>/favicon_io/favicon.ico">
     <title>Reports Management - AGAP-Link</title>
     <link rel="stylesheet" href="<?= ASSET_URL ?>/css/admin_module/admin_module.css">
-    <style>
-        .filter-bar {
-            background: var(--color-white);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-sm);
-            padding: 20px 24px;
-            margin-bottom: 24px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 14px;
-            align-items: flex-end;
-        }
-        .filter-bar .form-group { margin: 0; flex: 1 1 160px; }
-        .filter-bar label { font-size: 0.8rem; font-weight: 600; color: var(--color-gray-600); display: block; margin-bottom: 6px; }
-        .filter-bar select,
-        .filter-bar input[type="text"] {
-            width: 100%;
-            padding: 9px 12px;
-            border: 1.5px solid var(--color-gray-300);
-            border-radius: var(--radius-md);
-            font-family: var(--font-primary);
-            font-size: 0.9rem;
-            background: var(--color-white);
-            transition: border-color var(--transition-fast);
-        }
-        .filter-bar select:focus,
-        .filter-bar input[type="text"]:focus { border-color: var(--color-primary); outline: none; }
-        .filter-bar .btn-filter-apply {
-            padding: 10px 20px;
-            background: var(--color-primary);
-            color: #fff;
-            border: none;
-            border-radius: var(--radius-md);
-            font-weight: 600;
-            font-family: var(--font-primary);
-            cursor: pointer;
-            transition: background var(--transition-fast);
-            align-self: flex-end;
-        }
-        .filter-bar .btn-filter-apply:hover { background: var(--color-primary-dark); }
-        .filter-bar .btn-clear {
-            padding: 10px 16px;
-            background: var(--color-gray-100);
-            color: var(--color-gray-800);
-            border: 1.5px solid var(--color-gray-300);
-            border-radius: var(--radius-md);
-            font-family: var(--font-primary);
-            font-weight: 600;
-            cursor: pointer;
-            align-self: flex-end;
-            text-decoration: none;
-            font-size: 0.9rem;
-            display: inline-block;
-        }
-        .filter-bar .btn-clear:hover { background: var(--color-gray-200); }
-
-        /* Active filter indicator */
-        .active-filters {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-bottom: 16px;
-        }
-        .filter-tag {
-            background: rgba(249,115,22,0.1);
-            color: var(--color-primary-dark);
-            border: 1px solid rgba(249,115,22,0.3);
-            border-radius: 20px;
-            padding: 4px 12px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        /* Inline status update form in table */
-        .status-update-form { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
-        .status-update-form select { padding: 5px 10px; font-size: 0.85rem; min-width: 110px; }
-        .btn-update-status {
-            padding: 5px 12px;
-            background: var(--color-primary);
-            color: #fff;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 0.82rem;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: var(--font-primary);
-        }
-        .btn-update-status:hover { background: var(--color-primary-dark); }
-    </style>
 </head>
 
-<body>
+<body data-base-url="<?= BASE_URL ?>">
     <?php require VIEW_PATH . 'partials/mobile_topnav_admin.php'; ?>
 
     <div class="dashboard-container">
@@ -230,11 +141,10 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
                                     <th>Update Status</th>
                                     <th>Forwarded To</th>
                                     <th>Date</th>
-                                     <th></th> 
+                                    <th></th>
                                 </tr>
                             </thead>
-                          ...
-<tbody>
+                            <tbody>
 <?php foreach ($allReports as $report): ?>
 <tr>
     <td>#<?= htmlspecialchars($report['report_id']) ?></td>
@@ -283,7 +193,7 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
     <td><?= htmlspecialchars($report['agency_name'] ?? '—') ?></td>
     <td><?= date('M d, Y', strtotime($report['created_at'])) ?></td>
 
-    <!-- ⭐ ACTIONS COLUMN -->
+    <!-- ACTIONS COLUMN -->
     <td class="action-cell">
         <div class="meatballs-container">
 
@@ -298,9 +208,11 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
                         data-category="<?= htmlspecialchars($report['category_name']) ?>"
                         data-description="<?= htmlspecialchars($report['description']) ?>"
                         data-reporter="<?= htmlspecialchars($report['full_name']) ?>"
+                        data-phone="<?= htmlspecialchars($report['reporter_phone'] ?? '') ?>"
                         data-status="<?= htmlspecialchars($report['status']) ?>"
-                        data-agency="<?= htmlspecialchars($report['agency_name']) ?>"
-                        data-date="<?= date('M d, Y', strtotime($report['created_at'])) ?>">
+                        data-agency="<?= htmlspecialchars($report['agency_name'] ?? '—') ?>"
+                        data-date="<?= date('M d, Y', strtotime($report['created_at'])) ?>"
+                        data-photo="<?= htmlspecialchars($report['photo_path'] ?? '') ?>">
                     View Details
                 </button>
 
@@ -318,8 +230,7 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
 
 </tr>
 <?php endforeach; ?>
-</tbody>
-
+                            </tbody>
                         </table>
                     </div>
                 <?php endif; ?>
@@ -328,72 +239,38 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
         </main>
     </div>
 
-    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">☰</button>
-    <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
-<div id="reportModal" class="modal">
-    <div class="modal-content">
-        <span class="close-modal">&times;</span>
-
-        <h2 id="modalTitle">Report</h2>
-
-        <div class="modal-body">
-            <p><strong>Category:</strong> <span id="modalCategory"></span></p>
-            <p><strong>Description:</strong></p>
-            <p id="modalDescription"></p>
-            <p><strong>Reporter:</strong> <span id="modalReporter"></span></p>
-            <p><strong>Status:</strong> <span id="modalStatus"></span></p>
-            <p><strong>Forwarded To:</strong> <span id="modalAgency"></span></p>
-            <p><strong>Date:</strong> <span id="modalDate"></span></p>
-        </div>
-
-        <div class="modal-footer">
-            <a id="messageCitizenBtn" class="btn-primary" style="text-decoration: none;">Message Citizen</a>
+    <!-- REPORT DETAILS MODAL -->
+    <div id="reportModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2 id="modalTitle">Report</h2>
+            <div class="modal-body">
+                <!-- Photo display -->
+                <div id="modalPhotoWrapper" style="margin-bottom:16px; display:none;">
+                    <strong>Photo Evidence:</strong><br>
+                    <img id="modalPhoto" src="" alt="Report photo"
+                         style="max-width:100%; max-height:300px; margin-top:8px; border-radius:8px; object-fit:contain;">
+                </div>
+                <p><strong>Category:</strong> <span id="modalCategory"></span></p>
+                <p><strong>Description:</strong></p>
+                <p id="modalDescription"></p>
+                <p><strong>Reporter:</strong> <span id="modalReporter"></span></p>
+                <p><strong>Phone:</strong> <span id="modalPhone"></span></p>
+                <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+                <p><strong>Forwarded To:</strong> <span id="modalAgency"></span></p>
+                <p><strong>Date:</strong> <span id="modalDate"></span></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="messageCitizenBtn" class="btn-primary">
+                    Message Citizen via SMS
+                </button>
+            </div>
         </div>
     </div>
-</div>
-<script>
-document.addEventListener("DOMContentLoaded", () => {
 
-    // TOGGLE MEATBALLS
-    document.querySelectorAll(".meatballs-btn").forEach(btn => {
-        btn.addEventListener("click", e => {
-            e.stopPropagation();
-            document.querySelectorAll(".meatballs-menu").forEach(m => m.style.display = "none");
-            btn.nextElementSibling.style.display = "block";
-        });
-    });
-
-    document.addEventListener("click", () => {
-        document.querySelectorAll(".meatballs-menu").forEach(m => m.style.display = "none");
-    });
-
-    // MODAL
-    const modal = document.getElementById("reportModal");
-
-    document.querySelectorAll(".view-details-btn").forEach(btn => {
-        btn.addEventListener("click", () => {
-
-            document.getElementById("modalTitle").textContent = "Report #" + btn.dataset.id;
-            document.getElementById("modalCategory").textContent = btn.dataset.category;
-            document.getElementById("modalDescription").textContent = btn.dataset.description;
-            document.getElementById("modalReporter").textContent = btn.dataset.reporter;
-            document.getElementById("modalStatus").textContent = btn.dataset.status;
-            document.getElementById("modalAgency").textContent = btn.dataset.agency || "—";
-            document.getElementById("modalDate").textContent = btn.dataset.date;
-
-            document.getElementById("messageCitizenBtn").href =
-                "<?= BASE_URL ?>/view/admin_module/message_citizen.php?report_id=" + btn.dataset.id;
-
-            modal.style.display = "flex";
-        });
-    });
-
-    document.querySelector(".close-modal").addEventListener("click", () => {
-        modal.style.display = "none";
-    });
-
-});
-</script>
+    <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">☰</button>
+    <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
+    <script src="<?= ASSET_URL ?>/js/admin_module/admin_reports.js"></script>
 
 </body>
 

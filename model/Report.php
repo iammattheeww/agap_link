@@ -15,7 +15,7 @@ class Report
     // GET ALL CATEGORIES FOR DROPDOWNS (NEW)
     public function getAllCategories()
     {
-        $sql = "SELECT category_id, name FROM categories ORDER BY name ASC";
+        $sql = "SELECT category_id, name FROM categories WHERE name != 'Other' ORDER BY name ASC";
         $q = $this->conn->query($sql);
         return $q->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -196,7 +196,8 @@ class Report
     public function getFilteredReports($filterStatus = '', $filterCategory = '', $filterSearch = '')
     {
         $sql = "SELECT r.*, c.name AS category_name, a.name AS agency_name,
-                       CONCAT(u.first_name, ' ', IFNULL(CONCAT(u.middle_initial, '. '), ''), u.last_name) AS full_name
+                       CONCAT(u.first_name, ' ', IFNULL(CONCAT(u.middle_initial, '. '), ''), u.last_name) AS full_name,
+                       u.phone_number AS reporter_phone
                 FROM reports r
                 LEFT JOIN categories c ON r.category_id = c.category_id
                 LEFT JOIN agencies   a ON r.assigned_agency_id = a.agency_id
@@ -233,5 +234,58 @@ class Report
     {
         $stmt = $this->conn->query("SELECT agency_id, name FROM agencies ORDER BY name");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Get the primary agency for a given category_id.
+     * Returns agency_id or null if none found.
+     */
+    public function getAgencyByCategory(int $category_id): ?int
+    {
+        $stmt = $this->conn->prepare(
+            "SELECT agency_id FROM agencies WHERE category_id = ? ORDER BY agency_id ASC LIMIT 1"
+        );
+        $stmt->execute([$category_id]);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row ? (int)$row['agency_id'] : null;
+    }
+
+    /**
+     * Delete a report by ID (admin-facing).
+     * The controller must verify ownership/admin before calling this.
+     */
+    public function deleteReport(int $report_id): bool
+    {
+        try {
+            $this->conn->beginTransaction();
+            // report_logs deleted via ON DELETE CASCADE automatically
+            $stmt = $this->conn->prepare("DELETE FROM reports WHERE report_id = ?");
+            $stmt->execute([$report_id]);
+            $this->conn->commit();
+            return true;
+        } catch (Exception $e) {
+            $this->conn->rollBack();
+            throw $e;
+        }
+    }
+
+    /**
+     * Delete a report belonging to a specific user (ownership-safe version).
+     */
+    public function deleteUserReport(int $report_id, int $user_id): bool
+    {
+        try {
+            $this->conn->beginTransaction();
+            $stmt = $this->conn->prepare(
+                "DELETE FROM reports WHERE report_id = ? AND user_id = ?"
+            );
+            $stmt->execute([$report_id, $user_id]);
+            $affected = $stmt->rowCount();
+            $this->conn->commit();
+            return $affected > 0;
+        } catch (Exception $e) {
+            $this->conn->rollBack();
+            throw $e;
+        }
     }
 }

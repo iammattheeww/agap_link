@@ -146,7 +146,10 @@ class User
     // GET COMPLETE USER DETAILS BY ID METHOD
     public function get_user_details($id)
     {
-        $sql = "SELECT user_id, first_name, middle_initial, last_name, CONCAT(first_name, ' ', IFNULL(CONCAT(middle_initial, '. '), ''), last_name) AS full_name, email, phone_number, created_at FROM users WHERE user_id = :id";
+        $sql = "SELECT user_id, first_name, middle_initial, last_name,
+                       CONCAT(first_name, ' ', IFNULL(CONCAT(middle_initial, '. '), ''), last_name) AS full_name,
+                       email, phone_number, password_hash, created_at
+                FROM users WHERE user_id = :id";
         $q = $this->conn->prepare($sql);
         $q->execute(['id' => $id]);
         return $q->fetch(PDO::FETCH_ASSOC);
@@ -216,5 +219,16 @@ class User
         $q->execute(['email' => $email]);
         $count = $q->fetchColumn();
         return $count > 0;
+    }
+
+    // UPDATE USER PASSWORD METHOD
+    public function update_password(int $user_id, string $hashed_password): bool
+    {
+        $sql  = "UPDATE users SET password_hash = :password WHERE user_id = :user_id";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([
+            ':password'  => $hashed_password,
+            ':user_id'   => $user_id,
+        ]);
     }
 }
