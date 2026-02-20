@@ -347,7 +347,7 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
         </div>
 
         <div class="modal-footer">
-            <a id="messageCitizenBtn" class="btn-primary">Message Citizen</a>
+            <a id="messageCitizenBtn" class="btn-primary" style="text-decoration: none;">Message Citizen</a>
         </div>
     </div>
 </div>
