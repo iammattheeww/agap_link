@@ -19,10 +19,22 @@ switch ($action) {
         die();
 }
 
+function store_old_register_input() {
+    $_SESSION['old'] = [
+        'first_name' => $_POST['first_name'] ?? '',
+        'middle_initial' => $_POST['middle_initial'] ?? '',
+        'last_name' => $_POST['last_name'] ?? '',
+        'email' => $_POST['email'] ?? '',
+        'phone' => $_POST['phone'] ?? ''
+    ];
+}
+
 // REGISTER NEW USER 
 function register_user()
 {
+    
     $user = new User();
+    
 
     // GET AND SANITIZE INPUT 
     $first_name = trim($_POST['first_name']);
@@ -36,15 +48,19 @@ function register_user()
     $confirm_password = $_POST['confirm_password'];
 
     // VALIDATE REQUIRED FIELDS
-    if (empty($first_name) || empty($last_name) || empty($email) || empty($phone)) {
-        $_SESSION['error'] = "Please fill in all required fields!";
-        header("Location: " . BASE_URL . "/view/auth/index.php");
-        die();
-    }
+   if (empty($first_name) || empty($last_name) || empty($email) || empty($phone)) {
+    $_SESSION['error'] = "Please fill in all required fields!";
+    $_SESSION['active_tab'] = 'register';
+    store_old_register_input(); //  ADD THIS
+    header("Location: " . BASE_URL . "/view/auth/index.php");
+    die();
+}
 
     // VALIDATE MIDDLE INITIAL FORMAT (IF PROVIDED)
     if ($middle_initial !== null && strlen($middle_initial) > 5) {
-        $_SESSION['error'] = "Middle initial should be 1-5 characters only!";
+        $_SESSION['error'] = "Middle initial should be 1 character only!";
+            $_SESSION['active_tab'] = 'register';
+              store_old_register_input(); //  ADD THIS
         header("Location: " . BASE_URL . "/view/auth/index.php");
         die();
     }
@@ -52,6 +68,8 @@ function register_user()
     // CHECK IF EMAIL ALREADY EXISTS
     if ($user->email_exists($email)) {
         $_SESSION['error'] = "This email is already registered!";
+         $_SESSION['active_tab'] = 'register';
+           store_old_register_input(); //  ADD THIS
         header("Location: " . BASE_URL . "/view/auth/index.php");
         die();
     }
@@ -59,6 +77,8 @@ function register_user()
     // 8 CHARACTER PASSWORD VALIDATION  
     if (strlen($password) < 8) {
         $_SESSION['error'] = "Password must be at least 8 characters long!";
+         $_SESSION['active_tab'] = 'register';
+           store_old_register_input(); //  ADD THIS
         header("Location: " . BASE_URL . "/view/auth/index.php");
         die();
     }
@@ -66,6 +86,8 @@ function register_user()
     // VALIDATE PASSWORD MATCH 
     if ($password !== $confirm_password) {
         $_SESSION['error'] = "Passwords do not match!";
+         $_SESSION['active_tab'] = 'register';
+           store_old_register_input(); //  ADD THIS
         header("Location: " . BASE_URL . "/view/auth/index.php");
         die();
     }
@@ -79,15 +101,20 @@ function register_user()
 
         if ($result) {
             $_SESSION['success'] = "Account created successfully. Please log in.";
+              $_SESSION['active_tab'] = 'login'; 
             header("Location: " . BASE_URL . "/view/auth/index.php");
             die();
         }
     } catch (Exception $e) {
         $_SESSION['error'] = "Registration failed: " . $e->getMessage();
+         $_SESSION['active_tab'] = 'register';
+           store_old_register_input(); //  ADD THIS
         header("Location: " . BASE_URL . "/view/auth/index.php");
         die();
     }
 }
+
+
 
 // LOGIN USER
 function login_user()
@@ -145,6 +172,7 @@ function login_user()
 
     // LOGIN FAILED MESSAGE
     $_SESSION['error'] = "Invalid email or password!";
+    $_SESSION['active_tab'] = 'login';
     header("Location: " . BASE_URL . "/view/auth/index.php");
     exit();
 }

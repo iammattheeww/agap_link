@@ -62,7 +62,7 @@ try {
                         <a href="<?= BASE_URL ?>/view/user_module/user_dashboard.php" class="btn btn-primary btn-lg">Go to Dashboard</a>
                         <a href="#services" class="btn btn-secondary btn-lg">Learn More</a>
                     <?php else: ?>
-                        <a href="<?= BASE_URL ?>/view/auth/index.php" class="btn btn-primary btn-lg">Get Started</a>
+                        <a href="<?= BASE_URL ?>/view/auth/index.php" class="btn btn-primary btn-lg">Report Incident</a>
                         <a href="#services" class="btn btn-secondary btn-lg">Learn More</a>
                     <?php endif; ?>
                 </div>
@@ -241,7 +241,7 @@ try {
                     <p class="cta-description">
                         Join thousands of citizens contributing to a better city environment today.
                     </p>
-                    <a href="<?= BASE_URL ?>/view/auth/index.php" class="btn btn-primary btn-lg">Create Account Now</a>
+                    <a href="<?= BASE_URL ?>/view/auth/index.php" class="btn btn-primary btn-lg">Report Now</a>
                 <?php endif; ?>
 
             </div>

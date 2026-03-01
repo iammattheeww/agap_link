@@ -31,3 +31,17 @@ const miInput = document.querySelector('input[name="middle_initial"]');
 miInput.addEventListener('input', () => {
   miInput.value = miInput.value.toUpperCase().slice(0, 1); // Uppercase and limit to 1 char
 });
+function togglePassword(fieldId, iconWrapper) {
+  const input = document.getElementById(fieldId);
+  const icon = iconWrapper.querySelector("i");
+
+  if (input.type === "password") {
+    input.type = "text";
+    icon.classList.remove("fa-eye");
+    icon.classList.add("fa-eye-slash");
+  } else {
+    input.type = "password";
+    icon.classList.remove("fa-eye-slash");
+    icon.classList.add("fa-eye");
+  }
+}
