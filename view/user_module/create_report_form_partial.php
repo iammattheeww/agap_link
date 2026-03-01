@@ -9,7 +9,7 @@ $categories = array_filter(
 
 $userName = $_SESSION['user_name'] ?? 'User';
 ?>
-
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <div class="report-form-section">
     <form action="<?= BASE_URL ?>/controller/create_report_process.php" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="action" value="create_report">
@@ -69,18 +69,35 @@ $userName = $_SESSION['user_name'] ?? 'User';
 </div>
 
         <div class="form-group">
-            <label class="form-label">GPS Coordinates <span class="form-label-optional">(Optional)</span></label>
-            <button type="button" class="btn-get-location" id="getLocationBtn">
-                <span>📍</span>
-                Get My Current Location
-            </button>
-            <div id="locationStatus"></div>
-            <input type="hidden" name="gps_lat" id="gps_lat">
-            <input type="hidden" name="gps_long" id="gps_long">
-        </div>
+    <label class="form-label">
+        Pin Exact Location on Map
+        <span class="form-label-optional">(Required)</span>
+    </label>
+
+<div class="form-group">
+    <label class="form-label">Report Location</label>
+    <div id="reportMap" class="report-map"></div>
+</div>
+
+    <small class="form-label-optional">
+        Tap or drag the marker to set the exact report location.
+    </small>
+
+    <input type="hidden" name="gps_lat" id="gps_lat">
+    <input type="hidden" name="gps_long" id="gps_long">
+</div>
 
         <div class="form-actions">
             <button type="submit" class="btn-primary">Submit Report</button>
         </div>
     </form>
 </div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    if (typeof initReportMap === "function") {
+        initReportMap();
+    }
+});
+</script>

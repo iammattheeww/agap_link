@@ -20,6 +20,7 @@ $hasReports  = is_array($userReports) && count($userReports) > 0;
     <link rel="icon" href="<?= ASSET_URL ?>/favicon_io/favicon.ico">
     <title>My Reports - AGAP-Link</title>
     <link rel="stylesheet" href="<?= ASSET_URL ?>/css/user_module/user_module.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 <body>
     <?php require VIEW_PATH . 'partials/mobile_topnav_user.php'; ?>
@@ -27,16 +28,37 @@ $hasReports  = is_array($userReports) && count($userReports) > 0;
     <div class="dashboard-container">
         <?php require_once __DIR__ . '/../partials/user_sidebar.php'; ?>
 
+      <div class="report-modal-overlay" id="createReportModal">
+                <div class="report-modal">
+
+                    <div class="modal-header">
+                        <h2>Report an Issue</h2>
+                        <button type="button" class="modal-close" id="closeReportModal">&times;</button>
+                    </div>
+
+                    <p class="modal-subtitle">
+                        Help improve your community by reporting issues.
+                    </p>
+
+                    <?php require __DIR__ . '/create_report_form_partial.php'; ?>
+
+                </div>
+            </div>
+
         <main class="main-content page-transition">
             <div class="content-header">
                 <div>
                     <h1 class="page-title">My Reports</h1>
                     <p class="welcome-subtitle">Track the status of issues you've reported.</p>
                 </div>
+
+                
                 <div class="reports-toolbar">
                     <div class="reports-search">
                         <input type="text" id="reportSearch" placeholder="Search reports..." class="form-input">
                     </div>
+
+                    
                     <div class="reports-filters">
                         <div class="filter-dropdown" id="statusDropdown">
                             <button class="filter-toggle" id="filterToggle">
@@ -50,6 +72,10 @@ $hasReports  = is_array($userReports) && count($userReports) > 0;
                             </div>
                         </div>
                     </div>
+                       <button type="button" class="btn-report-issue" id="openReportModal">
+                    <span class="btn-icon">+</span>
+                    Report Issue
+                </button>
                 </div>
             </div>
 
@@ -130,7 +156,7 @@ $hasReports  = is_array($userReports) && count($userReports) > 0;
     </div>
 
     <!-- REPORT DETAIL MODAL -->
-    <div id="reportModal" class="modal-overlay">
+  <div id="reportDetailModal" class="modal-overlay">
         <div class="modal-card">
             <div class="modal-header">
                 <h3 id="modalCategory">Report</h3>
@@ -176,5 +202,119 @@ $hasReports  = is_array($userReports) && count($userReports) > 0;
 
     <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
     <script src="<?= ASSET_URL ?>/js/user_module/reports.js"></script>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+        <script>
+
+    document.addEventListener("DOMContentLoaded", function() {
+
+       const modal = document.getElementById("createReportModal");
+        const openBtn = document.getElementById("openReportModal");
+        const closeBtn = document.getElementById("closeReportModal");
+
+        if (openBtn) {
+            openBtn.addEventListener("click", function() {
+                modal.classList.add("active");
+            });
+        }
+
+        if (closeBtn) {
+            closeBtn.addEventListener("click", function() {
+                modal.classList.remove("active");
+            });
+        }
+
+        if (modal) {
+            modal.addEventListener("click", function(e) {
+                if (e.target === modal) {
+                    modal.classList.remove("active");
+                }
+            });
+        }
+
+    });
+</script>
+<script>
+   const cancelBtn = document.getElementById("cancelReportBtn");
+const createModal = document.getElementById("createReportModal");
+
+if (cancelBtn && createModal) {
+    cancelBtn.addEventListener("click", function() {
+        createModal.classList.remove("active");
+    });
+}
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const getLocationBtn = document.getElementById("getLocationBtn");
+        const status = document.getElementById("locationStatus");
+        const latInput = document.getElementById("gps_lat");
+        const longInput = document.getElementById("gps_long");
+
+        if (getLocationBtn) {
+            getLocationBtn.addEventListener("click", function() {
+
+                if (!navigator.geolocation) {
+                    status.innerHTML = "Geolocation is not supported.";
+                    return;
+                }
+
+                status.innerHTML = "Getting location...";
+
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        latInput.value = position.coords.latitude;
+                        longInput.value = position.coords.longitude;
+                        status.innerHTML = "Location captured successfully.";
+                    },
+                    function() {
+                        status.innerHTML = "Unable to retrieve location.";
+                    }
+                );
+            });
+        }
+
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+
+        const fileUploadArea = document.getElementById("fileUploadArea");
+        const fileInput = document.getElementById("photo");
+        const previewContainer = document.getElementById("previewContainer");
+        const previewImage = document.getElementById("previewImage");
+        const removeBtn = document.getElementById("removeImageBtn");
+
+        if (fileUploadArea) {
+            fileUploadArea.addEventListener("click", () => fileInput.click());
+        }
+
+        if (fileInput) {
+            fileInput.addEventListener("change", function() {
+                const file = this.files[0];
+
+                if (!file) return;
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImage.src = e.target.result;
+                    previewContainer.style.display = "block";
+                };
+
+                reader.readAsDataURL(file);
+            });
+        }
+
+        if (removeBtn) {
+            removeBtn.addEventListener("click", function() {
+                fileInput.value = "";
+                previewContainer.style.display = "none";
+            });
+        }
+
+    });
+</script>
 </body>
 </html>
