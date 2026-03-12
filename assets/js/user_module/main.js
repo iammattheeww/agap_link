@@ -119,9 +119,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const previewContainer = document.getElementById("previewContainer");
   const previewImage = document.getElementById("previewImage");
   const removeBtn = document.getElementById("removeImageBtn");
+  const uploadPlaceholder = document.getElementById("uploadPlaceholder");
 
   if (fileUploadArea && fileInput) {
-    fileUploadArea.addEventListener("click", function () {
+    fileUploadArea.addEventListener("click", function (e) {
+      // Don't re-open the dialog if clicking remove button or preview image
+      if (e.target === removeBtn || e.target === previewImage) return;
       fileInput.click();
     });
   }
@@ -134,15 +137,18 @@ document.addEventListener("DOMContentLoaded", function () {
       reader.onload = function (e) {
         if (previewImage) previewImage.src = e.target.result;
         if (previewContainer) previewContainer.style.display = "block";
+        if (uploadPlaceholder) uploadPlaceholder.style.display = "none";
       };
       reader.readAsDataURL(file);
     });
   }
 
   if (removeBtn) {
-    removeBtn.addEventListener("click", function () {
+    removeBtn.addEventListener("click", function (e) {
+      e.stopPropagation(); // Prevent click from bubbling to fileUploadArea
       if (fileInput) fileInput.value = "";
       if (previewContainer) previewContainer.style.display = "none";
+      if (uploadPlaceholder) uploadPlaceholder.style.display = "flex";
     });
   }
 

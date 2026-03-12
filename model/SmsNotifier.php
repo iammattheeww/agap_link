@@ -1,42 +1,21 @@
 <?php
-/**
- * SmsNotifier.php — Free SMS notification using Semaphore API (Philippines)
- *
- * SETUP:
- * 1. Register free at https://semaphore.co (free tier = 500 SMS/month, no subscription needed)
- * 2. Get your API key from https://semaphore.co/account#api
- * 3. Set SEMAPHORE_API_KEY and SEMAPHORE_SENDER_NAME in config/init.php or define below
- *
- * No PHPMailer or SMTP needed — pure cURL HTTP call.
- */
-
 require_once dirname(__DIR__) . '/config/init.php';
 
 class SmsNotifier
 {
-    // ── Configuration (override via constants in init.php) ──
     private static function apiKey(): string
     {
-        return defined('SEMAPHORE_API_KEY') ? SEMAPHORE_API_KEY : '';
-    }
-
-    private static function senderName(): string
-    {
-        return defined('SEMAPHORE_SENDER_NAME') ? SEMAPHORE_SENDER_NAME : 'AGAP-Link';
+        return defined('PHILSMS_API_KEY') ? PHILSMS_API_KEY : '';
     }
 
     /**
-     * Send an SMS for a report status update.
-     *
-     * @param int    $report_id  ID of the updated report
-     * @param string $new_status New status value
-     * @throws Exception         If the send fails
+     * Automatically send SMS when a report status changes.
+     * Called by update_report_status.php — no manual trigger needed.
      */
     public static function sendStatusUpdate(int $report_id, string $new_status): void
     {
         global $conn;
 
-        // Fetch reporter phone + first name
         $stmt = $conn->prepare("
             SELECT u.first_name, u.phone_number
             FROM reports r
@@ -51,64 +30,83 @@ class SmsNotifier
         }
 
         $firstName = htmlspecialchars_decode($row['first_name']);
-        $phone     = preg_replace('/\D/', '', $row['phone_number']); // digits only
+        $phone     = self::formatPhone($row['phone_number']);
         $id        = str_pad($report_id, 4, '0', STR_PAD_LEFT);
 
         $messages = [
-            'Pending'   => "Your report (ID: #$id) has been received and is currently pending review. Thank you for reporting, $firstName!",
-            'Verified'  => "Good news, $firstName! Your report (ID: #$id) has been verified and is now being assessed.",
-            'Forwarded' => "Your report (ID: #$id) has been forwarded to the appropriate agency for action, $firstName.",
-            'Ongoing'   => "Update: Your report (ID: #$id) is now being actively addressed. Thank you for your patience, $firstName.",
-            'Resolved'  => "Great news, $firstName! Your report (ID: #$id) has been resolved. Thank you for helping improve our community!",
+            'Pending'   => "Hi $firstName! Your AGAP-Link report (ID: #$id) has been received and is pending review. Thank you for helping keep our community safe!",
+            'Verified'  => "Hi $firstName! Good news — your report (ID: #$id) has been verified and is now being assessed by our team.",
+            'Forwarded' => "Hi $firstName! Your report (ID: #$id) has been forwarded to the appropriate response agency for action.",
+            'Ongoing'   => "Hi $firstName! Update: your report (ID: #$id) is now being actively addressed. Thank you for your patience!",
+            'Resolved'  => "Hi $firstName! Your report (ID: #$id) has been resolved. Thank you for helping improve our community! - AGAP-Link",
         ];
 
-        $message = $messages[$new_status] ?? "Your AGAP-Link report #$id status has been updated to: $new_status.";
+        $message = $messages[$new_status]
+            ?? "Hi $firstName! Your AGAP-Link report #$id status has been updated to: $new_status.";
 
-        self::sendSms($phone, $message);
+        self::send($phone, $message);
     }
 
     /**
-     * Send a custom SMS message to a phone number.
-     * Used by admin to message a citizen with a custom text.
+     * Send a custom one-off SMS (still available for edge cases).
      */
     public static function sendCustomSms(string $phone, string $message): void
     {
-        $phone = preg_replace('/\D/', '', $phone);
+        $phone = self::formatPhone($phone);
         if (empty($phone)) {
             throw new Exception('No valid phone number provided.');
         }
-        self::sendSms($phone, $message);
+        self::send($phone, $message);
     }
 
     /**
-     * Send a raw SMS via Semaphore API.
-     *
-     * @param string $to      Recipient number (digits only, e.g. 09171234567)
-     * @param string $message SMS body
-     * @throws Exception
+     * Normalize PH phone numbers to 639XXXXXXXXX format (required by PhilSMS).
      */
-    private static function sendSms(string $to, string $message): void
+    private static function formatPhone(string $phone): string
+    {
+        $phone = preg_replace('/\D/', '', $phone); // digits only
+
+        // 09XXXXXXXXX -> 639XXXXXXXXX
+        if (strlen($phone) === 11 && str_starts_with($phone, '0')) {
+            $phone = '63' . substr($phone, 1);
+        }
+
+        // 9XXXXXXXXX -> 639XXXXXXXXX
+        if (strlen($phone) === 10 && str_starts_with($phone, '9')) {
+            $phone = '63' . $phone;
+        }
+
+        return $phone;
+    }
+
+    /**
+     * Core PhilSMS API call.
+     */
+    private static function send(string $to, string $message): void
     {
         $apiKey = self::apiKey();
 
-        if (empty($apiKey)) {
-            throw new Exception('SEMAPHORE_API_KEY is not configured.');
+        if (empty($apiKey) || $apiKey === 'YOUR_API_TOKEN_HERE') {
+            throw new Exception('PHILSMS_API_KEY is not configured in config/sms_config.php.');
         }
 
-        $payload = http_build_query([
-            'apikey'      => $apiKey,
-            'number'      => $to,
-            'message'     => $message,
-            'sendername'  => self::senderName(),
+        $payload = json_encode([
+            'number'  => $to,
+            'message' => $message,
         ]);
 
-        $ch = curl_init('https://api.semaphore.co/api/v4/messages');
+        $ch = curl_init(PHILSMS_API_URL);
         curl_setopt_array($ch, [
             CURLOPT_POST           => true,
             CURLOPT_POSTFIELDS     => $payload,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT        => 15,
             CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_HTTPHEADER     => [
+                'Authorization: Bearer ' . $apiKey,
+                'Content-Type: application/json',
+                'Accept: application/json',
+            ],
         ]);
 
         $response = curl_exec($ch);
@@ -117,14 +115,16 @@ class SmsNotifier
         curl_close($ch);
 
         if ($curlErr) {
-            throw new Exception("SMS cURL error: $curlErr");
+            throw new Exception("PhilSMS cURL error: $curlErr");
         }
+
+        $decoded = json_decode($response, true);
 
         if ($httpCode < 200 || $httpCode >= 300) {
-            throw new Exception("SMS API returned HTTP $httpCode: $response");
+            $errMsg = $decoded['message'] ?? $response;
+            throw new Exception("PhilSMS API error (HTTP $httpCode): $errMsg");
         }
 
-        // Log success
-        error_log("SMS sent to $to (status: $httpCode)");
+        error_log("PhilSMS: SMS sent to $to | Status: $httpCode | Response: $response");
     }
 }

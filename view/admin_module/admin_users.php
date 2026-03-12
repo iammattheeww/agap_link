@@ -135,31 +135,8 @@ unset($_SESSION['success'], $_SESSION['error']);
     </div>
 
     <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">☰</button>
-    <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
-
-    <script>
-        function openDeleteModal(userId, userName) {
-            document.getElementById('deleteUserId').value = userId;
-            document.getElementById('deleteUserName').textContent = userName;
-            document.getElementById('deleteModal').classList.add('active');
-        }
-
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.remove('active');
-        }
-
-        document.getElementById('deleteModal').addEventListener('click', function(e) {
-            if (e.target === this) closeDeleteModal();
-        });
-
-        function filterUsers() {
-            const q = document.getElementById('userSearchInput').value.toLowerCase();
-            document.querySelectorAll('.user-row').forEach(row => {
-                const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(q) ? '' : 'none';
-            });
-        }
-    </script>
+        <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
+    <script src="<?= ASSET_URL ?>/js/admin_module/admin_users.js"></script>
 </body>
 
 </html>

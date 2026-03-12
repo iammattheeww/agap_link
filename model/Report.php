@@ -202,7 +202,7 @@ class Report
                 LEFT JOIN categories c ON r.category_id = c.category_id
                 LEFT JOIN agencies   a ON r.assigned_agency_id = a.agency_id
                 LEFT JOIN users      u ON r.user_id = u.user_id
-                WHERE 1=1";
+                WHERE (r.is_archived = 0 OR r.is_archived IS NULL)";
 
         $params = [];
 
@@ -269,8 +269,125 @@ class Report
         }
     }
 
+
     /**
-     * Delete a report belonging to a specific user (ownership-safe version).
+     * Soft-archive a report by setting is_archived = 1.
+     * Reports are NEVER permanently deleted per policy.
+     * Requires an `is_archived` column (TINYINT DEFAULT 0) on the reports table.
+     * SQL: ALTER TABLE reports ADD COLUMN is_archived TINYINT(1) NOT NULL DEFAULT 0;
+     */
+    public function archiveReport(int $report_id): bool
+    {
+        $NOW = new DateTime('now', new DateTimeZone('Asia/Manila'));
+        $NOW = $NOW->format('Y-m-d H:i:s');
+        
+        $stmt = $this->conn->prepare(
+            "UPDATE reports SET is_archived = 1, archived_at = ? WHERE report_id = ?"
+        );
+        return $stmt->execute([$NOW, $report_id]);
+    }
+
+    /**
+     * Restore an archived report by setting is_archived = 0.
+     */
+    public function restoreReport(int $report_id): bool
+    {
+        $stmt = $this->conn->prepare(
+            "UPDATE reports SET is_archived = 0, archived_at = NULL WHERE report_id = ?"
+        );
+        return $stmt->execute([$report_id]);
+    }
+
+    /**
+     * Get all archived reports with optional filters.
+     */
+    public function getArchivedReports($filterStatus = '', $filterCategory = '', $filterSearch = '')
+    {
+        $sql = "SELECT r.*, c.name AS category_name, a.name AS agency_name,
+                       CONCAT(u.first_name, ' ', IFNULL(CONCAT(u.middle_initial, '. '), ''), u.last_name) AS full_name,
+                       u.phone_number AS reporter_phone
+                FROM reports r
+                LEFT JOIN categories c ON r.category_id = c.category_id
+                LEFT JOIN agencies   a ON r.assigned_agency_id = a.agency_id
+                LEFT JOIN users      u ON r.user_id = u.user_id
+                WHERE r.is_archived = 1";
+
+        $params = [];
+
+        if ($filterStatus !== '') {
+            $sql .= " AND r.status = ?";
+            $params[] = $filterStatus;
+        }
+
+        if ($filterCategory !== '') {
+            $sql .= " AND r.category_id = ?";
+            $params[] = $filterCategory;
+        }
+
+        if ($filterSearch !== '') {
+            $sql .= " AND (r.description LIKE ? OR r.address LIKE ? OR c.name LIKE ? OR CONCAT(u.first_name,' ',u.last_name) LIKE ?)";
+            $like = "%{$filterSearch}%";
+            $params[] = $like; $params[] = $like; $params[] = $like; $params[] = $like;
+        }
+
+        $sql .= " ORDER BY r.archived_at DESC";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Verify a report (prevents prank dispatches).
+     * Admin must verify before forwarding to agencies.
+     */
+    public function verifyReport(int $report_id): bool
+    {
+        $NOW = new DateTime('now', new DateTimeZone('Asia/Manila'));
+        $NOW = $NOW->format('Y-m-d H:i:s');
+        
+        $stmt = $this->conn->prepare(
+            "UPDATE reports SET is_verified = 1 WHERE report_id = ?"
+        );
+        return $stmt->execute([$report_id]);
+    }
+
+    /**
+     * Get reports assigned to a specific agency (for agency dashboard).
+     */
+    public function getAgencyReports(int $agency_id, $filterStatus = '', $filterSearch = '')
+    {
+        $sql = "SELECT r.*, c.name AS category_name,
+                       CONCAT(u.first_name, ' ', IFNULL(CONCAT(u.middle_initial, '. '), ''), u.last_name) AS reporter_name,
+                       u.phone_number AS reporter_phone
+                FROM reports r
+                LEFT JOIN categories c ON r.category_id = c.category_id
+                LEFT JOIN users      u ON r.user_id = u.user_id
+                WHERE r.assigned_agency_id = ? AND (r.is_archived = 0 OR r.is_archived IS NULL)";
+
+        $params = [$agency_id];
+
+        if ($filterStatus !== '') {
+            $sql .= " AND r.status = ?";
+            $params[] = $filterStatus;
+        }
+
+        if ($filterSearch !== '') {
+            $sql .= " AND (r.description LIKE ? OR r.address LIKE ? OR c.name LIKE ?)";
+            $like = "%{$filterSearch}%";
+            $params[] = $like; $params[] = $like; $params[] = $like;
+        }
+
+        $sql .= " ORDER BY r.created_at DESC";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute($params);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * Delete a report by ID, with ownership check (user-facing).
+     * Verifies the report belongs to $user_id before deleting.
      */
     public function deleteUserReport(int $report_id, int $user_id): bool
     {
@@ -288,4 +405,17 @@ class Report
             throw $e;
         }
     }
+
+
+    /**
+     * Forward a report to an agency and set status to Forwarded.
+     */
+    public function forwardReport(int $report_id, int $agency_id): bool
+    {
+        $stmt = $this->conn->prepare(
+            "UPDATE reports SET assigned_agency_id = ?, status = 'Forwarded' WHERE report_id = ?"
+        );
+        return $stmt->execute([$agency_id, $report_id]);
+    }
+
 }

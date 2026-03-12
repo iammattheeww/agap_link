@@ -93,4 +93,27 @@ document.addEventListener("DOMContentLoaded", () => {
             messageCitizenBtn.disabled    = false;
         });
     });
+
+    // ── FORWARD MODAL ────────────────────────────────────────────────────
+    const forwardModal = document.getElementById("forwardModal");
+    const forwardReportIdInput = document.getElementById("forwardReportId");
+    
+    // Make showForwardModal globally available
+    window.showForwardModal = function(reportId) {
+        forwardReportIdInput.value = reportId;
+        forwardModal.style.display = "flex";
+    };
+
+    const closeForwardModal = document.getElementById("closeForwardModal");
+    const cancelForwardModal = document.getElementById("cancelForwardModal");
+
+    if (closeForwardModal) {
+        closeForwardModal.addEventListener("click", () => { forwardModal.style.display = "none"; });
+    }
+    if (cancelForwardModal) {
+        cancelForwardModal.addEventListener("click", () => { forwardModal.style.display = "none"; });
+    }
+    if (forwardModal) {
+        forwardModal.addEventListener("click", e => { if (e.target === forwardModal) forwardModal.style.display = "none"; });
+    }
 });

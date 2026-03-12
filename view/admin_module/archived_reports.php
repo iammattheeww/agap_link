@@ -11,7 +11,6 @@ if (!isset($_SESSION['admin_logged_in'])) {
     exit();
 }
 
-require_once dirname(__DIR__, 2) . "/config/agaplinkdb.php";
 require_once MODEL_PATH . 'Report.php';
 
 // ─── FILTER PARAMETERS ──────────────────────────────────────────────────
@@ -19,10 +18,10 @@ $filterStatus   = $_GET['status']   ?? '';
 $filterCategory = $_GET['category'] ?? '';
 $filterSearch   = trim($_GET['search'] ?? '');
 
-// ─── USE MODEL FOR ALL QUERIES ───────────────────────────────────────────
+// ─── GET ARCHIVED REPORTS ───────────────────────────────────────────────
 $reportModel = new Report();
-$allReports  = $reportModel->getFilteredReports($filterStatus, $filterCategory, $filterSearch);
-$hasReports  = !empty($allReports);
+$archivedReports = $reportModel->getArchivedReports($filterStatus, $filterCategory, $filterSearch);
+$hasReports  = !empty($archivedReports);
 $categories  = $reportModel->getAllCategories();
 $agencies    = $reportModel->getAllAgencies();
 
@@ -40,7 +39,7 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="<?= ASSET_URL ?>/favicon_io/favicon.ico">
-    <title>Reports Management - AGAP-Link</title>
+    <title>Archived Reports - AGAP-Link</title>
     <link rel="stylesheet" href="<?= ASSET_URL ?>/css/admin_module/admin_module.css">
 </head>
 
@@ -55,9 +54,12 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
 
             <div class="reports-header">
                 <div>
-                    <h1>Reports Management</h1>
-                    <p>Review, manage, and update community reports.</p>
+                    <h1>Archived Reports</h1>
+                    <p>View and restore archived reports. These reports are hidden from the active list.</p>
                 </div>
+                <a href="<?= BASE_URL ?>/view/admin_module/admin_report.php" class="btn-export" style="text-decoration:none; display:inline-flex; align-items:center; gap:6px;">
+                    ← Back to Active Reports
+                </a>
             </div>
 
             <?php if ($success): ?>
@@ -99,8 +101,8 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
                             <?php endforeach; ?>
                         </select>
                     </div>
-                    <button type="submit" class="btn-filter-apply">&#x25BC; Filter</button>
-                    <a href="<?= BASE_URL ?>/view/admin_module/admin_report.php" class="btn-clear">Clear</a>
+                    <button type="submit" class="btn-filter-apply">▼ Filter</button>
+                    <a href="<?= BASE_URL ?>/view/admin_module/archived_reports.php" class="btn-clear">Clear</a>
                 </div>
             </form>
 
@@ -118,7 +120,7 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
                         <span class="filter-tag">Search: "<?= htmlspecialchars($filterSearch) ?>"</span>
                     <?php endif; ?>
                     <span class="filter-tag" style="background:var(--color-gray-100); color:var(--color-gray-600); border-color:var(--color-gray-300);">
-                        <?= count($allReports) ?> result<?= count($allReports) !== 1 ? 's' : '' ?>
+                        <?= count($archivedReports) ?> result<?= count($archivedReports) !== 1 ? 's' : '' ?>
                     </span>
                 </div>
             <?php endif; ?>
@@ -126,8 +128,8 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
             <section class="reports-section">
                 <?php if (!$hasReports): ?>
                     <div class="empty-state">
-                        <div class="empty-icon">📋</div>
-                        <p class="empty-message">No reports found<?= ($filterStatus || $filterCategory || $filterSearch) ? ' matching your filters.' : ' yet.' ?></p>
+                        <div class="empty-icon">📦</div>
+                        <p class="empty-message">No archived reports found<?= ($filterStatus || $filterCategory || $filterSearch) ? ' matching your filters.' : ' yet.' ?></p>
                     </div>
                 <?php else: ?>
                     <div class="table-wrapper">
@@ -139,14 +141,13 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
                                     <th>Reporter</th>
                                     <th>Status</th>
                                     <th>Verified</th>
-                                    <th>Update Status</th>
                                     <th>Forwarded To</th>
-                                    <th>Date</th>
+                                    <th>Date Archived</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-<?php foreach ($allReports as $report): ?>
+<?php foreach ($archivedReports as $report): ?>
 <tr>
     <td>#<?= htmlspecialchars($report['report_id']) ?></td>
 
@@ -175,32 +176,15 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
     </td>
 
     <td>
-        <?php if (!empty($report['is_verified'])): ?>
-            <span style="color: #059669; font-weight: 600;">✓ Verified</span>
+        <?php if ($report['is_verified']): ?>
+            <span class="status-verified">✓ Verified</span>
         <?php else: ?>
-            <span style="color: #92400e; font-weight: 600;">Pending</span>
+            <span class="status-pending">Pending</span>
         <?php endif; ?>
     </td>
 
-    <td>
-        <form method="POST"
-              action="<?= BASE_URL ?>/controller/update_report_status.php"
-              class="status-update-form">
-            <input type="hidden" name="report_id" value="<?= $report['report_id'] ?>">
-            <select name="new_status">
-                <?php foreach ($statuses as $s): ?>
-                    <option value="<?= $s ?>"
-                        <?= $report['status'] === $s ? 'selected' : '' ?>>
-                        <?= $s ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-            <button type="submit" class="btn-update-status">Update</button>
-        </form>
-    </td>
-
     <td><?= htmlspecialchars($report['agency_name'] ?? '—') ?></td>
-    <td><?= date('M d, Y', strtotime($report['created_at'])) ?></td>
+    <td><?= date('M d, Y', strtotime($report['archived_at'])) ?></td>
 
     <!-- ACTIONS COLUMN -->
     <td class="action-cell">
@@ -225,43 +209,14 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
                     View Details
                 </button>
 
-                <!-- VERIFY (prevents prank dispatches) -->
-                <?php if (empty($report['is_verified'])): ?>
+                <!-- RESTORE (unarchive) -->
                 <form method="POST"
-                      action="<?= BASE_URL ?>/controller/verify_report.php"
-                      onsubmit="return confirm('Verify this report? This confirms the report is legitimate before forwarding to agencies.');">
+                      action="<?= BASE_URL ?>/controller/restore_report.php"
+                      onsubmit="return confirm('Restore this report? It will appear in the active reports list.');">
                     <input type="hidden" name="report_id" value="<?= $report['report_id'] ?>">
-                    <button type="submit" style="width:100%; padding:10px; border:none; background:none; text-align:left; cursor:pointer; color:#1d4ed8; font-weight:600;">
-                        ✓ Verify Report
+                    <button type="submit" class="restore-btn" style="width:100%; padding:10px; border:none; background:none; text-align:left; cursor:pointer; color:#059669;">
+                        ↺ Restore
                     </button>
-                </form>
-                <?php else: ?>
-                <button type="button" style="width:100%; padding:10px; border:none; background:none; text-align:left; cursor:default; color:#6b7280;" disabled>
-                    ✓ Already Verified
-                </button>
-                <?php endif; ?>
-
-                <!-- FORWARD TO AGENCY -->
-                <?php if (!empty($report['is_verified']) && empty($report['assigned_agency_id'])): ?>
-                <button type="button" class="forward-btn" onclick="showForwardModal(<?= $report['report_id'] ?>)" style="width:100%; padding:10px; border:none; background:none; text-align:left; cursor:pointer; color:#7c3aed; font-weight:600;">
-                    → Forward to Agency
-                </button>
-                <?php elseif (!empty($report['assigned_agency_id'])): ?>
-                <button type="button" style="width:100%; padding:10px; border:none; background:none; text-align:left; cursor:default; color:#6b7280;" disabled>
-                    → Already Forwarded
-                </button>
-                <?php else: ?>
-                <button type="button" style="width:100%; padding:10px; border:none; background:none; text-align:left; cursor:not-allowed; color:#9ca3af;" disabled>
-                    → Verify First
-                </button>
-                <?php endif; ?>
-
-                <!-- ARCHIVE (soft-hide, never permanently deleted) -->
-                <form method="POST"
-                      action="<?= BASE_URL ?>/controller/archive_report.php"
-                      onsubmit="return confirm('Archive this report? It will be hidden from the active list but permanently preserved.');">
-                    <input type="hidden" name="report_id" value="<?= $report['report_id'] ?>">
-                    <button type="submit" class="archive-btn">Archive</button>
                 </form>
 
             </div>
@@ -300,45 +255,13 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
                 <p><strong>Forwarded To:</strong> <span id="modalAgency"></span></p>
                 <p><strong>Date:</strong> <span id="modalDate"></span></p>
             </div>
-            <div class="modal-footer">
-                <button type="button" id="messageCitizenBtn" class="btn-primary">
-                    Message Citizen via SMS
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- FORWARD TO AGENCY MODAL -->
-    <div id="forwardModal" class="modal">
-        <div class="modal-content" style="max-width: 450px;">
-            <span class="close-modal" id="closeForwardModal">&times;</span>
-            <h2>Forward Report to Agency</h2>
-            <div class="modal-body">
-                <p style="margin-bottom: 16px;">Select an agency to forward this report to:</p>
-                <form method="POST" action="<?= BASE_URL ?>/controller/forward_report.php" id="forwardForm">
-                    <input type="hidden" name="report_id" id="forwardReportId">
-                    <div class="form-group">
-                        <label class="form-label" for="agency_id">Select Agency</label>
-                        <select name="agency_id" id="agencySelect" class="form-input" required>
-                            <option value="">-- Select Agency --</option>
-                            <?php foreach ($agencies as $agency): ?>
-                                <option value="<?= $agency['agency_id'] ?>"><?= htmlspecialchars($agency['name']) ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                    <div class="form-actions" style="margin-top: 20px;">
-                        <button type="submit" class="btn-primary">Forward Report</button>
-                        <button type="button" class="btn-secondary" id="cancelForwardModal">Cancel</button>
-                    </div>
-                </form>
-            </div>
         </div>
     </div>
 
     <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">☰</button>
-    <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
-    <script src="<?= ASSET_URL ?>/js/admin_module/admin_reports.js"></script>
-
+        <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
+    <script src="<?= ASSET_URL ?>/js/admin_module/archived_reports.js"></script>
 </body>
 
 </html>
+

@@ -76,10 +76,7 @@ unset($_SESSION['success'], $_SESSION['error']);
                                     <div class="announcement-meta">
                                         <span>&#x1F4C5; <?= date('M d, Y', strtotime($a['created_at'])) ?></span>
                                         <span>&#x1F464; <?= htmlspecialchars($a['author_name'] ?? 'Admin') ?></span>
-<<<<<<< HEAD
                                         <span><?= Announcement::relativeDate($a['created_at']) ?></span>
-=======
->>>>>>> 1a1e72c74c0c73546b17d950311e1555a11c0339
                                     </div>
                                 </div>
                                 <span class="status-badge status-active">Published</span>
@@ -163,40 +160,8 @@ unset($_SESSION['success'], $_SESSION['error']);
     </div>
 
     <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">☰</button>
-    <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
-    <script>
-        const annModal = document.getElementById('announcementModal');
-        const openModal  = () => annModal.classList.add('active');
-        const closeModal = () => annModal.classList.remove('active');
-
-        document.getElementById('openAnnouncementModal').addEventListener('click', openModal);
-        document.getElementById('closeAnnouncementModal').addEventListener('click', closeModal);
-        document.getElementById('cancelAnnouncementModal').addEventListener('click', closeModal);
-
-        const emptyBtn = document.getElementById('openAnnouncementModalEmpty');
-        if (emptyBtn) emptyBtn.addEventListener('click', openModal);
-
-        annModal.addEventListener('click', e => { if (e.target === annModal) closeModal(); });
-
-        // File upload preview
-        const uploadArea = document.getElementById('annFileUploadArea');
-        const fileInput  = document.getElementById('annImageInput');
-        const preview    = document.getElementById('annPreviewContainer');
-        const previewImg = document.getElementById('annPreviewImage');
-        const removeBtn  = document.getElementById('annRemoveImageBtn');
-
-        uploadArea.addEventListener('click', () => fileInput.click());
-
-        fileInput.addEventListener('change', function () {
-            const file = this.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = e => { previewImg.src = e.target.result; preview.style.display = 'block'; };
-            reader.readAsDataURL(file);
-        });
-
-        removeBtn.addEventListener('click', () => { fileInput.value = ''; preview.style.display = 'none'; });
-    </script>
+        <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
+    <script src="<?= ASSET_URL ?>/js/admin_module/announcement.js"></script>
 </body>
 
 </html>

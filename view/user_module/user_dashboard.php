@@ -13,8 +13,8 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-require MODEL_PATH . 'User.php';
-require MODEL_PATH . 'Report.php';
+require_once MODEL_PATH . 'User.php';
+require_once MODEL_PATH . 'Report.php';
 
 // INITIALIZE REPORT MODEL
 $reportModel = new Report();
@@ -41,20 +41,6 @@ $pendingReports = $stats['pending_count'] ?? 0;
 $hasReports = is_array($userReports) && count($userReports) > 0;
 
 ?>
-<?php if (isset($_GET['report_success'])): ?>
-    <div class="alert alert-success">
-        Report submitted successfully!
-    </div>
-<?php endif; ?>
-
-<?php if (isset($_GET['report_error'])): ?>
-    <div class="alert alert-error">
-        <?= $_SESSION['error'] ?? 'Something went wrong.' ?>
-    </div>
-    <?php unset($_SESSION['error']); ?>
-<?php endif; ?>
-
-
 <!DOCTYPE html>
 <html>
 
@@ -64,10 +50,22 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
     <link rel="icon" type="image/x-icon" href="<?= ASSET_URL ?>/favicon_io/favicon.ico">
     <title>User Dashboard - AGAP-Link</title>
     <link rel="stylesheet" href="<?= ASSET_URL ?>/css/user_module/user_module.css">
-       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 
 <body>
+<?php if (isset($_GET['report_success'])): ?>
+    <div class="alert alert-success" style="margin: 0; border-radius: 0;">
+        ✅ Report submitted successfully!
+    </div>
+<?php endif; ?>
+<?php if (isset($_GET['report_error'])): ?>
+    <div class="alert alert-error" style="margin: 0; border-radius: 0;">
+        <?= htmlspecialchars($_SESSION['error'] ?? 'Something went wrong.') ?>
+    </div>
+    <?php unset($_SESSION['error']); ?>
+<?php endif; ?>
+
     <div class="dashboard-container">
         <!-- SIDEBAR - USING REQUIRE_ONCE -->
         <?php require VIEW_PATH . 'partials/user_sidebar.php'; ?>
@@ -204,124 +202,15 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
         </main>
     </div>
 
-    <script src="<?= BASE_URL ?>/assets/js/landing/main.js"></script>
+    <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
      <script src="<?= ASSET_URL ?>/js/user_module/reports.js"></script>
      <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 
     <button class="mobile-menu-toggle" aria-label="Toggle Menu">☰</button>
+    <script src="<?= ASSET_URL ?>/js/user_module/user_dashboard.js"></script>
 </body>
 
-<script>
 
-    document.addEventListener("DOMContentLoaded", function() {
-
-        const modal = document.getElementById("reportModal");
-        const openBtn = document.getElementById("openReportModal");
-        const closeBtn = document.getElementById("closeReportModal");
-
-        if (openBtn) {
-            openBtn.addEventListener("click", function() {
-                modal.classList.add("active");
-            });
-        }
-
-        if (closeBtn) {
-            closeBtn.addEventListener("click", function() {
-                modal.classList.remove("active");
-            });
-        }
-
-        if (modal) {
-            modal.addEventListener("click", function(e) {
-                if (e.target === modal) {
-                    modal.classList.remove("active");
-                }
-            });
-        }
-
-    });
-</script>
-<script>
-    const cancelBtn = document.getElementById("cancelReportBtn");
-
-    if (cancelBtn) {
-        cancelBtn.addEventListener("click", function() {
-            modal.classList.remove("active");
-        });
-    }
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-
-        const getLocationBtn = document.getElementById("getLocationBtn");
-        const status = document.getElementById("locationStatus");
-        const latInput = document.getElementById("gps_lat");
-        const longInput = document.getElementById("gps_long");
-
-        if (getLocationBtn) {
-            getLocationBtn.addEventListener("click", function() {
-
-                if (!navigator.geolocation) {
-                    status.innerHTML = "Geolocation is not supported.";
-                    return;
-                }
-
-                status.innerHTML = "Getting location...";
-
-                navigator.geolocation.getCurrentPosition(
-                    function(position) {
-                        latInput.value = position.coords.latitude;
-                        longInput.value = position.coords.longitude;
-                        status.innerHTML = "Location captured successfully.";
-                    },
-                    function() {
-                        status.innerHTML = "Unable to retrieve location.";
-                    }
-                );
-            });
-        }
-
-    });
-</script>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-
-        const fileUploadArea = document.getElementById("fileUploadArea");
-        const fileInput = document.getElementById("photo");
-        const previewContainer = document.getElementById("previewContainer");
-        const previewImage = document.getElementById("previewImage");
-        const removeBtn = document.getElementById("removeImageBtn");
-
-        if (fileUploadArea) {
-            fileUploadArea.addEventListener("click", () => fileInput.click());
-        }
-
-        if (fileInput) {
-            fileInput.addEventListener("change", function() {
-                const file = this.files[0];
-
-                if (!file) return;
-
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewImage.src = e.target.result;
-                    previewContainer.style.display = "block";
-                };
-
-                reader.readAsDataURL(file);
-            });
-        }
-
-        if (removeBtn) {
-            removeBtn.addEventListener("click", function() {
-                fileInput.value = "";
-                previewContainer.style.display = "none";
-            });
-        }
-
-    });
-</script>
 
 </html>

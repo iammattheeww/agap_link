@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-require_once __DIR__ . '/../../model/User.php';
+require_once MODEL_PATH . 'User.php';
 
 $userModel   = new User();
 $userDetails = $userModel->get_user_details($_SESSION['user_id']);
@@ -66,7 +66,7 @@ $firstInitial  = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U'
                     <div class="profile-form-card">
                         <h1 class="welcome-title">Account Information</h1>
                         <br>
-                 <form id="profileForm" action="<?= BASE_URL ?>/controller/profile_process.php" method="POST">
+                 <form id="profileInfoForm" action="<?= BASE_URL ?>/controller/profile_process.php" method="POST">
                             <input type="hidden" name="action" value="update_profile">
                             <div class="form-grid form-grid-2">
                                 <div class="form-group">
@@ -120,7 +120,7 @@ $firstInitial  = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U'
                     <!-- CHANGE PASSWORD -->
                     <div class="profile-form-card">
                         <h2 class="form-section-title">Change Password</h2>
-                 <form id="profileForm" action="<?= BASE_URL ?>/controller/profile_process.php" method="POST">
+                 <form id="passwordForm" action="<?= BASE_URL ?>/controller/profile_process.php" method="POST">
                             <input type="hidden" name="action" value="change_password">
                             <div class="form-grid">
                                 <div class="form-group">
@@ -172,7 +172,7 @@ $firstInitial  = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U'
                 <p style="margin-bottom: 15px; color: var(--color-gray-800);">
                     To confirm deletion, please type <strong style="color: var(--color-secondary);">DELETE</strong> in the field below:
                 </p>
-                <form id="profileForm" form action="<?= BASE_URL ?>/controller/profile_process.php" method="POST" id="deleteAccountForm">
+                <form id="deleteAccountForm" action="<?= BASE_URL ?>/controller/profile_process.php" method="POST">
                     <input type="hidden" name="action" value="delete_account">
                     <div class="form-group">
                         <input type="text" id="delete_confirmation" name="delete_confirmation"

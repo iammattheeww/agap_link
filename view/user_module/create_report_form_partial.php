@@ -1,6 +1,8 @@
 <?php
 // Fetch categories excluding "Other" (category_id = 10)
-require_once MODEL_PATH . 'Report.php';
+if (!class_exists('Report')) {
+    require_once MODEL_PATH . 'Report.php';
+}
 $_reportModelPartial = new Report();
 $categories = array_filter(
     $_reportModelPartial->getAllCategories(),
@@ -9,7 +11,6 @@ $categories = array_filter(
 
 $userName = $_SESSION['user_name'] ?? 'User';
 ?>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <div class="report-form-section">
     <form action="<?= BASE_URL ?>/controller/create_report_process.php" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="action" value="create_report">
@@ -71,7 +72,7 @@ $userName = $_SESSION['user_name'] ?? 'User';
         <div class="form-group">
     <label class="form-label">
         Pin Exact Location on Map
-        <span class="form-label-optional">(Required)</span>
+        <span class="form-label-optional">(Optional)</span>
     </label>
 
 <div class="form-group">
@@ -92,7 +93,6 @@ $userName = $_SESSION['user_name'] ?? 'User';
         </div>
     </form>
 </div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {

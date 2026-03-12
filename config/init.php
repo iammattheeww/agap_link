@@ -57,4 +57,3 @@ define('UPLOAD_URL', BASE_URL . '/uploads');
 define('UPLOAD_PATH', ROOT_PATH . '/uploads/');
 
 require_once __DIR__ . '/sms_config.php';
-;

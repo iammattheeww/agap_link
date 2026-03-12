@@ -8,6 +8,9 @@ if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) 
 } elseif (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] === true) {
     header("Location: " . BASE_URL . "/view/admin_module/admin_dashboard.php");
     exit();
+} elseif (isset($_SESSION['agency_logged_in']) && $_SESSION['agency_logged_in'] === true) {
+    header("Location: " . BASE_URL . "/view/lgu_module/agency_dashboard.php");
+    exit();
 }
 
 $error = $_SESSION['error'] ?? '';
@@ -17,6 +20,11 @@ $activeTab = $_SESSION['active_tab'] ?? 'login';
 unset($_SESSION['error']);
 unset($_SESSION['success']);
 unset($_SESSION['active_tab']);
+
+// Sanitize activeTab to only allow known values
+if (!in_array($activeTab, ['login', 'register', 'agency'])) {
+    $activeTab = 'login';
+}
 
 $old = $_SESSION['old'] ?? [];
 unset($_SESSION['old']);
@@ -166,6 +174,7 @@ unset($_SESSION['old']);
                 <div class="tabs">
                     <button class="tab-btn active" id="loginTab" onclick="showTab('login')">Log In</button>
                     <button class="tab-btn" id="registerTab" onclick="showTab('register')">Sign Up</button>
+                    <button class="tab-btn" id="agencyTab" onclick="showTab('agency')">Agency</button>
                 </div>
 
                 <form method="POST" action="<?= BASE_URL ?>/controller/auth_process.php" id="login" class="tab-content active">
@@ -247,58 +256,30 @@ our
                     </p>
                 </form>
 
+                <!-- AGENCY LOGIN FORM -->
+                <form method="POST" action="<?= BASE_URL ?>/controller/agency_login.php" id="agency" class="tab-content">
+                    <label>Username</label>
+                    <input type="text" name="username" placeholder="agency_username" required autocomplete="username">
+
+                    <label>
+                        Password
+                    </label>
+                    <div class="password-wrapper">
+                        <input type="password" name="password" placeholder="••••••••" id="agencyPassword" required autocomplete="current-password">
+                        <span class="toggle-password" onclick="togglePassword('agencyPassword', this)">
+                            <i class="fa-solid fa-eye"></i>
+                        </span>
+                    </div>
+
+                    <button type="submit">Agency Sign In</button>
+                </form>
+
             </div>
         </div>
 
     </div>
 
+    <script>window.__activeTab = "<?= htmlspecialchars($activeTab) ?>";</script>
     <script src="<?= ASSET_URL ?>/js/login/main.js"></script>
 </body>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const activeTab = "<?= $activeTab ?>";
-
-    if (activeTab === "register") {
-        document.getElementById("registerTab").click();
-    } else {
-        document.getElementById("loginTab").click();
-    }
-});
-// TERMS & CONDITIONS MODAL
-function openTermsModal() {
-    document.getElementById("termsModal").style.display = "block";
-}
-
-function closeTermsModal() {
-    document.getElementById("termsModal").style.display = "none";
-}
-
-// Close modal when clicking outside content
-window.onclick = function(event) {
-    const modal = document.getElementById("termsModal");
-    if (event.target === modal) {
-        modal.style.display = "none";
-    }
-};
-</script>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-
-    const activeTab = "<?= $activeTab ?>";
-
-    if (activeTab === "register") {
-        document.getElementById("registerTab").click();
-    } else {
-        document.getElementById("loginTab").click();
-    }
-
-    // AUTO FADE TOAST
-    const toast = document.querySelector(".toast");
-    if (toast) {
-        setTimeout(() => {
-            toast.classList.remove("show");
-        }, 3000); // 3 seconds
-    }
-});
-</script>
 </html>

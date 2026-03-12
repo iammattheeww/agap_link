@@ -181,18 +181,37 @@ body {
 /* ADMIN-4: Stat card hover — fills with accent color */
 .stat-card-blue:hover {
   background: #3b82f6;
-}
-
-.stat-card-green:hover {
-  background: var(--color-success);
+  border-left-color: #3b82f6;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35);
 }
 
 .stat-card-orange:hover {
   background: var(--color-primary);
+  border-left-color: var(--color-primary);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(249, 115, 22, 0.35);
+}
+
+.stat-card-green:hover {
+  background: #22c55e;
+  border-left-color: #22c55e;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(34, 197, 94, 0.35);
+}
+
+.stat-card-purple:hover {
+  background: #8b5cf6;
+  border-left-color: #8b5cf6;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.35);
 }
 
 .stat-card-red:hover {
   background: #ef4444;
+  border-left-color: #ef4444;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(239, 68, 68, 0.35);
 }
 
 .stat-card:hover .stat-label,
@@ -206,7 +225,7 @@ body {
 
 /* Keep transition smooth */
 .stat-card {
-  transition: all 0.25s ease;
+  transition: background 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease, border-left-color 0.25s ease;
 }
 
 /* =============================== */
@@ -327,9 +346,11 @@ body {
   box-shadow: var(--shadow-md);
 }
 
-.stat-card-blue  { border-left-color: #3b82f6; }
-.stat-card-green { border-left-color: var(--color-success); }
-.stat-card-orange{ border-left-color: var(--color-primary); }
+.stat-card-blue   { border-left-color: #3b82f6; }
+.stat-card-green  { border-left-color: #22c55e; }
+.stat-card-orange { border-left-color: var(--color-primary); }
+.stat-card-purple { border-left-color: #8b5cf6; }
+.stat-card-red    { border-left-color: #ef4444; }
 
 .stat-label {
   font-size: 0.82rem;
@@ -1782,6 +1803,8 @@ textarea.form-input {
 }
 
 .delete-btn { color: #b91c1c; }
+.archive-btn { color: #92400e; }
+.archive-btn:hover { background: #fef3c7; }
 
 /* MODAL */
 .modal {
@@ -1902,3 +1925,39 @@ textarea.form-input {
     font-family: var(--font-primary);
 }
 .btn-update-status:hover { background: var(--color-primary-dark); }
+
+
+/* ── Agency Dashboard ──────────────────────────────────── */
+.agency-header {
+            background: linear-gradient(135deg, #1e40af, #1e3a8a);
+            color: white;
+            padding: 20px 24px;
+            border-radius: var(--radius-lg);
+            margin-bottom: 24px;
+        }
+        .agency-header h1 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+        .agency-header p {
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+        .verify-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .verify-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .verify-confirmed {
+            background: #d1fae5;
+            color: #065f46;
+        }

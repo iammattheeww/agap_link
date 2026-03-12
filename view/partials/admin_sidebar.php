@@ -26,6 +26,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
             <span>Reports</span>
         </a>
 
+        <a href="<?= BASE_URL ?>/view/admin_module/archived_reports.php"
+           class="nav-item <?= ($current_page == 'archived_reports.php') ? 'active' : '' ?>">
+            <span class="nav-icon"><i data-lucide="archive"></i></span>
+            <span>Archived</span>
+        </a>
+
         <a href="<?= BASE_URL ?>/view/admin_module/admin_users.php"
            class="nav-item <?= ($current_page == 'admin_users.php') ? 'active' : '' ?>">
             <span class="nav-icon"><i data-lucide="users"></i></span>

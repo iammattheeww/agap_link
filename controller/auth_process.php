@@ -1,6 +1,6 @@
 <?php
 require_once dirname(__DIR__) . "/config/init.php";
-require MODEL_PATH . 'User.php';
+require_once MODEL_PATH . 'User.php';
 
 $action = isset($_POST['action']) ? $_POST['action'] : (isset($_GET['action']) ? $_GET['action'] : '');
 

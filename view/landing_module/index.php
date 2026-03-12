@@ -107,20 +107,34 @@ try {
                     <span class="section-label">WHO WE ARE</span>
                     <h2 class="section-title">About Agap-Link</h2>
                     <p class="about-text">
-                        We bridge the gap between citizens and city administration. Our platform empowers you to be an active participant in your community's growth and safety.
+                        AGAP-Link bridges the gap between citizens and city administration in disaster-prone communities.
+                        Our platform is purpose-built for emergency response — giving every resident a direct line to report
+                        hazards, coordinate with agencies like the BFP and PNP, and stay informed during critical situations.
+                    </p>
+                    <p class="about-text" style="margin-top: 12px;">
+                        Whether it's a flooded road, a downed power line, or an active fire threat, AGAP-Link makes sure
+                        your report reaches the right unit — fast. Here's what the platform does for you:
                     </p>
                     <ul class="about-list">
                         <li>
-                            <img src="<?= ASSET_URL ?>/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
-                            <span>Direct line to city services</span>
+                            <img src="<?= ASSET_URL ?>/icons/alert_icon.png" alt="Hazard Reporting" class="about-icon" />
+                            <span><strong>Hazard Reporting</strong> — Submit incidents with photos and GPS-pinned locations. No street address needed — just drop a map pin.</span>
                         </li>
                         <li>
-                            <img src="<?= ASSET_URL ?>/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
-                            <span>Transparent tracking of issues</span>
+                            <img src="<?= ASSET_URL ?>/icons/refresh_icon.png" alt="Real-Time Updates" class="about-icon" />
+                            <span><strong>Real-Time SMS Updates</strong> — Receive automatic text notifications every time your report's status changes, from submission to resolution.</span>
                         </li>
                         <li>
-                            <img src="<?= ASSET_URL ?>/icons/aboutlist_icon.png" alt="About List Icon" class="about-icon" />
-                            <span>Community-driven improvements</span>
+                            <img src="<?= ASSET_URL ?>/icons/check_icon.png" alt="Progress Tracking" class="about-icon" />
+                            <span><strong>Progress Tracking</strong> — Monitor the live status of every report you file — Pending, Verified, Forwarded, Ongoing, or Resolved.</span>
+                        </li>
+                        <li>
+                            <img src="<?= ASSET_URL ?>/icons/aboutlist_icon.png" alt="Agency Coordination" class="about-icon" />
+                            <span><strong>Agency Forwarding</strong> — Verified reports are automatically routed to the appropriate response unit (BFP, PNP, DRRMO, etc.).</span>
+                        </li>
+                        <li>
+                            <img src="<?= ASSET_URL ?>/icons/aboutlist_icon.png" alt="Community Announcements" class="about-icon" />
+                            <span><strong>Community Announcements</strong> — Stay updated with official advisories, alerts, and news published directly by city administrators.</span>
                         </li>
                     </ul>
                 </div>
