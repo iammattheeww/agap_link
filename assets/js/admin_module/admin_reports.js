@@ -54,6 +54,7 @@ document.addEventListener("DOMContentLoaded", () => {
     modal.addEventListener("click", e => { if (e.target === modal) modal.style.display = "none"; });
 
     // ── MESSAGE CITIZEN (Semaphore SMS) ───────────────────────────────────
+    // THIS SHOULD BE PhilSMS
     messageCitizenBtn.addEventListener("click", () => {
         if (!currentReportId) return;
 
