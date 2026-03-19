@@ -27,20 +27,27 @@ if (!$report_id || !in_array($new_status, $allowed_statuses)) {
 
 try {
     $reportModel = new Report();
+
+    // ✅ Get current report BEFORE update (important)
+    $report = $reportModel->getReportById($report_id);
+
+    // ✅ Update status
     $reportModel->updateReportStatus($report_id, $new_status, $remarks ?: null);
 
-    // Send SMS notification
-    try {
-        require_once MODEL_PATH . 'SmsNotifier.php';
-        SmsNotifier::sendStatusUpdate($report_id, $new_status);
-    } catch (Exception $e) {
-        error_log("SMS notification failed for report #$report_id: " . $e->getMessage());
+    // ✅ Send SMS ONLY if status changed
+    if ($report && $report['status'] !== $new_status) {
+        try {
+            require_once MODEL_PATH . 'SmsNotifier.php';
+            SmsNotifier::sendStatusUpdate($report_id, $new_status);
+        } catch (Exception $e) {
+            error_log("SMS failed for report #$report_id: " . $e->getMessage());
+        }
     }
 
-    $_SESSION['success'] = "Report #$report_id status updated to $new_status.";
+    $_SESSION['success'] = "Report #$report_id updated to $new_status.";
 
 } catch (PDOException $e) {
-    $_SESSION['error'] = 'Failed to update status. Please try again.';
+    $_SESSION['error'] = 'Database error. Try again.';
 }
 
 header("Location: " . BASE_URL . "/view/admin_module/admin_report.php");

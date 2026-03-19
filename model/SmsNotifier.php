@@ -1,130 +1,121 @@
 <?php
-require_once dirname(__DIR__) . '/config/init.php';
+
+require_once dirname(__DIR__) . "/config/agaplinkdb.php";
+require_once MODEL_PATH . 'Report.php';
+
 
 class SmsNotifier
 {
-    private static function apiKey(): string
+    public static function sendStatusUpdate($reportId, $newStatus)
     {
-        return defined('PHILSMS_API_KEY') ? PHILSMS_API_KEY : '';
-    }
+        $reportModel = new Report();
+        $report = $reportModel->getReportById($reportId);
 
-    /**
-     * Automatically send SMS when a report status changes.
-     * Called by update_report_status.php — no manual trigger needed.
-     */
-    public static function sendStatusUpdate(int $report_id, string $new_status): void
-    {
-        global $conn;
-
-        $stmt = $conn->prepare("
-            SELECT u.first_name, u.phone_number
-            FROM reports r
-            JOIN users u ON r.user_id = u.user_id
-            WHERE r.report_id = ?
-        ");
-        $stmt->execute([$report_id]);
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        if (!$row || empty($row['phone_number'])) {
-            throw new Exception("No phone number found for report #$report_id");
+        if (!$report) {
+            throw new Exception("Report not found.");
         }
 
-        $firstName = htmlspecialchars_decode($row['first_name']);
-        $phone     = self::formatPhone($row['phone_number']);
-        $id        = str_pad($report_id, 4, '0', STR_PAD_LEFT);
+        if (empty($report['reporter_phone'])) {
+            throw new Exception("No phone number.");
+        }
 
-        $messages = [
-            'Pending'   => "Hi $firstName! Your AGAP-Link report (ID: #$id) has been received and is pending review. Thank you for helping keep our community safe!",
-            'Verified'  => "Hi $firstName! Good news — your report (ID: #$id) has been verified and is now being assessed by our team.",
-            'Forwarded' => "Hi $firstName! Your report (ID: #$id) has been forwarded to the appropriate response agency for action.",
-            'Ongoing'   => "Hi $firstName! Update: your report (ID: #$id) is now being actively addressed. Thank you for your patience!",
-            'Resolved'  => "Hi $firstName! Your report (ID: #$id) has been resolved. Thank you for helping improve our community! - AGAP-Link",
+        // ✅ Prevent duplicate SMS (optional but recommended)
+        if ($report['status'] === $newStatus) {
+            return;
+        }
+
+        $phone = self::formatPhone($report['reporter_phone']);
+
+        if (!$phone) {
+            throw new Exception("Invalid phone format.");
+        }
+
+        $message = self::buildMessage($reportId, $newStatus);
+
+        return self::sendSMS($phone, $message);
+    }
+
+    // ─────────────────────────────────────────────
+    private static function formatPhone($phone)
+    {
+        $phone = preg_replace('/\D/', '', $phone);
+
+        if (preg_match('/^09\d{9}$/', $phone)) {
+            return '63' . substr($phone, 1);
+        }
+
+        if (preg_match('/^639\d{9}$/', $phone)) {
+            return $phone;
+        }
+
+        return null;
+    }
+
+    // ─────────────────────────────────────────────
+    private static function buildMessage($reportId, $status)
+    {
+        return match ($status) {
+            'Pending'   => "AGAP-Link: Your report (#$reportId) has been received.",
+            'Verified'  => "AGAP-Link: Your report (#$reportId) has been verified.",
+            'Forwarded' => "AGAP-Link: Your report (#$reportId) was forwarded to authorities.",
+            'Ongoing'   => "AGAP-Link: Your report (#$reportId) is being handled.",
+            'Resolved'  => "AGAP-Link: Your report (#$reportId) has been resolved. Thank you!",
+            default     => "AGAP-Link: Your report (#$reportId) status updated to $status."
+        };
+    }
+
+    // ─────────────────────────────────────────────
+    private static function sendSMS($phone, $message)
+    {
+        $apiKey = "1624|ulZCKZqRcxrUEcKSshGZLkTgkF6ArDU3Bosvb3be53970c83"; // ✅ NO SPACE
+    
+        $url = "https://dashboard.philsms.com/api/v3/sms/send";
+    
+        $payload = [
+            "recipient" => $phone,
+            "message"   => $message
         ];
-
-        $message = $messages[$new_status]
-            ?? "Hi $firstName! Your AGAP-Link report #$id status has been updated to: $new_status.";
-
-        self::send($phone, $message);
-    }
-
-    /**
-     * Send a custom one-off SMS (still available for edge cases).
-     */
-    public static function sendCustomSms(string $phone, string $message): void
-    {
-        $phone = self::formatPhone($phone);
-        if (empty($phone)) {
-            throw new Exception('No valid phone number provided.');
-        }
-        self::send($phone, $message);
-    }
-
-    /**
-     * Normalize PH phone numbers to 639XXXXXXXXX format (required by PhilSMS).
-     */
-    private static function formatPhone(string $phone): string
-    {
-        $phone = preg_replace('/\D/', '', $phone); // digits only
-
-        // 09XXXXXXXXX -> 639XXXXXXXXX
-        if (strlen($phone) === 11 && str_starts_with($phone, '0')) {
-            $phone = '63' . substr($phone, 1);
-        }
-
-        // 9XXXXXXXXX -> 639XXXXXXXXX
-        if (strlen($phone) === 10 && str_starts_with($phone, '9')) {
-            $phone = '63' . $phone;
-        }
-
-        return $phone;
-    }
-
-    /**
-     * Core PhilSMS API call.
-     */
-    private static function send(string $to, string $message): void
-    {
-        $apiKey = self::apiKey();
-
-        if (empty($apiKey) || $apiKey === 'YOUR_API_TOKEN_HERE') {
-            throw new Exception('PHILSMS_API_KEY is not configured in config/sms_config.php.');
-        }
-
-        $payload = json_encode([
-            'number'  => $to,
-            'message' => $message,
-        ]);
-
-        $ch = curl_init(PHILSMS_API_URL);
+    
+        $headers = [
+            "Authorization: Bearer " . trim($apiKey),
+            "Content-Type: application/json",
+            "Accept: application/json"
+        ];
+    
+        $ch = curl_init();
+    
         curl_setopt_array($ch, [
+            CURLOPT_URL            => $url,
             CURLOPT_POST           => true,
-            CURLOPT_POSTFIELDS     => $payload,
             CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_TIMEOUT        => 15,
-            CURLOPT_SSL_VERIFYPEER => true,
-            CURLOPT_HTTPHEADER     => [
-                'Authorization: Bearer ' . $apiKey,
-                'Content-Type: application/json',
-                'Accept: application/json',
-            ],
+            CURLOPT_POSTFIELDS     => json_encode($payload),
+            CURLOPT_HTTPHEADER     => $headers
         ]);
-
+    
         $response = curl_exec($ch);
+    
+        if (curl_errno($ch)) {
+            throw new Exception("cURL error: " . curl_error($ch));
+        }
+    
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $curlErr  = curl_error($ch);
+    
         curl_close($ch);
-
-        if ($curlErr) {
-            throw new Exception("PhilSMS cURL error: $curlErr");
+    
+        // 🔥 LOG EVERYTHING
+        file_put_contents(
+            __DIR__ . "/../logs/sms_log.txt",
+            date('Y-m-d H:i:s') . " | HTTP:$httpCode | $phone | $response\n",
+            FILE_APPEND
+        );
+    
+        $result = json_decode($response, true);
+    
+        // ❌ THROW ERROR IF FAILED
+        if ($httpCode !== 200) {
+            throw new Exception("SMS API failed: " . $response);
         }
-
-        $decoded = json_decode($response, true);
-
-        if ($httpCode < 200 || $httpCode >= 300) {
-            $errMsg = $decoded['message'] ?? $response;
-            throw new Exception("PhilSMS API error (HTTP $httpCode): $errMsg");
-        }
-
-        error_log("PhilSMS: SMS sent to $to | Status: $httpCode | Response: $response");
+    
+        return $result;
     }
 }
