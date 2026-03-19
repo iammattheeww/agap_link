@@ -15,5 +15,5 @@
 //   No separate sender name approval needed.
 // ─────────────────────────────────────────────────────────────────────────────
 
-define('PHILSMS_API_KEY',  '1624|ulZCKZqRcxrUEcKSshGZLkTgkF6ArDU3Bosvb3be53970c83 ');  
-define('PHILSMS_API_URL',  'https://dashboard.philsms.com/api/v3/sms/send');
+define('PHILSMS_API_KEY',  '1624|ulZCKZqRcxrUEcKSshGZLkTgkF6ArDU3Bosvb3be53970c83');
+define('PHILSMS_API_URL', 'https://dashboard.philsms.com/api/v3/sms/send');
