@@ -111,17 +111,18 @@ $userName = $_SESSION['user_name'] ?? 'User';
                                     <div class="upload-text">Click to upload or drag and drop</div>
                                     <div class="upload-hint">PNG, JPG, JPEG up to 5MB</div>
                                 </div>
-                                <input
-                                    type="file"
-                                    name="photo"
-                                    id="photo"
-                                    class="file-input-hidden"
-                                    accept="image/png, image/jpeg, image/jpg">
                                 <div class="preview-container" id="previewContainer">
                                     <img src="" alt="Preview" class="preview-image" id="previewImage">
                                     <button type="button" class="remove-image-btn" id="removeImageBtn">Remove Photo</button>
                                 </div>
                             </div>
+                            <!-- FILE INPUT IS OUTSIDE THE CLICKABLE AREA -->
+                            <input
+                                type="file"
+                                name="photo"
+                                id="photo"
+                                class="file-input-hidden"
+                                accept="image/png, image/jpeg, image/jpg">
                         </div>
 
                         <div class="form-group">
