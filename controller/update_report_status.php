@@ -28,13 +28,13 @@ if (!$report_id || !in_array($new_status, $allowed_statuses)) {
 try {
     $reportModel = new Report();
 
-    // ✅ Get current report BEFORE update (important)
+    // GET CURRENT REPORT BEFORE UPDATE 
     $report = $reportModel->getReportById($report_id);
 
-    // ✅ Update status
+    // UPDATE STATUS
     $reportModel->updateReportStatus($report_id, $new_status, $remarks ?: null);
 
-    // ✅ Send SMS ONLY if status changed
+    // SEND SMS ONLY IF STATUS CHANGED
     if ($report && $report['status'] !== $new_status) {
         try {
             require_once MODEL_PATH . 'SmsNotifier.php';
