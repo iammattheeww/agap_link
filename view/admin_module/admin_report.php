@@ -14,12 +14,12 @@ if (!isset($_SESSION['admin_logged_in'])) {
 require_once dirname(__DIR__, 2) . "/config/agaplinkdb.php";
 require_once MODEL_PATH . 'Report.php';
 
-// ─── FILTER PARAMETERS ──────────────────────────────────────────────────
+// FILTER PARAMETERS
 $filterStatus   = $_GET['status']   ?? '';
 $filterCategory = $_GET['category'] ?? '';
 $filterSearch   = trim($_GET['search'] ?? '');
 
-// ─── USE MODEL FOR ALL QUERIES ───────────────────────────────────────────
+// USE MODEL FOR ALL QUERIES
 $reportModel = new Report();
 $allReports  = $reportModel->getFilteredReports($filterStatus, $filterCategory, $filterSearch);
 $hasReports  = !empty($allReports);
@@ -73,8 +73,8 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
                     <div class="form-group">
                         <label for="search">Search</label>
                         <input type="text" id="search" name="search"
-                               placeholder="Description, address, reporter..."
-                               value="<?= htmlspecialchars($filterSearch) ?>">
+                            placeholder="Description, address, reporter..."
+                            value="<?= htmlspecialchars($filterSearch) ?>">
                     </div>
                     <div class="form-group">
                         <label for="status">Status</label>
@@ -146,130 +146,130 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
                                 </tr>
                             </thead>
                             <tbody>
-<?php foreach ($allReports as $report): ?>
-<tr>
-    <td>#<?= htmlspecialchars($report['report_id']) ?></td>
+                                <?php foreach ($allReports as $report): ?>
+                                    <tr>
+                                        <td>#<?= htmlspecialchars($report['report_id']) ?></td>
 
-    <td>
-        <?= htmlspecialchars($report['category_name'] ?? 'General') ?>
-        <span class="report-cell-sub">
-            <?= htmlspecialchars(mb_strimwidth($report['description'] ?? '', 0, 70, '…')) ?>
-        </span>
-    </td>
+                                        <td>
+                                            <?= htmlspecialchars($report['category_name'] ?? 'General') ?>
+                                            <span class="report-cell-sub">
+                                                <?= htmlspecialchars(mb_strimwidth($report['description'] ?? '', 0, 70, '…')) ?>
+                                            </span>
+                                        </td>
 
-    <td><?= htmlspecialchars($report['full_name'] ?? 'N/A') ?></td>
+                                        <td><?= htmlspecialchars($report['full_name'] ?? 'N/A') ?></td>
 
-    <td>
-        <?php
-        $status = strtolower($report['status']);
-        $statusClass = match ($status) {
-            'pending'   => 'status-pending',
-            'ongoing'   => 'status-ongoing',
-            'verified'  => 'status-verified',
-            'forwarded' => 'status-forwarded',
-            'resolved'  => 'status-resolved',
-            default     => 'status-pending'
-        };
-        ?>
-        <span class="<?= $statusClass ?>"><?= ucfirst($status) ?></span>
-    </td>
+                                        <td>
+                                            <?php
+                                            $status = strtolower($report['status']);
+                                            $statusClass = match ($status) {
+                                                'pending'   => 'status-pending',
+                                                'ongoing'   => 'status-ongoing',
+                                                'verified'  => 'status-verified',
+                                                'forwarded' => 'status-forwarded',
+                                                'resolved'  => 'status-resolved',
+                                                default     => 'status-pending'
+                                            };
+                                            ?>
+                                            <span class="<?= $statusClass ?>"><?= ucfirst($status) ?></span>
+                                        </td>
 
-    <td>
-        <?php if (!empty($report['is_verified'])): ?>
-            <span style="color: #059669; font-weight: 600;">✓ Verified</span>
-        <?php else: ?>
-            <span style="color: #92400e; font-weight: 600;">Pending</span>
-        <?php endif; ?>
-    </td>
+                                        <td>
+                                            <?php if (!empty($report['is_verified'])): ?>
+                                                <span style="color: #059669; font-weight: 600;">✓ Verified</span>
+                                            <?php else: ?>
+                                                <span style="color: #92400e; font-weight: 600;">Pending</span>
+                                            <?php endif; ?>
+                                        </td>
 
-    <td>
-        <form method="POST"
-              action="<?= BASE_URL ?>/controller/update_report_status.php"
-              class="status-update-form">
-            <input type="hidden" name="report_id" value="<?= $report['report_id'] ?>">
-            <select name="new_status">
-                <?php foreach ($statuses as $s): ?>
-                    <option value="<?= $s ?>"
-                        <?= $report['status'] === $s ? 'selected' : '' ?>>
-                        <?= $s ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-            <button type="submit" class="btn-update-status">Update</button>
-        </form>
-    </td>
+                                        <td>
+                                            <form method="POST"
+                                                action="<?= BASE_URL ?>/controller/update_report_status.php"
+                                                class="status-update-form">
+                                                <input type="hidden" name="report_id" value="<?= $report['report_id'] ?>">
+                                                <select name="new_status">
+                                                    <?php foreach ($statuses as $s): ?>
+                                                        <option value="<?= $s ?>"
+                                                            <?= $report['status'] === $s ? 'selected' : '' ?>>
+                                                            <?= $s ?>
+                                                        </option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                                <button type="submit" class="btn-update-status">Update</button>
+                                            </form>
+                                        </td>
 
-    <td><?= htmlspecialchars($report['agency_name'] ?? '—') ?></td>
-    <td><?= date('M d, Y', strtotime($report['created_at'])) ?></td>
+                                        <td><?= htmlspecialchars($report['agency_name'] ?? '—') ?></td>
+                                        <td><?= date('M d, Y', strtotime($report['created_at'])) ?></td>
 
-    <!-- ACTIONS COLUMN -->
-    <td class="action-cell">
-        <div class="meatballs-container">
+                                        <!-- ACTIONS COLUMN -->
+                                        <td class="action-cell">
+                                            <div class="meatballs-container">
 
-            <button type="button" class="meatballs-btn">⋮</button>
+                                                <button type="button" class="meatballs-btn">⋮</button>
 
-            <div class="meatballs-menu">
+                                                <div class="meatballs-menu">
 
-                <!-- VIEW DETAILS -->
-                <button type="button"
-                        class="view-details-btn"
-                        data-id="<?= $report['report_id'] ?>"
-                        data-category="<?= htmlspecialchars($report['category_name']) ?>"
-                        data-description="<?= htmlspecialchars($report['description']) ?>"
-                        data-reporter="<?= htmlspecialchars($report['full_name']) ?>"
-                        data-phone="<?= htmlspecialchars($report['reporter_phone'] ?? '') ?>"
-                        data-status="<?= htmlspecialchars($report['status']) ?>"
-                        data-agency="<?= htmlspecialchars($report['agency_name'] ?? '—') ?>"
-                        data-date="<?= date('M d, Y', strtotime($report['created_at'])) ?>"
-                        data-photo="<?= htmlspecialchars($report['photo_path'] ?? '') ?>">
-                    View Details
-                </button>
+                                                    <!-- VIEW DETAILS -->
+                                                    <button type="button"
+                                                        class="view-details-btn"
+                                                        data-id="<?= $report['report_id'] ?>"
+                                                        data-category="<?= htmlspecialchars($report['category_name']) ?>"
+                                                        data-description="<?= htmlspecialchars($report['description']) ?>"
+                                                        data-reporter="<?= htmlspecialchars($report['full_name']) ?>"
+                                                        data-phone="<?= htmlspecialchars($report['reporter_phone'] ?? '') ?>"
+                                                        data-status="<?= htmlspecialchars($report['status']) ?>"
+                                                        data-agency="<?= htmlspecialchars($report['agency_name'] ?? '—') ?>"
+                                                        data-date="<?= date('M d, Y', strtotime($report['created_at'])) ?>"
+                                                        data-photo="<?= htmlspecialchars($report['photo_path'] ?? '') ?>">
+                                                        View Details
+                                                    </button>
 
-                <!-- VERIFY (prevents prank dispatches) -->
-                <?php if (empty($report['is_verified'])): ?>
-                <form method="POST"
-                      action="<?= BASE_URL ?>/controller/verify_report.php"
-                      onsubmit="return confirm('Verify this report? This confirms the report is legitimate before forwarding to agencies.');">
-                    <input type="hidden" name="report_id" value="<?= $report['report_id'] ?>">
-                    <button type="submit" style="width:100%; padding:10px; border:none; background:none; text-align:left; cursor:pointer; color:#1d4ed8; font-weight:600;">
-                        ✓ Verify Report
-                    </button>
-                </form>
-                <?php else: ?>
-                <button type="button" style="width:100%; padding:10px; border:none; background:none; text-align:left; cursor:default; color:#6b7280;" disabled>
-                    ✓ Already Verified
-                </button>
-                <?php endif; ?>
+                                                    <!-- VERIFY (prevents prank dispatches) -->
+                                                    <?php if (empty($report['is_verified'])): ?>
+                                                        <form method="POST"
+                                                            action="<?= BASE_URL ?>/controller/verify_report.php"
+                                                            onsubmit="return confirm('Verify this report? This confirms the report is legitimate before forwarding to agencies.');">
+                                                            <input type="hidden" name="report_id" value="<?= $report['report_id'] ?>">
+                                                            <button type="submit" style="width:100%; padding:10px; border:none; background:none; text-align:left; cursor:pointer; color:#1d4ed8; font-weight:600;">
+                                                                ✓ Verify Report
+                                                            </button>
+                                                        </form>
+                                                    <?php else: ?>
+                                                        <button type="button" style="width:100%; padding:10px; border:none; background:none; text-align:left; cursor:default; color:#6b7280;" disabled>
+                                                            ✓ Already Verified
+                                                        </button>
+                                                    <?php endif; ?>
 
-                <!-- FORWARD TO AGENCY -->
-                <?php if (!empty($report['is_verified']) && empty($report['assigned_agency_id'])): ?>
-                <button type="button" class="forward-btn" onclick="showForwardModal(<?= $report['report_id'] ?>)" style="width:100%; padding:10px; border:none; background:none; text-align:left; cursor:pointer; color:#7c3aed; font-weight:600;">
-                    → Forward to Agency
-                </button>
-                <?php elseif (!empty($report['assigned_agency_id'])): ?>
-                <button type="button" style="width:100%; padding:10px; border:none; background:none; text-align:left; cursor:default; color:#6b7280;" disabled>
-                    → Already Forwarded
-                </button>
-                <?php else: ?>
-                <button type="button" style="width:100%; padding:10px; border:none; background:none; text-align:left; cursor:not-allowed; color:#9ca3af;" disabled>
-                    → Verify First
-                </button>
-                <?php endif; ?>
+                                                    <!-- FORWARD TO AGENCY -->
+                                                    <?php if (!empty($report['is_verified']) && empty($report['assigned_agency_id'])): ?>
+                                                        <button type="button" class="forward-btn" onclick="showForwardModal(<?= $report['report_id'] ?>)" style="width:100%; padding:10px; border:none; background:none; text-align:left; cursor:pointer; color:#7c3aed; font-weight:600;">
+                                                            → Forward to Agency
+                                                        </button>
+                                                    <?php elseif (!empty($report['assigned_agency_id'])): ?>
+                                                        <button type="button" style="width:100%; padding:10px; border:none; background:none; text-align:left; cursor:default; color:#6b7280;" disabled>
+                                                            → Already Forwarded
+                                                        </button>
+                                                    <?php else: ?>
+                                                        <button type="button" style="width:100%; padding:10px; border:none; background:none; text-align:left; cursor:not-allowed; color:#9ca3af;" disabled>
+                                                            → Verify First
+                                                        </button>
+                                                    <?php endif; ?>
 
-                <!-- ARCHIVE (soft-hide, never permanently deleted) -->
-                <form method="POST"
-                      action="<?= BASE_URL ?>/controller/archive_report.php"
-                      onsubmit="return confirm('Archive this report? It will be hidden from the active list but permanently preserved.');">
-                    <input type="hidden" name="report_id" value="<?= $report['report_id'] ?>">
-                    <button type="submit" class="archive-btn">Archive</button>
-                </form>
+                                                    <!-- ARCHIVE (soft-hide, never permanently deleted) -->
+                                                    <form method="POST"
+                                                        action="<?= BASE_URL ?>/controller/archive_report.php"
+                                                        onsubmit="return confirm('Archive this report? It will be hidden from the active list but permanently preserved.');">
+                                                        <input type="hidden" name="report_id" value="<?= $report['report_id'] ?>">
+                                                        <button type="submit" class="archive-btn">Archive</button>
+                                                    </form>
 
-            </div>
-        </div>
-    </td>
+                                                </div>
+                                            </div>
+                                        </td>
 
-</tr>
-<?php endforeach; ?>
+                                    </tr>
+                                <?php endforeach; ?>
                             </tbody>
                         </table>
                     </div>
@@ -289,7 +289,7 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
                 <div id="modalPhotoWrapper" style="margin-bottom:16px; display:none;">
                     <strong>Photo Evidence:</strong><br>
                     <img id="modalPhoto" src="" alt="Report photo"
-                         style="max-width:100%; max-height:300px; margin-top:8px; border-radius:8px; object-fit:contain;">
+                        style="max-width:100%; max-height:300px; margin-top:8px; border-radius:8px; object-fit:contain;">
                 </div>
                 <p><strong>Category:</strong> <span id="modalCategory"></span></p>
                 <p><strong>Description:</strong></p>
