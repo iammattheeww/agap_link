@@ -65,44 +65,95 @@ document.addEventListener("DOMContentLoaded", () => {
     if (e.target === modal) modal.style.display = "none";
   });
 
-  // MESSAGE CITIZEN (PhilSMS)
-  messageCitizenBtn.addEventListener("click", () => {
-    if (!currentReportId) return;
+  // ── MESSAGE CITIZEN (PhilSMS — AUTO-GENERATED MESSAGE) ────────────────
+  // Status → message map mirrors SmsNotifier::buildMessage() exactly.
+  // No prompt(), no custom input. Admin confirms, PHP generates the message.
+  const STATUS_MESSAGES = {
+    Pending: "AGAP-Link: Your report (#" + "…" + ") has been received.",
+    Verified: "AGAP-Link: Your report (#" + "…" + ") has been verified.",
+    Forwarded:
+      "AGAP-Link: Your report (#" + "…" + ") was forwarded to authorities.",
+    Ongoing: "AGAP-Link: Your report (#" + "…" + ") is being handled.",
+    Resolved:
+      "AGAP-Link: Your report (#" + "…" + ") has been resolved. Thank you!",
+  };
 
-    const promptMsg = prompt(
-      "Enter a custom message to send to the citizen via SMS.\n\n" +
-        "Leave blank to send the default status update message.",
+  messageCitizenBtn.addEventListener("click", () => {
+    if (!currentReportId || !currentReportStatus) {
+      alert("❌ No report selected.");
+      return;
+    }
+
+    // Build the preview exactly as SmsNotifier::buildMessage() would
+    const previewMessage = STATUS_MESSAGES[currentReportStatus]
+      ? STATUS_MESSAGES[currentReportStatus].replace(/…/g, currentReportId)
+      : "AGAP-Link: Your report (#" +
+        currentReportId +
+        ") status updated to " +
+        currentReportStatus +
+        ".";
+
+    // Show confirm dialog with full preview — no typing required
+    const confirmed = confirm(
+      "📩 Send SMS Notification?\n\n" +
+        "To      : " +
+        (currentReportPhone || "citizen (no phone on record)") +
+        "\n" +
+        "Status  : " +
+        currentReportStatus +
+        "\n" +
+        "Message : " +
+        previewMessage +
+        "\n\n" +
+        "Click OK to send.",
     );
 
-    if (promptMsg === null) return; // USER CANCELLED
-
-    const formData = new FormData();
-    formData.append("report_id", currentReportId);
-    formData.append("custom_message", promptMsg.trim());
+    if (!confirmed) return;
 
     const baseUrl = document.body.dataset.baseUrl || "";
 
     messageCitizenBtn.textContent = "Sending…";
     messageCitizenBtn.disabled = true;
 
+    // send_sms.php reads a JSON body with report_id + status
+    // SmsNotifier::sendStatusUpdate() then builds the message server-side
     fetch(baseUrl + "/controller/send_sms.php", {
       method: "POST",
-      body: formData,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        report_id: currentReportId,
+        status: currentReportStatus,
+      }),
     })
-      .then((r) => r.json())
+      .then((r) => {
+        // Guard: if PHP crashes it returns HTML, not JSON
+        const ct = r.headers.get("content-type") || "";
+        if (!ct.includes("application/json")) {
+          throw new Error(
+            "Server returned a non-JSON response (HTTP " +
+              r.status +
+              "). Check PHP error log.",
+          );
+        }
+        return r.json();
+      })
       .then((data) => {
         if (data.success) {
           alert(
-            "✅ SMS sent successfully to " +
-              (currentReportPhone || "the citizen") +
-              ".",
+            "✅ SMS sent successfully!\n\n" +
+              "To      : " +
+              (currentReportPhone || "citizen") +
+              "\n" +
+              "Message : " +
+              previewMessage,
           );
         } else {
-          alert("❌ Failed to send SMS: " + (data.message || "Unknown error."));
+          alert("❌ Failed to send SMS: " + (data.error || "Unknown error."));
         }
       })
       .catch((err) => {
-        alert("❌ Network error: " + err.message);
+        console.error("[SMS]", err);
+        alert("❌ Network or server error:\n" + err.message);
       })
       .finally(() => {
         messageCitizenBtn.textContent = "Message Citizen via SMS";
@@ -110,7 +161,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
   });
 
-  // FORWARD MODAL
+  // ── FORWARD MODAL ─────────────────────────────────────────────────────
   const forwardModal = document.getElementById("forwardModal");
   const forwardReportIdInput = document.getElementById("forwardReportId");
 
