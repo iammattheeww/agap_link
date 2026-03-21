@@ -1,11 +1,6 @@
 <?php
 
 require_once dirname(__DIR__) . "/config/agaplinkdb.php";
-
-// sms_config.php defines PHILSMS_API_KEY and PHILSMS_API_URL
-// It is loaded by init.php, which is always required before SmsNotifier is called.
-// The constants are available here at runtime.
-
 require_once MODEL_PATH . 'Report.php';
 
 
@@ -42,7 +37,6 @@ class SmsNotifier
     // ─────────────────────────────────────────────
     private static function formatPhone($phone)
     {
-        // Strip everything that is not a digit
         $phone = preg_replace('/\D/', '', $phone);
 
         // 09XXXXXXXXX → 639XXXXXXXXX
@@ -50,7 +44,7 @@ class SmsNotifier
             return '63' . substr($phone, 1);
         }
 
-        // 639XXXXXXXXX → already correct
+        // Already in international format
         if (preg_match('/^639\d{9}$/', $phone)) {
             return $phone;
         }
@@ -74,24 +68,21 @@ class SmsNotifier
     // ─────────────────────────────────────────────
     private static function sendSMS($phone, $message)
     {
-        // Use constants defined in config/sms_config.php (loaded via init.php)
-        $apiKey = defined('PHILSMS_API_KEY') ? trim(PHILSMS_API_KEY) : '';
-        $url    = defined('PHILSMS_API_URL') ? PHILSMS_API_URL : 'https://dashboard.philsms.com/api/v3/sms/send';
+        $apiKey   = defined('PHILSMS_API_KEY')   ? trim(PHILSMS_API_KEY)   : '';
+        $url      = defined('PHILSMS_API_URL')   ? PHILSMS_API_URL         : 'https://dashboard.philsms.com/api/v3/sms/send';
+        $senderId = defined('PHILSMS_SENDER_ID') ? trim(PHILSMS_SENDER_ID) : 'PhilSMS';
 
         if (empty($apiKey)) {
             throw new Exception("PHILSMS_API_KEY is not configured in config/sms_config.php.");
         }
 
-        // ⚠️ DO NOT include "sender_id" in this payload.
-        // PhilSMS requires sender IDs to be pre-registered and approved in your
-        // dashboard under Sender ID Management before they can be used.
-        // Using any unregistered sender_id — including "AGAPLink" — will cause
-        // the API to reject every request with:
-        // "Sender ID is not authorized to send this message."
-        // Omitting sender_id makes PhilSMS use your account's default sender,
-        // which is authorized automatically.
+        // PhilSMS REQUIRES sender_id — omitting it or passing an empty string
+        // causes HTTP 404: "Sender ID is not authorized to send this message."
+        // Use "PhilSMS" (the platform default) unless you have a custom
+        // sender ID approved in your dashboard.
         $payload = [
             "recipient" => $phone,
+            "sender_id" => $senderId,
             "type"      => "plain",
             "message"   => $message,
         ];
@@ -122,10 +113,10 @@ class SmsNotifier
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        // LOG every attempt — success and failure
+        // LOG every attempt
         file_put_contents(
             __DIR__ . "/../logs/sms_log.txt",
-            date('Y-m-d H:i:s') . " | HTTP:$httpCode | TO:$phone | MSG:$message | RESP:$response\n",
+            date('Y-m-d H:i:s') . " | HTTP:$httpCode | TO:$phone | SENDER:$senderId | MSG:$message | RESP:$response\n",
             FILE_APPEND
         );
 

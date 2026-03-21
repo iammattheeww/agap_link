@@ -1,19 +1,19 @@
 <?php
 // ─── PHILSMS API CONFIGURATION ────────────────────────────────────────────────
 // Free tier available at https://philsms.com
-// Your account shows: SMS Unit balance (top up as needed)
 //
 // HOW TO GET YOUR API KEY:
 //   1. Log in at https://dashboard.philsms.com
 //   2. Go to Developers > API Documents
-//   3. Your API token is shown in the example requests as the Bearer token
-//      (e.g. "Authorization: Bearer 49|LNFe8WJ7CPtvl2mzowAB4ll4enbFR0XGgnQh2qWY")
-//   4. Copy ONLY the token part after "Bearer " and paste it below
+//   3. Copy the token shown after "Bearer " in the example requests
 //
-// YOUR SENDER NAME:
-//   PhilSMS uses your registered account name as sender.
-//   No separate sender name approval needed.
+// SENDER ID:
+//   "PhilSMS" is the built-in default sender available on ALL PhilSMS accounts.
+//   It works immediately with no registration required.
+//   If you register a custom sender ID in your dashboard (e.g. "AGAPLink"),
+//   update PHILSMS_SENDER_ID below to match it exactly.
 // ─────────────────────────────────────────────────────────────────────────────
 
-define('PHILSMS_API_KEY',  '1624|ulZCKZqRcxrUEcKSshGZLkTgkF6ArDU3Bosvb3be53970c83');
-define('PHILSMS_API_URL', 'https://dashboard.philsms.com/api/v3/sms/send');
+define('PHILSMS_API_KEY',   '1624|ulZCKZqRcxrUEcKSshGZLkTgkF6ArDU3Bosvb3be53970c83');
+define('PHILSMS_API_URL',   'https://dashboard.philsms.com/api/v3/sms/send');
+define('PHILSMS_SENDER_ID', 'PhilSMS');
