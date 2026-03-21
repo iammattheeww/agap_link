@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-
   // FILE UPLOAD HANDLING
   const fileUploadArea = document.getElementById("fileUploadArea");
   const fileInput = document.getElementById("photo");
@@ -8,16 +7,20 @@ document.addEventListener("DOMContentLoaded", function () {
   const removeImageBtn = document.getElementById("removeImageBtn");
   const uploadPlaceholder = document.getElementById("uploadPlaceholder");
 
-  // Click to upload (guard against clicks on remove button / preview)
   fileUploadArea.addEventListener("click", (e) => {
-    if (e.target === removeImageBtn || e.target === previewImage) return;
+    if (
+      e.target === removeImageBtn ||
+      e.target === previewImage ||
+      e.target === fileInput
+    )
+      return;
     fileInput.click();
   });
 
-  // File selection
+  // FILE SELECTION
   fileInput.addEventListener("change", handleFileSelect);
 
-  // Drag and drop
+  // DRAG AND DROP
   fileUploadArea.addEventListener("dragover", (e) => {
     e.preventDefault();
     fileUploadArea.classList.add("dragover");
@@ -42,14 +45,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const file = fileInput.files[0];
     if (!file) return;
 
-    // Validate size (5MB)
+    // VALIDATE SIZE (5MB)
     if (file.size > 5 * 1024 * 1024) {
       alert("File size must be less than 5MB");
       fileInput.value = "";
       return;
     }
 
-    // Validate type
+    // VALIDATE TYPE
     if (!["image/jpeg", "image/jpg", "image/png"].includes(file.type)) {
       alert("Only JPG, JPEG, and PNG files are allowed");
       fileInput.value = "";
@@ -60,7 +63,7 @@ document.addEventListener("DOMContentLoaded", function () {
     reader.onload = (e) => {
       previewImage.src = e.target.result;
 
-      // SHOW preview, HIDE placeholder
+      // SHOW PREVIEW, HIDE PLACEHOLDER
       previewContainer.classList.add("active");
       if (uploadPlaceholder) uploadPlaceholder.style.display = "none";
     };
@@ -68,20 +71,16 @@ document.addEventListener("DOMContentLoaded", function () {
     reader.readAsDataURL(file);
   }
 
-  // Remove image
+  // REMOVE IMAGE - stopPropagation()IS AN EVENT METHOD THAT PREVENTS THE CLICK FROM REACHING fileUploadArea VARIABLE AND RE-OPENING FILE DIALOG
   removeImageBtn.addEventListener("click", (e) => {
-    e.stopPropagation(); // Prevent bubbling to fileUploadArea
+    e.stopPropagation();
     fileInput.value = "";
     previewImage.src = "";
     previewContainer.classList.remove("active");
     if (uploadPlaceholder) uploadPlaceholder.style.display = "flex";
   });
 
-
-  /* =========================
-     GPS LOCATION HANDLING
-  ========================== */
-
+  // GPS LOCATION HANDLING
   const getLocationBtn = document.getElementById("getLocationBtn");
   const locationStatus = document.getElementById("locationStatus");
   const gpsLatInput = document.getElementById("gps_lat");
@@ -89,7 +88,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
   getLocationBtn.addEventListener("click", () => {
     if (!navigator.geolocation) {
-      showLocationStatus("Geolocation is not supported by your browser", "error");
+      showLocationStatus(
+        "Geolocation is not supported by your browser",
+        "error",
+      );
       return;
     }
 
@@ -106,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         showLocationStatus(
           `Location captured: ${lat.toFixed(6)}, ${long.toFixed(6)}`,
-          "success"
+          "success",
         );
 
         getLocationBtn.textContent = "✓ Location Captured";
@@ -134,7 +136,7 @@ document.addEventListener("DOMContentLoaded", function () {
         showLocationStatus(errorMessage, "error");
         getLocationBtn.textContent = "📍 Get My Current Location";
         getLocationBtn.disabled = false;
-      }
+      },
     );
   });
 
@@ -143,11 +145,7 @@ document.addEventListener("DOMContentLoaded", function () {
     locationStatus.className = "location-status location-" + type;
   }
 
-
-  /* =========================
-     FORM VALIDATION FIX
-  ========================== */
-
+  // FORM VALIDATION
   const form = document.querySelector("form");
 
   form.addEventListener("submit", (e) => {
@@ -160,5 +158,4 @@ document.addEventListener("DOMContentLoaded", function () {
       alert("Please fill in all required fields");
     }
   });
-
 });
