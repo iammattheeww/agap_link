@@ -1,5 +1,5 @@
 <?php
-// Fetch categories excluding "Other" (category_id = 10)
+// FETCH CATEGORIES EXCLUDING "Other" (category_id = 10)
 if (!class_exists('Report')) {
     require_once MODEL_PATH . 'Report.php';
 }
@@ -41,52 +41,50 @@ $userName = $_SESSION['user_name'] ?? 'User';
                 placeholder="Street, Barangay, City" required maxlength="255">
         </div>
 
-      <div class="form-group">
-    <label class="form-label">Photo Evidence <span class="form-label-optional">(Optional)</span></label>
+        <div class="form-group">
+            <label class="form-label">Photo Evidence <span class="form-label-optional">(Optional)</span></label>
 
-    <div class="file-upload-area" id="fileUploadArea">
+            <div class="file-upload-area" id="fileUploadArea">
 
-        <!-- Upload Placeholder -->
-        <div class="upload-placeholder" id="uploadPlaceholder">
-            <div class="upload-icon">📷</div>
-            <div class="upload-text">Click to upload or drag and drop</div>
-            <div class="upload-hint">PNG, JPG, JPEG up to 5MB</div>
+                <!-- IMAGE PLACEHOLDER -->
+                <div class="upload-placeholder" id="uploadPlaceholder">
+                    <div class="upload-icon">📷</div>
+                    <div class="upload-text">Click to upload or drag and drop</div>
+                    <div class="upload-hint">PNG, JPG, JPEG up to 5MB</div>
+                </div>
+
+                <!-- PREVIEW INSIDE UPLOAD BOX -->
+                <div class="preview-container" id="previewContainer">
+                    <img src="" alt="Preview" class="preview-image" id="previewImage">
+                    <button type="button" class="remove-image-btn" id="removeImageBtn">
+                        Remove Photo
+                    </button>
+                </div>
+
+            </div>
+            <input type="file" name="photo" id="photo"
+                class="file-input-hidden"
+                accept="image/png, image/jpeg, image/jpg">
         </div>
-
-        <!-- Hidden File Input -->
-        <input type="file" name="photo" id="photo"
-            class="file-input-hidden"
-            accept="image/png, image/jpeg, image/jpg">
-
-        <!-- Preview INSIDE upload box -->
-        <div class="preview-container" id="previewContainer">
-            <img src="" alt="Preview" class="preview-image" id="previewImage">
-            <button type="button" class="remove-image-btn" id="removeImageBtn">
-                Remove Photo
-            </button>
-        </div>
-
-    </div>
-</div>
 
         <div class="form-group">
-    <label class="form-label">
-        Pin Exact Location on Map
-        <span class="form-label-optional">(Optional)</span>
-    </label>
+            <label class="form-label">
+                Pin Exact Location on Map
+                <span class="form-label-optional">(Optional)</span>
+            </label>
 
-<div class="form-group">
-    <label class="form-label">Report Location</label>
-    <div id="reportMap" class="report-map"></div>
-</div>
+            <div class="form-group">
+                <label class="form-label">Report Location</label>
+                <div id="reportMap" class="report-map"></div>
+            </div>
 
-    <small class="form-label-optional">
-        Tap or drag the marker to set the exact report location.
-    </small>
+            <small class="form-label-optional">
+                Tap or drag the marker to set the exact report location.
+            </small>
 
-    <input type="hidden" name="gps_lat" id="gps_lat">
-    <input type="hidden" name="gps_long" id="gps_long">
-</div>
+            <input type="hidden" name="gps_lat" id="gps_lat">
+            <input type="hidden" name="gps_long" id="gps_long">
+        </div>
 
         <div class="form-actions">
             <button type="submit" class="btn-primary">Submit Report</button>
@@ -95,9 +93,9 @@ $userName = $_SESSION['user_name'] ?? 'User';
 </div>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    if (typeof initReportMap === "function") {
-        initReportMap();
-    }
-});
+    document.addEventListener("DOMContentLoaded", function() {
+        if (typeof initReportMap === "function") {
+            initReportMap();
+        }
+    });
 </script>
