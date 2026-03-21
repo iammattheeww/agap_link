@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // MEATBALLS MENU
+  // ── MEATBALLS MENU ────────────────────────────────────────────────────
   document.querySelectorAll(".meatballs-btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
       e.stopPropagation();
@@ -9,24 +9,27 @@ document.addEventListener("DOMContentLoaded", () => {
       btn.nextElementSibling.style.display = "block";
     });
   });
+
   document.addEventListener("click", () => {
     document
       .querySelectorAll(".meatballs-menu")
       .forEach((m) => (m.style.display = "none"));
   });
 
-  // MODAL
+  // ── MODAL ─────────────────────────────────────────────────────────────
   const modal = document.getElementById("reportModal");
   const closeModal = document.querySelector(".close-modal");
   const messageCitizenBtn = document.getElementById("messageCitizenBtn");
 
   let currentReportId = null;
   let currentReportPhone = null;
+  let currentReportStatus = null; // ← FIX: was never declared — caused silent ReferenceError on every button click
 
   document.querySelectorAll(".view-details-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
       currentReportId = btn.dataset.id;
       currentReportPhone = btn.dataset.phone || "";
+      currentReportStatus = btn.dataset.status; // ← FIX: was never assigned — stayed null/undefined forever
 
       document.getElementById("modalTitle").textContent =
         "Report #" + currentReportId;
@@ -43,11 +46,12 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.dataset.agency || "—";
       document.getElementById("modalDate").textContent = btn.dataset.date;
 
+      // PHOTO
       const photoWrapper = document.getElementById("modalPhotoWrapper");
       const photoEl = document.getElementById("modalPhoto");
 
       if (btn.dataset.photo && btn.dataset.photo !== "") {
-        photoEl.src = btn.dataset.photo; // ← FIXED: was baseUrl + btn.dataset.photo
+        photoEl.src = btn.dataset.photo;
         photoWrapper.style.display = "block";
       } else {
         photoWrapper.style.display = "none";
@@ -61,21 +65,18 @@ document.addEventListener("DOMContentLoaded", () => {
   closeModal.addEventListener("click", () => {
     modal.style.display = "none";
   });
+
   modal.addEventListener("click", (e) => {
     if (e.target === modal) modal.style.display = "none";
   });
 
   // ── MESSAGE CITIZEN (PhilSMS — AUTO-GENERATED MESSAGE) ────────────────
-  // Status → message map mirrors SmsNotifier::buildMessage() exactly.
-  // No prompt(), no custom input. Admin confirms, PHP generates the message.
   const STATUS_MESSAGES = {
-    Pending: "AGAP-Link: Your report (#" + "…" + ") has been received.",
-    Verified: "AGAP-Link: Your report (#" + "…" + ") has been verified.",
-    Forwarded:
-      "AGAP-Link: Your report (#" + "…" + ") was forwarded to authorities.",
-    Ongoing: "AGAP-Link: Your report (#" + "…" + ") is being handled.",
-    Resolved:
-      "AGAP-Link: Your report (#" + "…" + ") has been resolved. Thank you!",
+    Pending: "AGAP-Link: Your report (#…) has been received.",
+    Verified: "AGAP-Link: Your report (#…) has been verified.",
+    Forwarded: "AGAP-Link: Your report (#…) was forwarded to authorities.",
+    Ongoing: "AGAP-Link: Your report (#…) is being handled.",
+    Resolved: "AGAP-Link: Your report (#…) has been resolved. Thank you!",
   };
 
   messageCitizenBtn.addEventListener("click", () => {
@@ -84,7 +85,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Build the preview exactly as SmsNotifier::buildMessage() would
     const previewMessage = STATUS_MESSAGES[currentReportStatus]
       ? STATUS_MESSAGES[currentReportStatus].replace(/…/g, currentReportId)
       : "AGAP-Link: Your report (#" +
@@ -93,7 +93,6 @@ document.addEventListener("DOMContentLoaded", () => {
         currentReportStatus +
         ".";
 
-    // Show confirm dialog with full preview — no typing required
     const confirmed = confirm(
       "📩 Send SMS Notification?\n\n" +
         "To      : " +
@@ -115,8 +114,6 @@ document.addEventListener("DOMContentLoaded", () => {
     messageCitizenBtn.textContent = "Sending…";
     messageCitizenBtn.disabled = true;
 
-    // send_sms.php reads a JSON body with report_id + status
-    // SmsNotifier::sendStatusUpdate() then builds the message server-side
     fetch(baseUrl + "/controller/send_sms.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -126,7 +123,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }),
     })
       .then((r) => {
-        // Guard: if PHP crashes it returns HTML, not JSON
         const ct = r.headers.get("content-type") || "";
         if (!ct.includes("application/json")) {
           throw new Error(
@@ -165,7 +161,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const forwardModal = document.getElementById("forwardModal");
   const forwardReportIdInput = document.getElementById("forwardReportId");
 
-  // MAKE showForwardModal GLOBALLY AVAILABLE
   window.showForwardModal = function (reportId) {
     forwardReportIdInput.value = reportId;
     forwardModal.style.display = "flex";

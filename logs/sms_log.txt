@@ -1,0 +1,8 @@
+2026-03-21 03:16:39 | HTTP:404 | 639949926492 | {"status":"error","message":"Sender ID \"AGAPLink\" is not authorized to send this message."}
+2026-03-21 03:17:51 | HTTP:404 | 639470418759 | {"status":"error","message":"Sender ID \"AGAPLink\" is not authorized to send this message."}
+2026-03-21 03:51:06 | HTTP:404 | 639949926492 | {"status":"error","message":"Sender ID \"AGAPLink\" is not authorized to send this message."}
+2026-03-21 03:51:44 | HTTP:404 | 639949926492 | {"status":"error","message":"Sender ID \"AGAPLink\" is not authorized to send this message."}
+2026-03-21 03:55:21 | HTTP:404 | 639949926492 | {"status":"error","message":"Sender ID \"\" is not authorized to send this message."}
+2026-03-21 03:55:47 | HTTP:404 | 639949926492 | {"status":"error","message":"Sender ID \"\" is not authorized to send this message."}
+2026-03-21 03:56:55 | HTTP:404 | 639949926492 | {"status":"error","message":"Sender ID \"\" is not authorized to send this message."}
+2026-03-21 04:01:27 | HTTP:404 | 639949926492 | {"status":"error","message":"Sender ID \"\" is not authorized to send this message."}

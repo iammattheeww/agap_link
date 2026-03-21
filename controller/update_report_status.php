@@ -28,7 +28,7 @@ if (!$report_id || !in_array($new_status, $allowed_statuses)) {
 try {
     $reportModel = new Report();
 
-    // GET CURRENT REPORT BEFORE UPDATE 
+    // GET CURRENT REPORT BEFORE UPDATE
     $report = $reportModel->getReportById($report_id);
 
     // UPDATE STATUS
@@ -39,13 +39,18 @@ try {
         try {
             require_once MODEL_PATH . 'SmsNotifier.php';
             SmsNotifier::sendStatusUpdate($report_id, $new_status);
+            // SMS sent successfully — include confirmation in the success message
+            $_SESSION['success'] = "Report #$report_id updated to $new_status. SMS notification sent.";
         } catch (Exception $e) {
+            // SMS failed — log it but don't block the status update
+            // Also surface the reason in the session so the admin sees it
             error_log("SMS failed for report #$report_id: " . $e->getMessage());
+            $_SESSION['success'] = "Report #$report_id updated to $new_status. (SMS failed: " . $e->getMessage() . ")";
         }
+    } else {
+        // Status unchanged — no SMS sent
+        $_SESSION['success'] = "Report #$report_id updated to $new_status.";
     }
-
-    $_SESSION['success'] = "Report #$report_id updated to $new_status.";
-
 } catch (PDOException $e) {
     $_SESSION['error'] = 'Database error. Try again.';
 }
