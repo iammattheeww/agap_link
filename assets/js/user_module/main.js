@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-
   // ============================================
   // MOBILE TOP NAV + SLIDE-IN SIDEBAR
   // ============================================
@@ -12,7 +11,9 @@ document.addEventListener("DOMContentLoaded", function () {
       e.stopPropagation();
       sidebar.classList.toggle("sidebar-open");
       overlay && overlay.classList.toggle("active");
-      this.textContent = sidebar.classList.contains("sidebar-open") ? "✕" : "☰";
+      this.textContent = sidebar.classList.contains("sidebar-open")
+        ? "✕"
+        : "☰";
     });
   }
 
@@ -31,7 +32,9 @@ document.addEventListener("DOMContentLoaded", function () {
       e.stopPropagation();
       sidebar.classList.toggle("sidebar-open");
       overlay && overlay.classList.toggle("active");
-      this.textContent = sidebar.classList.contains("sidebar-open") ? "✕" : "☰";
+      this.textContent = sidebar.classList.contains("sidebar-open")
+        ? "✕"
+        : "☰";
     });
   }
 
@@ -80,75 +83,6 @@ document.addEventListener("DOMContentLoaded", function () {
       if (e.target === reportModal) {
         reportModal.classList.remove("active");
       }
-    });
-  }
-
-  // ============================================
-  // GEOLOCATION (Report Form)
-  // ============================================
-  const getLocationBtn = document.getElementById("getLocationBtn");
-  const locationStatus = document.getElementById("locationStatus");
-  const latInput = document.getElementById("gps_lat");
-  const longInput = document.getElementById("gps_long");
-
-  if (getLocationBtn) {
-    getLocationBtn.addEventListener("click", function () {
-      if (!navigator.geolocation) {
-        if (locationStatus) locationStatus.innerHTML = "Geolocation is not supported.";
-        return;
-      }
-      if (locationStatus) locationStatus.innerHTML = "Getting location...";
-      navigator.geolocation.getCurrentPosition(
-        function (position) {
-          if (latInput) latInput.value = position.coords.latitude;
-          if (longInput) longInput.value = position.coords.longitude;
-          if (locationStatus) locationStatus.innerHTML = "Location captured successfully.";
-        },
-        function () {
-          if (locationStatus) locationStatus.innerHTML = "Unable to retrieve location.";
-        }
-      );
-    });
-  }
-
-  // ============================================
-  // FILE UPLOAD PREVIEW (Report Form)
-  // ============================================
-  const fileUploadArea = document.getElementById("fileUploadArea");
-  const fileInput = document.getElementById("photo");
-  const previewContainer = document.getElementById("previewContainer");
-  const previewImage = document.getElementById("previewImage");
-  const removeBtn = document.getElementById("removeImageBtn");
-  const uploadPlaceholder = document.getElementById("uploadPlaceholder");
-
-  if (fileUploadArea && fileInput) {
-    fileUploadArea.addEventListener("click", function (e) {
-      // Don't re-open the dialog if clicking remove button or preview image
-      if (e.target === removeBtn || e.target === previewImage) return;
-      fileInput.click();
-    });
-  }
-
-  if (fileInput) {
-    fileInput.addEventListener("change", function () {
-      const file = this.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        if (previewImage) previewImage.src = e.target.result;
-        if (previewContainer) previewContainer.style.display = "block";
-        if (uploadPlaceholder) uploadPlaceholder.style.display = "none";
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-
-  if (removeBtn) {
-    removeBtn.addEventListener("click", function (e) {
-      e.stopPropagation(); // Prevent click from bubbling to fileUploadArea
-      if (fileInput) fileInput.value = "";
-      if (previewContainer) previewContainer.style.display = "none";
-      if (uploadPlaceholder) uploadPlaceholder.style.display = "flex";
     });
   }
 
