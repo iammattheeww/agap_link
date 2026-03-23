@@ -45,7 +45,7 @@ $userName = $_SESSION['user_name'] ?? 'User';
                         Help improve your community by reporting issues. Provide as much detail as possible to help us address the problem quickly.
                     </p>
                 </div>
-                <?php if (isset($_SESSION['error'])): ?>
+                <?php if (isset($_SESSION['error'])): ?>    
                     <div class="alert alert-error">
                         <?= htmlspecialchars($_SESSION['error']) ?>
                         <?php unset($_SESSION['error']); ?>
@@ -60,7 +60,6 @@ $userName = $_SESSION['user_name'] ?? 'User';
             </div>
         </main>
     </div>
-
     <script src="<?= ASSET_URL ?>/js/user_module/create_report.js"></script>
     <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
     <button class="mobile-menu-toggle" aria-label="Toggle Menu">☰</button>
