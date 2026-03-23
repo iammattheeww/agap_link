@@ -84,6 +84,7 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
                         Help improve your community by reporting issues.
                     </p>
 
+                    <!-- THIS OPENS THE MODAL -->
                     <?php require __DIR__ . '/create_report_form_partial.php'; ?>
 
                 </div>
@@ -106,7 +107,6 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
                     <span class="btn-icon">+</span>
                     Report Issue
                 </button>
-
             </header>
 
 

@@ -1,10 +1,13 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // REPORT MODAL
+  // THIS VARIABLE IS FOR THE CONDITIONAL STATEMENTS THAT OPENS THE MODAL
   const modal = document.getElementById("reportModal");
   const openBtn = document.getElementById("openReportModal");
+
+  // THIS VARIABLE IS FOR THE CONDITIONAL STATEMENTS THAT CLOSES THE MODAL
   const closeBtn = document.getElementById("closeReportModal");
   const cancelBtn = document.getElementById("cancelReportBtn");
 
+  // CLICK EVENT LISTENER FOR THE BUTTON
   function openModal() {
     if (modal) modal.classList.add("active");
   }
@@ -12,9 +15,11 @@ document.addEventListener("DOMContentLoaded", function () {
     if (modal) modal.classList.remove("active"); 
   }
 
-  if (openBtn) openBtn.addEventListener("click", openModal);
-  if (closeBtn) closeBtn.addEventListener("click", closeModal);
-  if (cancelBtn) cancelBtn.addEventListener("click", closeModal);
+  // OPENS THE MODAL
+  if (openBtn) openBtn.addEventListener("click", openModal); // CALLS THE openModal function -> openBtn is openModal()
+  if (closeBtn) closeBtn.addEventListener("click", closeModal); // CALLS THE closeModal function -> closeBtn is closeModal()
+  if (cancelBtn) cancelBtn.addEventListener("click", closeModal); // CALLS THE closeModal function -> cancelBtn is closeModal()
+  
   if (modal) {
     modal.addEventListener("click", function (e) {
       if (e.target === modal) closeModal();
