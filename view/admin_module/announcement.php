@@ -83,20 +83,20 @@ unset($_SESSION['success'], $_SESSION['error']);
                             </div>
                             <?php if (!empty($a['image_path'])): ?>
                                 <img src="<?= UPLOAD_URL ?>/announcements/<?= htmlspecialchars(basename($a['image_path'])) ?>"
-                                     alt="Announcement image"
-                                     style="width:100%; max-height:220px; object-fit:cover;">
+                                    alt="Announcement image"
+                                    style="width:100%; max-height:220px; object-fit:cover;">
                             <?php endif; ?>
                             <div class="announcement-body">
                                 <?= nl2br(htmlspecialchars($a['content'])) ?>
                             </div>
                             <div class="announcement-footer">
                                 <form method="POST"
-                                      action="<?= BASE_URL ?>/controller/announcement_process.php"
-                                      onsubmit="return confirm('Delete this announcement? This cannot be undone.');">
+                                    action="<?= BASE_URL ?>/controller/announcement_process.php"
+                                    onsubmit="return confirm('Delete this announcement? This cannot be undone.');">
                                     <input type="hidden" name="action" value="delete">
                                     <input type="hidden" name="announcement_id" value="<?= $a['announcement_id'] ?>">
                                     <button type="submit" class="action-delete"
-                                            style="border:none; cursor:pointer; padding:6px 12px; border-radius:6px; font-size:0.82rem; font-weight:600;">
+                                        style="border:none; cursor:pointer; padding:6px 12px; border-radius:6px; font-size:0.82rem; font-weight:600;">
                                         Delete
                                     </button>
                                 </form>
@@ -124,14 +124,14 @@ unset($_SESSION['success'], $_SESSION['error']);
                 <div class="form-group">
                     <label class="form-label" for="ann_title">Title *</label>
                     <input type="text" id="ann_title" name="title" class="form-input"
-                           placeholder="Announcement title" required maxlength="255">
+                        placeholder="Announcement title" required maxlength="255">
                 </div>
 
                 <div class="form-group">
                     <label class="form-label" for="ann_content">Content / Body *</label>
                     <textarea id="ann_content" name="content" class="form-input"
-                              placeholder="Write the announcement details here..."
-                              required style="min-height: 140px;"></textarea>
+                        placeholder="Write the announcement details here..."
+                        required style="min-height: 140px;"></textarea>
                 </div>
 
                 <div class="form-group">
@@ -144,7 +144,7 @@ unset($_SESSION['success'], $_SESSION['error']);
                         <div class="upload-hint">PNG, JPG, JPEG up to 5MB</div>
                     </div>
                     <input type="file" name="image" id="annImageInput" class="file-input-hidden"
-                           accept="image/png, image/jpeg, image/jpg">
+                        accept="image/png, image/jpeg, image/jpg">
                     <div id="annPreviewContainer" class="preview-container">
                         <img src="" alt="Preview" class="preview-image" id="annPreviewImage">
                         <button type="button" class="remove-image-btn" id="annRemoveImageBtn">Remove Image</button>
@@ -160,7 +160,7 @@ unset($_SESSION['success'], $_SESSION['error']);
     </div>
 
     <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">☰</button>
-        <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
+    <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
     <script src="<?= ASSET_URL ?>/js/admin_module/announcement.js"></script>
 </body>
 
