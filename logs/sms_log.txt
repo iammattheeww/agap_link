@@ -11,3 +11,69 @@
 2026-03-21 04:07:44 | HTTP:200 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link: Your report (#13) has been verified. | RESP:{"status":"success","message":"Your message was successfully delivered","data":{"uid":"69be0b7fa5b9c","to":"639949926492","from":"PhilSMS","message":"AGAP-Link: Your report (#13) has been verified.","status":"Delivered","cost":"1","sms_count":1}}
 2026-03-21 04:10:08 | HTTP:200 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link: Your report (#13) has been resolved. Thank you! | RESP:{"status":"success","message":"Your message was successfully delivered","data":{"uid":"69be0c0fa632b","to":"639949926492","from":"PhilSMS","message":"AGAP-Link: Your report (#13) has been resolved. Thank you!","status":"Delivered","cost":"1","sms_count":1}}
 2026-03-21 04:10:24 | HTTP:200 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link: Your report (#13) has been resolved. Thank you! | RESP:{"status":"success","message":"Your message was successfully delivered","data":{"uid":"69be0c1f554b7","to":"639949926492","from":"PhilSMS","message":"AGAP-Link: Your report (#13) has been resolved. Thank you!","status":"Delivered","cost":"1","sms_count":1}}
+2026-03-23 22:37:03 | HTTP:404 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link Password Reset
+
+Your one-time password (OTP) for r... | RESP:{"status":"error","message":"Your message contains spam words."}
+2026-03-23 22:39:34 | HTTP:403 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link — Login Verification
+
+Your temporary login verific... | RESP:{"status":"error","message":"Failed"}
+2026-03-23 22:40:06 | HTTP:403 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link — Login Verification
+
+Your new temporary login ver... | RESP:{"status":"error","message":"Failed"}
+2026-03-23 22:46:26 | HTTP:403 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link — Login Verification
+
+Your new temporary login ver... | RESP:{"status":"error","message":"Failed"}
+2026-03-23 22:56:41 | HTTP:404 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link Password Reset
+
+Your one-time password (OTP) for r... | RESP:{"status":"error","message":"Your message contains spam words."}
+2026-03-23 22:56:57 | HTTP:403 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link — Login Verification
+
+Your temporary login verific... | RESP:{"status":"error","message":"Failed"}
+2026-03-23 22:57:32 | HTTP:403 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link — Login Verification
+
+Your new temporary login ver... | RESP:{"status":"error","message":"Failed"}
+2026-03-23 23:00:37 | HTTP:403 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link — Login Verification
+
+Your temporary login verific... | RESP:{"status":"error","message":"Failed"}
+2026-03-23 23:02:41 | HTTP:200 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link Test SMS - 2026-03-23 23:02:38... | RESP:{"status":"success","message":"Your message was successfully delivered","data":{"uid":"69c1b8819c454","to":"639949926492","from":"PhilSMS","message":"AGAP-Link Test SMS - 2026-03-23 23:02:38","status":"Delivered","cost":"1","sms_count":1}}
+2026-03-23 23:02:43 | HTTP:200 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link Test SMS - 2026-03-23 23:02:41... | RESP:{"status":"success","message":"Your message was successfully delivered","data":{"uid":"69c1b88418e89","to":"639949926492","from":"PhilSMS","message":"AGAP-Link Test SMS - 2026-03-23 23:02:41","status":"Delivered","cost":"1","sms_count":1}}
+2026-03-23 23:08:15 | HTTP:200 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link: Your login code is: 667666... | RESP:{"status":"success","message":"Your message was successfully delivered","data":{"uid":"69c1b9d01be00","to":"639949926492","from":"PhilSMS","message":"AGAP-Link: Your login code is: 667666","status":"Delivered","cost":"1","sms_count":1}}
+2026-03-23 23:08:45 | HTTP:200 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link: Your password reset code is: 414275... | RESP:{"status":"success","message":"Your message was successfully delivered","data":{"uid":"69c1b9ed7055d","to":"639949926492","from":"PhilSMS","message":"AGAP-Link: Your password reset code is: 414275","status":"Delivered","cost":"1","sms_count":1}}
+2026-03-23 23:09:48 | HTTP:200 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link: Your login code is: 398251... | RESP:{"status":"success","message":"Your message was successfully delivered","data":{"uid":"69c1ba2cb20da","to":"639949926492","from":"PhilSMS","message":"AGAP-Link: Your login code is: 398251","status":"Delivered","cost":"1","sms_count":1}}
+2026-03-24 01:15:13 | HTTP:403 | TO:639123456789 | SENDER:PhilSMS | MSG:AGAP-Link Announcement
+
+123
+
+123
+
+Log in to AGAP-Link for th... | RESP:{"status":"error","message":"Failed"}
+2026-03-24 01:15:16 | HTTP:403 | TO:639087053123 | SENDER:PhilSMS | MSG:AGAP-Link Announcement
+
+123
+
+123
+
+Log in to AGAP-Link for th... | RESP:{"status":"error","message":"Failed"}
+2026-03-24 01:15:19 | HTTP:403 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link Announcement
+
+123
+
+123
+
+Log in to AGAP-Link for th... | RESP:{"status":"error","message":"Failed"}
+2026-03-24 01:27:03 | HTTP:200 | TO:639123456789,639087053123,639949926492 | SENDER:PhilSMS | MSG:AGAP-Link: 09022005. Log in for details.... | RESP:{"status":"success","message":"Message is scheduled successfully.","data":[{"uid":"69c1da555e1e9","to":"639123456789","from":"PhilSMS","message":"AGAP-Link: 09022005. Log in for details.","customer_status":"Delivered","cost":"1","sms_count":1},{"uid":"69c1da567544f","to":"639087053123","from":"PhilSMS","message":"AGAP-Link: 09022005. Log in for details.","customer_status":"Delivered","cost":"1","sms_count":1},{"uid":"69c1da5789c5f","to":"639949926492","from":"PhilSMS","message":"AGAP-Link: 09022005. Log in for details.","customer_status":"Delivered","cost":"1","sms_count":1}]}
+2026-03-24 01:36:03 | HTTP:200 | TO:639123456789,639087053123,639949926492 | SENDER:PhilSMS | MSG:AGAP-Link: [Update]
+Oil Price Hike
+
+Oil Price rises up to 5 ... | RESP:{"status":"success","message":"Message is scheduled successfully.","data":[{"uid":"69c1dc71aa771","to":"639123456789","from":"PhilSMS","message":"AGAP-Link: [Update]\nOil Price Hike\n\nOil Price rises up to 5 pesos as of today.\n\nStay informed. Download AGAP-Link now!","customer_status":"Delivered","cost":"1","sms_count":1},{"uid":"69c1dc72b118e","to":"639087053123","from":"PhilSMS","message":"AGAP-Link: [Update]\nOil Price Hike\n\nOil Price rises up to 5 pesos as of today.\n\nStay informed. Download AGAP-Link now!","customer_status":"Delivered","cost":"1","sms_count":1},{"uid":"69c1dc73d2b43","to":"639949926492","from":"PhilSMS","message":"AGAP-Link: [Update]\nOil Price Hike\n\nOil Price rises up to 5 pesos as of today.\n\nStay informed. Download AGAP-Link now!","customer_status":"Delivered","cost":"1","sms_count":1}]}
+2026-03-24 01:39:56 | HTTP:200 | TO:639123456789,639087053123,639949926492 | SENDER:PhilSMS | MSG:AGAP-Link: [Update]
+❗❗Spider-Man Brand New Day
+
+❗❗Peter Park... | RESP:{"status":"success","message":"Message is scheduled successfully.","data":[{"uid":"69c1dd5b483f8","to":"639123456789","from":"PhilSMS","message":"AGAP-Link: [Update]\n\u2757\u2757Spider-Man Brand New Day\n\n\u2757\u2757Peter Parker obtains organic webbing as his genes begin to mutate and as he goes through a lot of trauma.\n\nStay informed. Download AGAP-Link now!","customer_status":"Failed","cost":"0","sms_count":3},{"uid":"69c1dd5c40e5a","to":"639087053123","from":"PhilSMS","message":"AGAP-Link: [Update]\n\u2757\u2757Spider-Man Brand New Day\n\n\u2757\u2757Peter Parker obtains organic webbing as his genes begin to mutate and as he goes through a lot of trauma.\n\nStay informed. Download AGAP-Link now!","customer_status":"Failed","cost":"0","sms_count":3},{"uid":"69c1dd5d3aa8b","to":"639949926492","from":"PhilSMS","message":"AGAP-Link: [Update]\n\u2757\u2757Spider-Man Brand New Day\n\n\u2757\u2757Peter Parker obtains organic webbing as his genes begin to mutate and as he goes through a lot of trauma.\n\nStay informed. Download AGAP-Link now!","customer_status":"Failed","cost":"0","sms_count":3}]}
+2026-03-24 01:42:40 | HTTP:200 | TO:639123456789,639087053123,639949926492 | SENDER:PhilSMS | MSG:AGAP-Link: [Update]
+Spider-Man Brand New Day
+
+Peter Parker o... | RESP:{"status":"success","message":"Message is scheduled successfully.","data":[{"uid":"69c1ddfe4a8e3","to":"639123456789","from":"PhilSMS","message":"AGAP-Link: [Update]\nSpider-Man Brand New Day\n\nPeter Parker obtains organic webbing as his genes begin to mutate and as he goes through a lot of trauma.\n\nStay informed. Download AGAP-Link now!","customer_status":"Delivered","cost":"2","sms_count":2},{"uid":"69c1ddff42bc5","to":"639087053123","from":"PhilSMS","message":"AGAP-Link: [Update]\nSpider-Man Brand New Day\n\nPeter Parker obtains organic webbing as his genes begin to mutate and as he goes through a lot of trauma.\n\nStay informed. Download AGAP-Link now!","customer_status":"Delivered","cost":"2","sms_count":2},{"uid":"69c1de003a97f","to":"639949926492","from":"PhilSMS","message":"AGAP-Link: [Update]\nSpider-Man Brand New Day\n\nPeter Parker obtains organic webbing as his genes begin to mutate and as he goes through a lot of trauma.\n\nStay informed. Download AGAP-Link now!","customer_status":"Delivered","cost":"2","sms_count":2}]}
+2026-03-24 02:47:08 | HTTP:403 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link — Report Resolved ✅
+
+We are pleased to inform you ... | RESP:{"status":"error","message":"Failed"}

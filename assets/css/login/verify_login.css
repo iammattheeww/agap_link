@@ -1,0 +1,183 @@
+/* ── verify_login.css ─────────────────────────────────────────────────────── */
+
+.verify-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f4f4f4;
+  padding: 20px;
+}
+
+.verify-box {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 48px 40px;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  animation: fadeInUp 0.5s ease;
+}
+
+.verify-logo {
+  color: #ff6b35;
+  font-weight: 800;
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+.verify-title {
+  color: #1a2332;
+  font-weight: 700;
+  font-size: 1.4rem;
+  margin: 0 0 10px;
+}
+
+.verify-subtitle {
+  color: #6b7280;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  margin: 0 0 28px;
+}
+
+.verify-subtitle strong {
+  color: #1a2332;
+}
+
+.countdown-wrapper {
+  background: #f4f4f4;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+#countdownTimer {
+  font-weight: 700;
+  color: #ff6b35;
+}
+
+#countdownTimer.expired {
+  color: #ef4444;
+}
+
+.otp-input-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.otp-input {
+  width: 180px;
+  padding: 16px 12px;
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 12px;
+  text-align: center;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  font-family: monospace;
+  color: #1a2332;
+  outline: none;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
+}
+
+.otp-input:focus {
+  border-color: #ff6b35;
+  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.12);
+}
+
+.verify-btn {
+  width: 100%;
+  padding: 14px;
+  background: #ff6b35;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition:
+    background 0.2s,
+    transform 0.15s;
+}
+
+.verify-btn:hover {
+  background: #e85520;
+  transform: translateY(-1px);
+}
+
+.resend-form {
+  font-size: 0.9rem;
+  color: #6b7280;
+  margin-bottom: 8px;
+}
+
+.resend-form button {
+  background: none;
+  border: none;
+  color: #ff6b35;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0;
+  margin-left: 4px;
+}
+
+.resend-form button:hover {
+  color: #e85520;
+}
+
+.verify-back {
+  display: inline-block;
+  margin-top: 20px;
+  color: #9ca3af;
+  font-size: 0.88rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.verify-back:hover {
+  color: #4b5563;
+  text-decoration: underline;
+}
+
+.verify-error {
+  background: #fee2e2;
+  color: #991b1b;
+  border-left: 4px solid #ef4444;
+  padding: 12px 14px;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+.verify-success {
+  background: #d1fae5;
+  color: #065f46;
+  border-left: 4px solid #10b981;
+  padding: 12px 14px;
+  border-radius: 6px;
+  font-size: 0.88rem;
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

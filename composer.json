@@ -1,0 +1,17 @@
+{
+    "name": "bhorb/agap_link",
+    "autoload": {
+        "psr-4": {
+            "Bhorb\\AgapLink\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "iammattheeww",
+            "email": "bhorbhor2014@gmail.com"
+        }
+    ],
+    "require": {
+        "phpmailer/phpmailer": "^7.0"
+    }
+}

@@ -190,51 +190,12 @@ try {
                     <?php endforeach; ?>
 
                 <?php else: ?>
-                    <!-- Fallback: hardcoded announcements shown when DB is empty -->
-                    <article class="announcement-card">
-                        <div class="announcement-image">
-                            <div class="announcement-img-placeholder">
-                                <img src="<?= ASSET_URL ?>/images/landing_announcement_01.jpg" alt="Announcement Image" class="announcement-img">
-                            </div>
-                            <span class="announcement-badge">News</span>
-                        </div>
-                        <div class="announcement-content">
-                            <time class="announcement-date">February 4, 2026</time>
-                            <h3 class="announcement-title">Red Alert Status: Tropical Cyclone Basyang (Penha)</h3>
-                            <p class="announcement-description">The Provincial Disaster Risk Reduction and Management Council (PDRRMC) has placed Negros Occidental under Red Alert Status.</p>
-                            <a href="#" class="announcement-link">Read More →</a>
-                        </div>
-                    </article>
-
-                    <article class="announcement-card">
-                        <div class="announcement-image">
-                            <div class="announcement-img-placeholder">
-                                <img src="<?= ASSET_URL ?>/images/landing_announcement_02.jpg" alt="Announcement Image" class="announcement-img">
-                            </div>
-                            <span class="announcement-badge">News</span>
-                        </div>
-                        <div class="announcement-content">
-                            <time class="announcement-date">February 6, 2026</time>
-                            <h3 class="announcement-title">Province-Wide Class & Work Suspensions</h3>
-                            <p class="announcement-description">Due to severe weather conditions and a Yellow Heavy Rainfall Warning, classes and work have been suspended at all levels in Bacolod City.</p>
-                            <a href="#" class="announcement-link">Read More →</a>
-                        </div>
-                    </article>
-
-                    <article class="announcement-card">
-                        <div class="announcement-image">
-                            <div class="announcement-img-placeholder">
-                                <img src="<?= ASSET_URL ?>/images/landing_announcement_03.jpg" alt="Announcement Image" class="announcement-img">
-                            </div>
-                            <span class="announcement-badge">News</span>
-                        </div>
-                        <div class="announcement-content">
-                            <time class="announcement-date">February 6, 2026</time>
-                            <h3 class="announcement-title">Infrastructure Advisory: Landslide & Flash Flood Risk</h3>
-                            <p class="announcement-description">Risks of landslides and flash floods caused by Tropical Storm Basyang have led to widespread work and class suspensions across the province.</p>
-                            <a href="#" class="announcement-link">Read More →</a>
-                        </div>
-                    </article>
+                    <!-- Empty state when no announcements in database -->
+                    <div style="text-align:center; padding: 60px 20px; color: var(--color-gray-600); grid-column: 1/-1;">
+                        <p style="font-size: 2.5rem; margin-bottom: 12px;">📢</p>
+                        <h3 style="font-size: 1.25rem; margin-bottom: 8px; color: var(--color-dark);">No Announcements Yet</h3>
+                        <p>Check back later for community updates and news.</p>
+                    </div>
                 <?php endif; ?>
 
             </div>

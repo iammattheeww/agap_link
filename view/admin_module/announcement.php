@@ -135,6 +135,22 @@ unset($_SESSION['success'], $_SESSION['error']);
                 </div>
 
                 <div class="form-group">
+                    <label class="form-label" for="ann_category">Category *</label>
+                    <select id="ann_category" name="category" class="form-input" required>
+                        <option value="" disabled selected>Select announcement category</option>
+                        <option value="Maintenance">Maintenance</option>
+                        <option value="Safety">Safety</option>
+                        <option value="Event">Event</option>
+                        <option value="Health">Health</option>
+                        <option value="Infrastructure">Infrastructure</option>
+                        <option value="Notice">Notice</option>
+                        <option value="Update">Update</option>
+                        <option value="Emergency">Emergency</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
                     <label class="form-label">
                         Image <span class="form-label-optional">(Optional)</span>
                     </label>
@@ -142,13 +158,17 @@ unset($_SESSION['success'], $_SESSION['error']);
                         <div class="upload-icon">🖼️</div>
                         <div class="upload-text">Click to upload an image</div>
                         <div class="upload-hint">PNG, JPG, JPEG up to 5MB</div>
+                        <div id="annPreviewContainer" class="preview-container">
+                            <img src="" alt="Preview" class="preview-image" id="annPreviewImage">
+                            <button type="button" class="remove-image-btn" id="annRemoveImageBtn">Remove Image</button>
+                        </div>
+                        <input type="file" name="image" id="annImageInput" class="file-input-hidden"
+                            accept="image/png, image/jpeg, image/jpg">
                     </div>
-                    <input type="file" name="image" id="annImageInput" class="file-input-hidden"
-                        accept="image/png, image/jpeg, image/jpg">
-                    <div id="annPreviewContainer" class="preview-container">
+                    <!-- <div id="annPreviewContainer" class="preview-container">
                         <img src="" alt="Preview" class="preview-image" id="annPreviewImage">
                         <button type="button" class="remove-image-btn" id="annRemoveImageBtn">Remove Image</button>
-                    </div>
+                    </div> -->
                 </div>
 
                 <div class="form-actions" style="margin-top: 20px;">
