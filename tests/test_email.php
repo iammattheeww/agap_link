@@ -4,7 +4,7 @@
  * 
  * Run this from your browser at:
  * http://localhost/agap_link/tests/test_email.php
- * 
+ * sdjbsajkdasjda
  * This will test Gmail SMTP connection and email sending
  */
 
