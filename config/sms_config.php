@@ -1,19 +1,14 @@
 <?php
-// ─── PHILSMS API CONFIGURATION ────────────────────────────────────────────────
-// Free tier available at https://philsms.com
-//
-// HOW TO GET YOUR API KEY:
-//   1. Log in at https://dashboard.philsms.com
-//   2. Go to Developers > API Documents
-//   3. Copy the token shown after "Bearer " in the example requests
-//
-// SENDER ID:
-//   "PhilSMS" is the built-in default sender available on ALL PhilSMS accounts.
-//   It works immediately with no registration required.
-//   If you register a custom sender ID in your dashboard (e.g. "AGAPLink"),
-//   update PHILSMS_SENDER_ID below to match it exactly.
-// ─────────────────────────────────────────────────────────────────────────────
+// Ensure ROOT_PATH is defined and Dotenv is loaded if not already
+if (!defined('ROOT_PATH')) {
+    define('ROOT_PATH', dirname(__DIR__));
+}
+require_once ROOT_PATH . '/vendor/autoload.php';
 
-define('PHILSMS_API_KEY',   '1624|ulZCKZqRcxrUEcKSshGZLkTgkF6ArDU3Bosvb3be53970c83');
-define('PHILSMS_API_URL',   'https://dashboard.philsms.com/api/v3/sms/send');
-define('PHILSMS_SENDER_ID', 'PhilSMS');
+$dotenv = Dotenv\Dotenv::createImmutable(ROOT_PATH);
+$dotenv->safeLoad();
+
+// ─── PHILSMS API CONFIGURATION ────────────────────────────────────────────────
+define('PHILSMS_API_KEY',   $_ENV['PHILSMS_API_KEY']);
+define('PHILSMS_API_URL',   $_ENV['PHILSMS_API_URL']);
+define('PHILSMS_SENDER_ID', $_ENV['PHILSMS_SENDER_ID']);

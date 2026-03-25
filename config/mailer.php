@@ -1,44 +1,37 @@
 <?php
-// ─── PHPMAILER CONFIGURATION ───────────────────────────────────────────────
-
-// 1. Define ROOT_PATH FIRST
+// 1. Define ROOT_PATH
 if (!defined('ROOT_PATH')) {
     define('ROOT_PATH', dirname(__DIR__));
 }
 
-// 2. Load Composer Autoloader ONLY
+// 2. Load Composer and Dotenv
 require_once ROOT_PATH . '/vendor/autoload.php';
 
-// 3. Import PHPMailer classes
+// Load .env variables
+$dotenv = Dotenv\Dotenv::createImmutable(ROOT_PATH);
+$dotenv->safeLoad(); // safeLoad won't throw an error if .env is missing
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// 4. Mail Config
-define('MAILER_HOST', 'smtp.gmail.com');
-define('MAILER_USER', 'bhorbhor2014@gmail.com');
-define('MAILER_PASS', 'MatthewJustin');
-define('MAILER_PORT', 587);
-define('MAILER_FROM', 'bhorbhor2014@gmail.com');
-define('MAILER_NAME', 'AGAP Link System');
-
-// 5. Factory function
+// 3. Factory function using $_ENV
 function createMailer(): PHPMailer
 {
-    $mail = new PHPMailer(true); // true = enable exceptions
+    $mail = new PHPMailer(true);
 
     $mail->isSMTP();
-    $mail->Host       = MAILER_HOST;
+    // We pull values from $_ENV instead of hardcoded strings
+    $mail->Host       = $_ENV['MAILER_HOST'];
     $mail->SMTPAuth   = true;
-    $mail->Username   = MAILER_USER;
-    $mail->Password   = MAILER_PASS;
+    $mail->Username   = $_ENV['MAILER_USER'];
+    $mail->Password   = $_ENV['MAILER_PASS'];
     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port       = MAILER_PORT;
+    $mail->Port       = $_ENV['MAILER_PORT'];
 
-    // Debug mode - captures SMTP details
-    $mail->SMTPDebug = 2; // Verbose debug: 0=off, 1=errors, 2=commands+responses
-    $mail->Debugoutput = 'error_log'; // Log to PHP error_log instead of stdout
+    $mail->SMTPDebug = 2;
+    $mail->Debugoutput = 'error_log';
 
-    $mail->setFrom(MAILER_FROM, MAILER_NAME);
+    $mail->setFrom($_ENV['MAILER_FROM'], $_ENV['MAILER_NAME']);
     $mail->isHTML(true);
     $mail->CharSet = 'UTF-8';
 
