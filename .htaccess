@@ -7,4 +7,20 @@
     # Block direct URL access to config and model folders ONLY
     RewriteRule ^(config|model)/ - [F,L]
 
+    # Deny access to .env and other hidden files
+    # This is the "Shield" for your passwords
+    RewriteRule ^\.env$ - [F,L]
+    RewriteRule ^\.gitignore$ - [F,L]
+
+    # Extra Layer: Block any file starting with a dot (.)
+    <FilesMatch "^\.">
+        <IfModule mod_authz_core.c>
+            Require all denied
+        </IfModule>
+        <IfModule !mod_authz_core.c>
+            Order allow,deny
+            Deny from all
+        </IfModule>
+    </FilesMatch>
+
 </IfModule>
