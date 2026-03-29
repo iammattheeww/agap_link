@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.3
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Mar 24, 2026 at 02:33 AM
--- Server version: 11.8.5-MariaDB-log
--- PHP Version: 8.4.14
+-- Host: 127.0.0.1
+-- Generation Time: Mar 29, 2026 at 04:31 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `agaplink_db`
+-- Database: `agap_link`
 --
 
 -- --------------------------------------------------------
@@ -194,8 +194,8 @@ CREATE TABLE `login_tokens` (
 --
 
 INSERT INTO `login_tokens` (`token_id`, `user_id`, `token_code`, `expires_at`, `used`, `created_at`) VALUES
-(12, 11, '390804', '2026-03-24 02:15:32', 1, '2026-03-24 02:10:32'),
-(13, 15, '661471', '2026-03-24 02:35:55', 1, '2026-03-24 02:30:55');
+(13, 15, '661471', '2026-03-24 02:35:55', 1, '2026-03-24 02:30:55'),
+(17, 11, '170297', '2026-03-26 16:09:17', 0, '2026-03-26 16:04:17');
 
 -- --------------------------------------------------------
 
@@ -218,7 +218,7 @@ CREATE TABLE `password_reset_otps` (
 --
 
 INSERT INTO `password_reset_otps` (`otp_id`, `user_id`, `otp_code`, `channel`, `expires_at`, `used`, `created_at`) VALUES
-(11, 11, '656782', 'sms', '2026-03-24 02:14:42', 1, '2026-03-24 02:09:42');
+(16, 11, '462045', 'sms', '2026-03-26 16:03:34', 1, '2026-03-26 15:58:34');
 
 -- --------------------------------------------------------
 
@@ -308,7 +308,7 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`user_id`, `first_name`, `middle_initial`, `last_name`, `email`, `phone_number`, `password_hash`, `created_at`) VALUES
 (5, 'Peter', NULL, 'Parker', 'peterparker@email.com', '09123456789', '$2y$10$7Hrm88DdYzTvhuQtdunfOeOdQMrtpr3ORCTSR86VlXNsl3IM3wXQu', '2026-02-10 03:46:37'),
 (8, 'LEO CERLYN', 'A', 'TACSAGON', 'alvinferrer691@gmail.com', '09087053123', '$2y$10$LF6GU32okdUXO6vQpyQSO.gzSTf3gL5HgDEmT.i1HF1QdiqJL7E1a', '2026-02-20 02:19:04'),
-(11, 'Matthew Justin', NULL, 'Intoy', 's2402438@usls.edu.ph', '09949926492', '$2y$12$RrvDGzFf2dcf6Vmph7UpheGPeCFmS0eV0rl05P3Fj0/byQzhDGnGq', '2026-03-04 10:59:38'),
+(11, 'Matthew Justin', NULL, 'Intoy', 's2402438@usls.edu.ph', '09949926492', '$2y$10$yzv6RcUDdeBrp0eE54R3xeUqfYL6dRz8kQjUD770gCFznSZ5NqnEq', '2026-03-04 10:59:38'),
 (15, 'Miles', NULL, 'Morales', 'bhorbhor2014@gmail.com', '09949926492', '$2y$12$Lb13fasDZ4pAVw5X4zqSvuJD4Ofu6J.c.PCMaVLwwBc5BSOgTAU3S', '2026-03-24 10:30:39');
 
 --
@@ -434,13 +434,13 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `login_tokens`
 --
 ALTER TABLE `login_tokens`
-  MODIFY `token_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `token_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `password_reset_otps`
 --
 ALTER TABLE `password_reset_otps`
-  MODIFY `otp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `otp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT for table `reports`
