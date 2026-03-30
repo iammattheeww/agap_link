@@ -1,0 +1,129 @@
+/* ============================================================
+   EXPORT BUTTON & TOAST  –  add these rules to admin_module.css
+   (paste at the bottom of your existing CSS file)
+   ============================================================ */
+
+
+/* ── Reports Header Layout ───────────────────────────────── */
+.reports-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.reports-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 4px;   /* optical alignment with heading */
+}
+
+
+/* ── Export Button ───────────────────────────────────────── */
+.btn-export {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 20px;
+    background-color: #16a34a;          /* green-600 */
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.18s ease, box-shadow 0.18s ease, transform 0.1s ease;
+    box-shadow: 0 1px 4px rgba(22, 163, 74, 0.25);
+    letter-spacing: 0.01em;
+}
+
+.btn-export svg {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.btn-export:hover {
+    background-color: #15803d;          /* green-700 */
+    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.35);
+}
+
+.btn-export:hover svg {
+    transform: translateY(2px);
+}
+
+.btn-export:active {
+    transform: scale(0.97);
+    box-shadow: none;
+}
+
+/* Disabled / loading state */
+.btn-export:disabled,
+.btn-export.is-loading {
+    opacity: 0.65;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+
+/* ── Export Toast Notification ───────────────────────────── */
+.export-toast {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 220px;
+    max-width: 380px;
+    padding: 13px 20px;
+    background-color: #1f2937;          /* gray-800 */
+    color: #f9fafb;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.20);
+    transition: opacity 0.4s ease;
+    border-left: 4px solid #16a34a;
+}
+
+.export-toast--success {
+    border-left-color: #16a34a;         /* green */
+    background-color: #14532d;
+    color: #bbf7d0;
+}
+
+.export-toast--error {
+    border-left-color: #dc2626;         /* red */
+    background-color: #450a0a;
+    color: #fecaca;
+}
+
+
+/* ── Responsive: stack header on small screens ───────────── */
+@media (max-width: 600px) {
+    .reports-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .reports-header-actions {
+        width: 100%;
+    }
+
+    .btn-export {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .export-toast {
+        left: 16px;
+        right: 16px;
+        bottom: 16px;
+        max-width: none;
+    }
+}

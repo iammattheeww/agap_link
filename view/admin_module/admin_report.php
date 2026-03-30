@@ -42,6 +42,7 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
     <link rel="icon" type="image/x-icon" href="<?= ASSET_URL ?>/favicon_io/favicon.ico">
     <title>Reports Management - AGAP-Link</title>
     <link rel="stylesheet" href="<?= ASSET_URL ?>/css/admin_module/admin_module.css">
+     <link rel="stylesheet" href="<?= ASSET_URL ?>/css/admin_module/admin_reports.css">
 </head>
 
 <body data-base-url="<?= BASE_URL ?>">
@@ -57,6 +58,16 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
                 <div>
                     <h1>Reports Management</h1>
                     <p>Review, manage, and update community reports.</p>
+                </div>
+                <div class="reports-header-actions">
+                    <button type="button" id="exportReportsBtn" class="btn-export">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Export to Excel
+                    </button>
                 </div>
             </div>
 
@@ -131,7 +142,7 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
                     </div>
                 <?php else: ?>
                     <div class="table-wrapper">
-                        <table class="reports-table">
+                        <table class="reports-table" id="reportsTable">
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -147,7 +158,16 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
                             </thead>
                             <tbody>
                                 <?php foreach ($allReports as $report): ?>
-                                    <tr>
+                                    <tr
+                                        data-report-id="<?= htmlspecialchars($report['report_id']) ?>"
+                                        data-category="<?= htmlspecialchars($report['category_name'] ?? 'General') ?>"
+                                        data-description="<?= htmlspecialchars($report['description'] ?? '') ?>"
+                                        data-reporter="<?= htmlspecialchars($report['full_name'] ?? 'N/A') ?>"
+                                        data-status="<?= htmlspecialchars($report['status']) ?>"
+                                        data-verified="<?= !empty($report['is_verified']) ? 'Verified' : 'Pending' ?>"
+                                        data-agency="<?= htmlspecialchars($report['agency_name'] ?? '—') ?>"
+                                        data-date="<?= date('M d, Y', strtotime($report['created_at'])) ?>">
+
                                         <td>#<?= htmlspecialchars($report['report_id']) ?></td>
 
                                         <td>
@@ -335,10 +355,320 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
         </div>
     </div>
 
+    <!-- EXPORT PROGRESS TOAST -->
+    <div id="exportToast" class="export-toast" style="display:none;">
+        <span id="exportToastMsg">Preparing export…</span>
+    </div>
+
     <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">☰</button>
+
+    <!-- SheetJS CDN for Excel export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
     <script src="<?= ASSET_URL ?>/js/admin_module/admin_reports.js"></script>
 
 </body>
+<script>
+    /* ============================================================
+   admin_reports.js  –  AGAP-Link Admin Reports Module
+   Handles: meatball menus, view-details modal, forward modal,
+            status-update form, and Excel export.
+   ============================================================ */
 
+document.addEventListener('DOMContentLoaded', function () {
+
+    // ── MEATBALLS MENU ──────────────────────────────────────────
+    document.querySelectorAll('.meatballs-btn').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            // Close all other open menus first
+            document.querySelectorAll('.meatballs-menu.open').forEach(m => {
+                if (m !== this.nextElementSibling) m.classList.remove('open');
+            });
+            this.nextElementSibling.classList.toggle('open');
+        });
+    });
+
+    // Close meatballs when clicking outside
+    document.addEventListener('click', function () {
+        document.querySelectorAll('.meatballs-menu.open').forEach(m => m.classList.remove('open'));
+    });
+
+
+    // ── VIEW DETAILS MODAL ──────────────────────────────────────
+    const reportModal    = document.getElementById('reportModal');
+    const closeModalBtns = document.querySelectorAll('.close-modal');
+
+    document.querySelectorAll('.view-details-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            document.getElementById('modalTitle').textContent    = 'Report #' + this.dataset.id;
+            document.getElementById('modalCategory').textContent = this.dataset.category  || '—';
+            document.getElementById('modalDescription').textContent = this.dataset.description || '—';
+            document.getElementById('modalReporter').textContent = this.dataset.reporter  || '—';
+            document.getElementById('modalPhone').textContent    = this.dataset.phone     || '—';
+            document.getElementById('modalStatus').textContent   = this.dataset.status    || '—';
+            document.getElementById('modalAgency').textContent   = this.dataset.agency    || '—';
+            document.getElementById('modalDate').textContent     = this.dataset.date      || '—';
+
+            // Photo
+            const photoWrapper = document.getElementById('modalPhotoWrapper');
+            const photoEl      = document.getElementById('modalPhoto');
+            if (this.dataset.photo) {
+                photoEl.src          = this.dataset.photo;
+                photoWrapper.style.display = 'block';
+            } else {
+                photoWrapper.style.display = 'none';
+            }
+
+            // Store reporter info on the SMS button
+            const smsBtn = document.getElementById('messageCitizenBtn');
+            if (smsBtn) {
+                smsBtn.dataset.phone    = this.dataset.phone    || '';
+                smsBtn.dataset.reporter = this.dataset.reporter || '';
+                smsBtn.dataset.id       = this.dataset.id       || '';
+            }
+
+            reportModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+
+            // Close meatball menu
+            document.querySelectorAll('.meatballs-menu.open').forEach(m => m.classList.remove('open'));
+        });
+    });
+
+    // Close modals
+    closeModalBtns.forEach(btn => {
+        btn.addEventListener('click', closeAllModals);
+    });
+
+    window.addEventListener('click', function (e) {
+        if (e.target === reportModal) closeAllModals();
+        const forwardModal = document.getElementById('forwardModal');
+        if (e.target === forwardModal) closeAllModals();
+    });
+
+    function closeAllModals() {
+        const reportModal  = document.getElementById('reportModal');
+        const forwardModal = document.getElementById('forwardModal');
+        if (reportModal)  reportModal.style.display  = 'none';
+        if (forwardModal) forwardModal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    // Cancel button on forward modal
+    const cancelForward = document.getElementById('cancelForwardModal');
+    if (cancelForward) {
+        cancelForward.addEventListener('click', closeAllModals);
+    }
+
+
+    // ── FORWARD TO AGENCY MODAL ─────────────────────────────────
+    window.showForwardModal = function (reportId) {
+        const modal = document.getElementById('forwardModal');
+        document.getElementById('forwardReportId').value = reportId;
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        document.querySelectorAll('.meatballs-menu.open').forEach(m => m.classList.remove('open'));
+    };
+
+
+    // ── SMS BUTTON ──────────────────────────────────────────────
+    const smsBtn = document.getElementById('messageCitizenBtn');
+    if (smsBtn) {
+        smsBtn.addEventListener('click', function () {
+            const phone = this.dataset.phone;
+            if (!phone) {
+                alert('No phone number on record for this reporter.');
+                return;
+            }
+            window.open('sms:' + phone, '_blank');
+        });
+    }
+
+
+    // ── AUTO-DISMISS ALERTS ─────────────────────────────────────
+    document.querySelectorAll('.alert').forEach(alert => {
+        setTimeout(() => {
+            alert.style.transition = 'opacity 0.5s ease';
+            alert.style.opacity    = '0';
+            setTimeout(() => alert.remove(), 500);
+        }, 4000);
+    });
+
+
+    // ── EXPORT TO EXCEL ─────────────────────────────────────────
+    const exportBtn = document.getElementById('exportReportsBtn');
+    if (exportBtn) {
+        exportBtn.addEventListener('click', exportReportsToExcel);
+    }
+
+    function exportReportsToExcel() {
+        // Show toast
+        showExportToast('Preparing export…');
+
+        // Small timeout so the toast renders before heavy work
+        setTimeout(() => {
+            try {
+                const rows = document.querySelectorAll('#reportsTable tbody tr');
+
+                if (!rows.length) {
+                    showExportToast('No reports to export.', true);
+                    return;
+                }
+
+                // ── Build data array from data-* attributes on each <tr> ──
+                // Using data attributes avoids reading HTML entities / badge markup
+                const headers = [
+                    'Report ID',
+                    'Category',
+                    'Description',
+                    'Reporter',
+                    'Status',
+                    'Verified',
+                    'Forwarded To',
+                    'Date Submitted'
+                ];
+
+                const data = [headers];
+
+                rows.forEach(row => {
+                    data.push([
+                        row.dataset.reportId   || '',
+                        row.dataset.category   || '',
+                        row.dataset.description || '',
+                        row.dataset.reporter   || '',
+                        row.dataset.status     || '',
+                        row.dataset.verified   || '',
+                        row.dataset.agency     || '',
+                        row.dataset.date       || ''
+                    ]);
+                });
+
+                // ── Create workbook ──────────────────────────────────────
+                const wb = XLSX.utils.book_new();
+                const ws = XLSX.utils.aoa_to_sheet(data);
+
+                // Column widths (characters)
+                ws['!cols'] = [
+                    { wch: 10 },  // Report ID
+                    { wch: 22 },  // Category
+                    { wch: 55 },  // Description
+                    { wch: 24 },  // Reporter
+                    { wch: 13 },  // Status
+                    { wch: 13 },  // Verified
+                    { wch: 28 },  // Forwarded To
+                    { wch: 16 },  // Date Submitted
+                ];
+
+                // Freeze the header row
+                ws['!freeze'] = { xSplit: 0, ySplit: 1 };
+
+                // Style header row: bold + green background
+                const range = XLSX.utils.decode_range(ws['!ref']);
+                for (let col = range.s.c; col <= range.e.c; col++) {
+                    const cellAddr = XLSX.utils.encode_cell({ r: 0, c: col });
+                    if (!ws[cellAddr]) continue;
+                    ws[cellAddr].s = {
+                        font:      { bold: true, color: { rgb: 'FFFFFF' }, sz: 11 },
+                        fill:      { fgColor: { rgb: '166534' } },  // dark green
+                        alignment: { horizontal: 'center', vertical: 'center', wrapText: false },
+                        border: {
+                            bottom: { style: 'thin', color: { rgb: 'BBBBBB' } }
+                        }
+                    };
+                }
+
+                // Zebra rows: light green on even data rows
+                for (let row = 1; row <= range.e.r; row++) {
+                    for (let col = range.s.c; col <= range.e.c; col++) {
+                        const cellAddr = XLSX.utils.encode_cell({ r: row, c: col });
+                        if (!ws[cellAddr]) {
+                            // Create empty cell so we can style it
+                            ws[cellAddr] = { t: 's', v: '' };
+                        }
+                        ws[cellAddr].s = {
+                            fill:      { fgColor: { rgb: row % 2 === 0 ? 'F0FDF4' : 'FFFFFF' } },
+                            font:      { sz: 10 },
+                            alignment: { vertical: 'center', wrapText: col === 2 }  // wrap Description col
+                        };
+                    }
+                }
+
+                XLSX.utils.book_append_sheet(wb, ws, 'Reports');
+
+                // ── Add a Summary sheet ──────────────────────────────────
+                const totalRows    = rows.length;
+                const statusCounts = {};
+                rows.forEach(row => {
+                    const s = (row.dataset.status || 'Unknown').trim();
+                    statusCounts[s] = (statusCounts[s] || 0) + 1;
+                });
+
+                const summaryData = [
+                    ['AGAP-Link Reports Summary'],
+                    [],
+                    ['Export Date', new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })],
+                    ['Total Reports Exported', totalRows],
+                    [],
+                    ['Status Breakdown', ''],
+                    ['Status', 'Count'],
+                    ...Object.entries(statusCounts).map(([s, c]) => [s, c])
+                ];
+
+                const ws2 = XLSX.utils.aoa_to_sheet(summaryData);
+                ws2['!cols'] = [{ wch: 30 }, { wch: 20 }];
+
+                // Style the title cell
+                if (ws2['A1']) {
+                    ws2['A1'].s = {
+                        font: { bold: true, sz: 14, color: { rgb: '166534' } }
+                    };
+                }
+
+                XLSX.utils.book_append_sheet(wb, ws2, 'Summary');
+
+                // ── Generate filename with date ──────────────────────────
+                const today    = new Date();
+                const dateStr  = today.toISOString().slice(0, 10);  // YYYY-MM-DD
+                const filename = `agaplink_reports_${dateStr}.xlsx`;
+
+                // Write the file (triggers browser download)
+                XLSX.writeFile(wb, filename, { bookType: 'xlsx', type: 'binary', cellStyles: true });
+
+                showExportToast(`✓ Exported ${totalRows} report${totalRows !== 1 ? 's' : ''} successfully!`, false, true);
+
+            } catch (err) {
+                console.error('Export error:', err);
+                showExportToast('Export failed. Please try again.', true);
+            }
+        }, 50);
+    }
+
+    // Toast helper
+    function showExportToast(message, isError = false, isSuccess = false) {
+        const toast   = document.getElementById('exportToast');
+        const msgEl   = document.getElementById('exportToastMsg');
+        if (!toast || !msgEl) return;
+
+        msgEl.textContent     = message;
+        toast.style.display   = 'flex';
+        toast.className       = 'export-toast';
+
+        if (isError)   toast.classList.add('export-toast--error');
+        if (isSuccess) toast.classList.add('export-toast--success');
+
+        // Auto-hide after 3s
+        clearTimeout(toast._hideTimer);
+        toast._hideTimer = setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => {
+                toast.style.display  = 'none';
+                toast.style.opacity  = '';
+                toast.className      = 'export-toast';
+            }, 400);
+        }, 3000);
+    }
+
+}); // end DOMContentLoaded
+</script>
 </html>
