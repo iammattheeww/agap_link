@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 29, 2026 at 04:31 PM
+-- Generation Time: Apr 04, 2026 at 08:24 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -31,15 +31,16 @@ CREATE TABLE `admin_users` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
   `email` varchar(50) NOT NULL,
-  `password` varchar(255) NOT NULL
+  `password` varchar(255) NOT NULL,
+  `last_login` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `admin_users`
 --
 
-INSERT INTO `admin_users` (`id`, `name`, `email`, `password`) VALUES
-(1, 'System Admin', 'admin@agap-link.com', '$2y$10$by9oEeew9Hufd4OF2IkRlOPU9OUTLlwxQqiNVOFKNQdnTV97W3xSq');
+INSERT INTO `admin_users` (`id`, `name`, `email`, `password`, `last_login`) VALUES
+(1, 'System Admin', 'admin@agap-link.com', '$2y$10$by9oEeew9Hufd4OF2IkRlOPU9OUTLlwxQqiNVOFKNQdnTV97W3xSq', NULL);
 
 -- --------------------------------------------------------
 
@@ -195,7 +196,9 @@ CREATE TABLE `login_tokens` (
 
 INSERT INTO `login_tokens` (`token_id`, `user_id`, `token_code`, `expires_at`, `used`, `created_at`) VALUES
 (13, 15, '661471', '2026-03-24 02:35:55', 1, '2026-03-24 02:30:55'),
-(17, 11, '170297', '2026-03-26 16:09:17', 0, '2026-03-26 16:04:17');
+(19, 16, '068888', '2026-03-29 23:36:53', 0, '2026-03-29 23:31:53'),
+(20, 17, '206709', '2026-03-29 23:45:33', 0, '2026-03-29 23:40:33'),
+(21, 11, '907490', '2026-03-29 23:49:32', 1, '2026-03-29 23:44:32');
 
 -- --------------------------------------------------------
 
@@ -218,7 +221,7 @@ CREATE TABLE `password_reset_otps` (
 --
 
 INSERT INTO `password_reset_otps` (`otp_id`, `user_id`, `otp_code`, `channel`, `expires_at`, `used`, `created_at`) VALUES
-(16, 11, '462045', 'sms', '2026-03-26 16:03:34', 1, '2026-03-26 15:58:34');
+(18, 11, '270394', 'sms', '2026-03-29 23:49:00', 1, '2026-03-29 23:44:00');
 
 -- --------------------------------------------------------
 
@@ -298,18 +301,21 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL,
   `phone_number` varchar(20) NOT NULL,
   `password_hash` varchar(255) NOT NULL,
-  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `last_login` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `first_name`, `middle_initial`, `last_name`, `email`, `phone_number`, `password_hash`, `created_at`) VALUES
-(5, 'Peter', NULL, 'Parker', 'peterparker@email.com', '09123456789', '$2y$10$7Hrm88DdYzTvhuQtdunfOeOdQMrtpr3ORCTSR86VlXNsl3IM3wXQu', '2026-02-10 03:46:37'),
-(8, 'LEO CERLYN', 'A', 'TACSAGON', 'alvinferrer691@gmail.com', '09087053123', '$2y$10$LF6GU32okdUXO6vQpyQSO.gzSTf3gL5HgDEmT.i1HF1QdiqJL7E1a', '2026-02-20 02:19:04'),
-(11, 'Matthew Justin', NULL, 'Intoy', 's2402438@usls.edu.ph', '09949926492', '$2y$10$yzv6RcUDdeBrp0eE54R3xeUqfYL6dRz8kQjUD770gCFznSZ5NqnEq', '2026-03-04 10:59:38'),
-(15, 'Miles', NULL, 'Morales', 'bhorbhor2014@gmail.com', '09949926492', '$2y$12$Lb13fasDZ4pAVw5X4zqSvuJD4Ofu6J.c.PCMaVLwwBc5BSOgTAU3S', '2026-03-24 10:30:39');
+INSERT INTO `users` (`user_id`, `first_name`, `middle_initial`, `last_name`, `email`, `phone_number`, `password_hash`, `created_at`, `last_login`) VALUES
+(5, 'Peter', NULL, 'Parker', 'peterparker@email.com', '09123456789', '$2y$10$7Hrm88DdYzTvhuQtdunfOeOdQMrtpr3ORCTSR86VlXNsl3IM3wXQu', '2026-02-10 03:46:37', NULL),
+(8, 'LEO CERLYN', 'A', 'TACSAGON', 'alvinferrer691@gmail.com', '09087053123', '$2y$10$LF6GU32okdUXO6vQpyQSO.gzSTf3gL5HgDEmT.i1HF1QdiqJL7E1a', '2026-02-20 02:19:04', NULL),
+(11, 'Matthew Justin', NULL, 'Intoy', 's2402438@usls.edu.ph', '09949926492', '$2y$10$yzjaoftYKAdS8.kWDWSase0JdJNnb49I/GV5YB5qztEwUNqKimiKC', '2026-03-04 10:59:38', NULL),
+(15, 'Miles', NULL, 'Morales', 'bhorbhor2014@gmail.com', '09949926492', '$2y$12$Lb13fasDZ4pAVw5X4zqSvuJD4Ofu6J.c.PCMaVLwwBc5BSOgTAU3S', '2026-03-24 10:30:39', NULL),
+(16, 'Jayram', NULL, 'Garcia', 'jaryam123@gmail.com', '09207828624', '$2y$10$SaLqtLIeAy/tdGk3HaOEmu4T501Od4m/sfOmNU5dRJs1Ib7M/4i.u', '2026-03-29 23:31:24', NULL),
+(17, 'David', NULL, 'Buala', 'davidbuala@email.com', '09942017579', '$2y$10$20.9ECHwiycO.I2tkhnsfORoVN1L4C85YJ6FtTHwWd4Zajtg6t7dm', '2026-03-29 23:40:24', NULL);
 
 --
 -- Indexes for dumped tables
@@ -434,13 +440,13 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `login_tokens`
 --
 ALTER TABLE `login_tokens`
-  MODIFY `token_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `token_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `password_reset_otps`
 --
 ALTER TABLE `password_reset_otps`
-  MODIFY `otp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `otp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT for table `reports`
@@ -458,7 +464,7 @@ ALTER TABLE `report_logs`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- Constraints for dumped tables
