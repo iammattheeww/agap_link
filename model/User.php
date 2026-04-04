@@ -67,6 +67,65 @@ class User
         return false;
     }
 
+    // NEW METHOD FOR AGENCY LOGIN CHECK
+    public function agency_check_login($email, $password)
+    {
+
+        // SQL QUERY WITH ALIASES
+        // ---------------------------------------------------------------- //
+
+        // $sql = "SELECT au.*, a.name as agency_name 
+        //         FROM agency_users au
+        //         JOIN agencies a ON au.agency_id = a.agency_id
+        //         WHERE au.email = :email AND au.is_active = 1";
+
+        // ---------------------------------------------------------------- //
+
+        // SQL QUERY WITHOUT ALIASES
+        // ---------------------------------------------------------------- //
+
+        $sql = "SELECT agency_users.*, agencies.name as agency_name 
+        FROM agency_users
+        JOIN agencies ON agency_users.agency_id = agencies.agency_id
+        WHERE agency_users.email = :email AND agency_users.is_active = 1";
+
+        // ---------------------------------------------------------------- //
+
+        $q = $this->conn->prepare($sql);
+        $q->execute(['email' => $email]);
+        $agency_user = $q->fetch(PDO::FETCH_ASSOC);
+
+        if ($agency_user && password_verify($password, $agency_user['password_hash'])) {
+            return $agency_user;
+        }
+
+        return false;
+    }
+
+    // TIMESTAMP FOR WHEN THE AGENCY LAST LOGGED IN
+    public function update_agency_last_login($agency_user_id)
+    {
+        $sql = "UPDATE agency_users SET last_login = NOW() WHERE agency_user_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([$agency_user_id]);
+    }
+
+    // TIMESTAMP FOR WHEN THE ADMIN LAST LOGGED IN
+    public function update_admin_last_login($admin_id)
+    {
+        $sql = "UPDATE admin_users SET last_login = NOW() WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([$admin_id]);
+    }
+
+    // TIMESTAMP FOR WHEN THE USER LAST LOGGED IN
+    public function update_user_last_login($user_id)
+    {
+        $sql = "UPDATE users SET last_login = NOW() WHERE user_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([$user_id]);
+    }
+
     public function get_user_id($email)
     {
         $sql = "SELECT id FROM users WHERE email = :email";

@@ -6,200 +6,282 @@ require_once MODEL_PATH . 'OtpModel.php';
 $action = $_POST['action'] ?? ($_GET['action'] ?? '');
 
 switch ($action) {
-    case 'register':
-        register_user();
-        break;
+  case 'register':
+    register_user();
+    break;
 
-    case 'login':
-        login_user();
-        break;
+  case 'login':
+    login_user();
+    break;
 
-    default:
-        $_SESSION['error'] = 'Invalid action!';
-        header('Location: ' . BASE_URL . '/view/auth/index.php');
-        exit();
+  default:
+    $_SESSION['error'] = 'Invalid action!';
+    header('Location: ' . BASE_URL . '/view/auth/index.php');
+    exit();
 }
 
 function store_old_register_input(): void
 {
-    $_SESSION['old'] = [
-        'first_name'     => $_POST['first_name']    ?? '',
-        'middle_initial' => $_POST['middle_initial'] ?? '',
-        'last_name'      => $_POST['last_name']      ?? '',
-        'email'          => $_POST['email']          ?? '',
-        'phone'          => $_POST['phone']          ?? '',
-    ];
+  $_SESSION['old'] = [
+    'first_name'     => $_POST['first_name']    ?? '',
+    'middle_initial' => $_POST['middle_initial'] ?? '',
+    'last_name'      => $_POST['last_name']      ?? '',
+    'email'          => $_POST['email']          ?? '',
+    'phone'          => $_POST['phone']          ?? '',
+  ];
 }
 
 function register_user(): void
 {
-    $user = new User();
+  $user = new User();
 
-    $first_name     = trim($_POST['first_name']    ?? '');
-    $middle_initial = isset($_POST['middle_initial']) && trim($_POST['middle_initial']) !== ''
-        ? strtoupper(trim($_POST['middle_initial']))
-        : null;
-    $last_name      = trim($_POST['last_name']     ?? '');
-    $email          = trim($_POST['email']         ?? '');
-    $phone          = trim($_POST['phone']         ?? '');
-    $password       = $_POST['password']           ?? '';
-    $confirm_password = $_POST['confirm_password'] ?? '';
+  $first_name     = trim($_POST['first_name']    ?? '');
+  $middle_initial = isset($_POST['middle_initial']) && trim($_POST['middle_initial']) !== ''
+    ? strtoupper(trim($_POST['middle_initial']))
+    : null;
+  $last_name      = trim($_POST['last_name']     ?? '');
+  $email          = trim($_POST['email']         ?? '');
+  $phone          = trim($_POST['phone']         ?? '');
+  $password       = $_POST['password']           ?? '';
+  $confirm_password = $_POST['confirm_password'] ?? '';
 
-    if (empty($first_name) || empty($last_name) || empty($email) || empty($phone)) {
-        $_SESSION['error'] = 'Please fill in all required fields!';
-        $_SESSION['active_tab'] = 'register';
-        store_old_register_input();
-        header('Location: ' . BASE_URL . '/view/auth/index.php');
-        exit();
+  if (empty($first_name) || empty($last_name) || empty($email) || empty($phone)) {
+    $_SESSION['error'] = 'Please fill in all required fields!';
+    $_SESSION['active_tab'] = 'register';
+    store_old_register_input();
+    header('Location: ' . BASE_URL . '/view/auth/index.php');
+    exit();
+  }
+
+  if ($middle_initial !== null && strlen($middle_initial) > 5) {
+    $_SESSION['error'] = 'Middle initial should be 1 character only!';
+    $_SESSION['active_tab'] = 'register';
+    store_old_register_input();
+    header('Location: ' . BASE_URL . '/view/auth/index.php');
+    exit();
+  }
+
+  if ($user->email_exists($email)) {
+    $_SESSION['error'] = 'This email is already registered!';
+    $_SESSION['active_tab'] = 'register';
+    store_old_register_input();
+    header('Location: ' . BASE_URL . '/view/auth/index.php');
+    exit();
+  }
+
+  if (strlen($password) < 8) {
+    $_SESSION['error'] = 'Password must be at least 8 characters long!';
+    $_SESSION['active_tab'] = 'register';
+    store_old_register_input();
+    header('Location: ' . BASE_URL . '/view/auth/index.php');
+    exit();
+  }
+
+  if ($password !== $confirm_password) {
+    $_SESSION['error'] = 'Passwords do not match!';
+    $_SESSION['active_tab'] = 'register';
+    store_old_register_input();
+    header('Location: ' . BASE_URL . '/view/auth/index.php');
+    exit();
+  }
+
+  $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+  try {
+    $result = $user->new_user($first_name, $middle_initial, $last_name, $email, $phone, $hashed_password);
+
+    if ($result) {
+      // Send welcome email — failure must NOT block registration
+      try {
+        require_once CONFIG_PATH . 'mailer.php';
+        $mail = createMailer();
+        $mail->addAddress($email, trim($first_name . ' ' . $last_name));
+        $mail->Subject = 'Welcome to AGAP-Link — Your Community Reporting Platform';
+        $mail->Body    = _build_welcome_email($first_name);
+        $mail->AltBody = "Welcome to AGAP-Link, $first_name! Your account is ready. Log in at localhost/agap_link.";
+        $mail->send();
+      } catch (Exception $mailEx) {
+        error_log('[auth_process] Welcome email failed for ' . $email . ': ' . $mailEx->getMessage());
+      }
+
+      $_SESSION['success'] = 'Account created successfully. Please log in.';
+      $_SESSION['active_tab'] = 'login';
+      header('Location: ' . BASE_URL . '/view/auth/index.php');
+      exit();
     }
-
-    if ($middle_initial !== null && strlen($middle_initial) > 5) {
-        $_SESSION['error'] = 'Middle initial should be 1 character only!';
-        $_SESSION['active_tab'] = 'register';
-        store_old_register_input();
-        header('Location: ' . BASE_URL . '/view/auth/index.php');
-        exit();
-    }
-
-    if ($user->email_exists($email)) {
-        $_SESSION['error'] = 'This email is already registered!';
-        $_SESSION['active_tab'] = 'register';
-        store_old_register_input();
-        header('Location: ' . BASE_URL . '/view/auth/index.php');
-        exit();
-    }
-
-    if (strlen($password) < 8) {
-        $_SESSION['error'] = 'Password must be at least 8 characters long!';
-        $_SESSION['active_tab'] = 'register';
-        store_old_register_input();
-        header('Location: ' . BASE_URL . '/view/auth/index.php');
-        exit();
-    }
-
-    if ($password !== $confirm_password) {
-        $_SESSION['error'] = 'Passwords do not match!';
-        $_SESSION['active_tab'] = 'register';
-        store_old_register_input();
-        header('Location: ' . BASE_URL . '/view/auth/index.php');
-        exit();
-    }
-
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-    try {
-        $result = $user->new_user($first_name, $middle_initial, $last_name, $email, $phone, $hashed_password);
-
-        if ($result) {
-            // Send welcome email — failure must NOT block registration
-            try {
-                require_once CONFIG_PATH . 'mailer.php';
-                $mail = createMailer();
-                $mail->addAddress($email, trim($first_name . ' ' . $last_name));
-                $mail->Subject = 'Welcome to AGAP-Link — Your Community Reporting Platform';
-                $mail->Body    = _build_welcome_email($first_name);
-                $mail->AltBody = "Welcome to AGAP-Link, $first_name! Your account is ready. Log in at localhost/agap_link.";
-                $mail->send();
-            } catch (Exception $mailEx) {
-                error_log('[auth_process] Welcome email failed for ' . $email . ': ' . $mailEx->getMessage());
-            }
-
-            $_SESSION['success'] = 'Account created successfully. Please log in.';
-            $_SESSION['active_tab'] = 'login';
-            header('Location: ' . BASE_URL . '/view/auth/index.php');
-            exit();
-        }
-    } catch (Exception $e) {
-        $_SESSION['error'] = 'Registration failed: ' . $e->getMessage();
-        $_SESSION['active_tab'] = 'register';
-        store_old_register_input();
-        header('Location: ' . BASE_URL . '/view/auth/index.php');
-        exit();
-    }
+  } catch (Exception $e) {
+    $_SESSION['error'] = 'Registration failed: ' . $e->getMessage();
+    $_SESSION['active_tab'] = 'register';
+    store_old_register_input();
+    header('Location: ' . BASE_URL . '/view/auth/index.php');
+    exit();
+  }
 }
 
 function login_user(): void
 {
-    $user     = new User();
-    $otpModel = new OtpModel();
+  // $user     = new User();
+  // $otpModel = new OtpModel();
 
-    $email    = trim($_POST['email']    ?? '');
-    $password = trim($_POST['password'] ?? '');
+  // $email    = trim($_POST['email']    ?? '');
+  // $password = trim($_POST['password'] ?? '');
 
-    if (empty($email) || empty($password)) {
-        $_SESSION['error'] = 'Please fill in all fields!';
-        header('Location: ' . BASE_URL . '/view/auth/index.php');
-        exit();
-    }
+  // if (empty($email) || empty($password)) {
+  //     $_SESSION['error'] = 'Please fill in all fields!';
+  //     header('Location: ' . BASE_URL . '/view/auth/index.php');
+  //     exit();
+  // }
 
-    // Admin login — no MFA
-    $admin_data = $user->admin_check_login($email, $password);
-    if ($admin_data) {
-        $_SESSION['admin_logged_in'] = true;
-        $_SESSION['admin_id']        = $admin_data['id'];
-        $_SESSION['admin_email']     = $admin_data['email'];
-        $_SESSION['admin_name']      = $admin_data['name'];
-        header('Location: ' . BASE_URL . '/view/admin_module/admin_dashboard.php');
-        exit();
-    }
+  // // Admin login — no MFA
+  // $admin_data = $user->admin_check_login($email, $password);
+  // if ($admin_data) {
+  //     $_SESSION['admin_logged_in'] = true;
+  //     $_SESSION['admin_id']        = $admin_data['id'];
+  //     $_SESSION['admin_email']     = $admin_data['email'];
+  //     $_SESSION['admin_name']      = $admin_data['name'];
+  //     header('Location: ' . BASE_URL . '/view/admin_module/admin_dashboard.php');
+  //     exit();
+  // }
 
-    // Regular user login — SMS MFA
-    $user_data = $user->check_login($email, $password);
+  // // Regular user login — SMS MFA
+  // $user_data = $user->check_login($email, $password);
 
-    if ($user_data) {
-        $userId = (int) $user_data['user_id'];
-        $phone  = $user_data['phone_number'] ?? '';
+  // if ($user_data) {
+  //     $userId = (int) $user_data['user_id'];
+  //     $phone  = $user_data['phone_number'] ?? '';
 
-        $tokenCode = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+  //     $tokenCode = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
-        $otpModel->deleteTokensByUser($userId);
-        $otpModel->insertToken($userId, $tokenCode);
+  //     $otpModel->deleteTokensByUser($userId);
+  //     $otpModel->insertToken($userId, $tokenCode);
 
-        $smsMessage = "AGAP-Link: Your login code is: " . $tokenCode;
+  //     $smsMessage = "AGAP-Link: Your login code is: " . $tokenCode;
 
-        if (!empty($phone)) {
-            try {
-                require_once MODEL_PATH . 'SmsNotifier.php';
-                SmsNotifier::sendRawSMS($phone, $smsMessage);
-            } catch (Exception $e) {
-                error_log('[auth_process] Login token SMS failed: ' . $e->getMessage());
-            }
-        }
+  //     if (!empty($phone)) {
+  //         try {
+  //             require_once MODEL_PATH . 'SmsNotifier.php';
+  //             SmsNotifier::sendRawSMS($phone, $smsMessage);
+  //         } catch (Exception $e) {
+  //             error_log('[auth_process] Login token SMS failed: ' . $e->getMessage());
+  //         }
+  //     }
 
-        $_SESSION['pending_login_user_id']      = $userId;
-        $_SESSION['pending_login_role']         = 'user';
-        $_SESSION['pending_login_masked_phone'] = _mask_phone($phone);
+  //     $_SESSION['pending_login_user_id']      = $userId;
+  //     $_SESSION['pending_login_role']         = 'user';
+  //     $_SESSION['pending_login_masked_phone'] = _mask_phone($phone);
 
-        header('Location: ' . BASE_URL . '/view/auth/verify_login.php');
-        exit();
-    }
+  //     header('Location: ' . BASE_URL . '/view/auth/verify_login.php');
+  //     exit();
+  // }
 
-    $_SESSION['error'] = 'Invalid email or password!';
-    $_SESSION['active_tab'] = 'login';
+  // $_SESSION['error'] = 'Invalid email or password!';
+  // $_SESSION['active_tab'] = 'login';
+  // header('Location: ' . BASE_URL . '/view/auth/index.php');
+  // exit();
+
+  $user     = new User();
+  $otpModel = new OtpModel();
+
+  $email    = trim($_POST['email']    ?? '');
+  $password = trim($_POST['password'] ?? '');
+
+  if (empty($email) || empty($password)) {
+    $_SESSION['error'] = 'Please fill in all fields!';
     header('Location: ' . BASE_URL . '/view/auth/index.php');
     exit();
+  }
+
+  // Admin login — no MFA
+  $admin_data = $user->admin_check_login($email, $password);
+  if ($admin_data) {
+    $_SESSION['admin_logged_in'] = true;
+    $_SESSION['admin_id']        = $admin_data['id'];
+    $_SESSION['admin_email']     = $admin_data['email'];
+    $_SESSION['admin_name']      = $admin_data['name'];
+
+    // UPDATE THE LAST LOGIN TIMESTAMP FOR ADMIN USERS
+    $user->update_admin_last_login($admin_data['id']);
+
+    header('Location: ' . BASE_URL . '/view/admin_module/admin_dashboard.php');
+    exit();
+  }
+
+  // Agency user login — no MFA (based on your current implementation)
+  $agency_data = $user->agency_check_login($email, $password);
+  if ($agency_data) {
+    $_SESSION['agency_logged_in'] = true;
+    $_SESSION['agency_user_id']   = $agency_data['agency_user_id'];
+    $_SESSION['agency_id']        = $agency_data['agency_id'];
+    $_SESSION['agency_name']      = $agency_data['agency_name'];
+    $_SESSION['agency_full_name'] = $agency_data['full_name'];
+
+    // UPDATE THE LAST LOGIN TIMESTAMP FOR AGENCY USERS
+    $user->update_agency_last_login($agency_data['agency_user_id']);    
+
+    header('Location: ' . BASE_URL . '/view/lgu_module/agency_dashboard.php');
+    exit();
+  }
+
+  // Regular user login — SMS MFA
+  $user_data = $user->check_login($email, $password);
+
+  if ($user_data) {
+    $userId = (int) $user_data['user_id'];
+    $phone  = $user_data['phone_number'] ?? '';
+
+    $tokenCode = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+
+    $otpModel->deleteTokensByUser($userId);
+    $otpModel->insertToken($userId, $tokenCode);
+
+    $smsMessage = "AGAP-Link: Your login code is: " . $tokenCode;
+
+    if (!empty($phone)) {
+      try {
+        require_once MODEL_PATH . 'SmsNotifier.php';
+        SmsNotifier::sendRawSMS($phone, $smsMessage);
+      } catch (Exception $e) {
+        error_log('[auth_process] Login token SMS failed: ' . $e->getMessage());
+      }
+    }
+
+    // UPDATE THE LAST LOGIN TIMESTAMP FOR REGULAR USERS OR RESIDENTS
+    $user->update_user_last_login($userId);
+
+    $_SESSION['pending_login_user_id']      = $userId;
+    $_SESSION['pending_login_role']         = 'user';
+    $_SESSION['pending_login_masked_phone'] = _mask_phone($phone);
+
+    header('Location: ' . BASE_URL . '/view/auth/verify_login.php');
+    exit();
+  }
+
+  $_SESSION['error'] = 'Invalid email or password!';
+  $_SESSION['active_tab'] = 'login';
+  header('Location: ' . BASE_URL . '/view/auth/index.php');
+  exit();
 }
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 
 function _mask_phone(string $phone): string
 {
-    $digits = preg_replace('/\D/', '', $phone);
-    if (strlen($digits) <= 6) {
-        return $phone;
-    }
-    $first = substr($digits, 0, 3);
-    $last  = substr($digits, -3);
-    $stars = str_repeat('*', strlen($digits) - 6);
-    return $first . $stars . $last;
+  $digits = preg_replace('/\D/', '', $phone);
+  if (strlen($digits) <= 6) {
+    return $phone;
+  }
+  $first = substr($digits, 0, 3);
+  $last  = substr($digits, -3);
+  $stars = str_repeat('*', strlen($digits) - 6);
+  return $first . $stars . $last;
 }
 
 function _build_welcome_email(string $firstName): string
 {
-    $year         = date('Y');
-    $dashboardUrl = BASE_URL . '/view/user_module/user_dashboard.php';
-    
-    return <<<HTML
+  $year         = date('Y');
+  $dashboardUrl = BASE_URL . '/view/user_module/user_dashboard.php';
+
+  return <<<HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
