@@ -177,7 +177,8 @@ unset($_SESSION['old']);
         <div class="tabs">
           <button class="tab-btn active" id="loginTab" onclick="showTab('login')">Log In</button>
           <button class="tab-btn" id="registerTab" onclick="showTab('register')">Sign Up</button>
-          <button class="tab-btn" id="agencyTab" onclick="showTab('agency')">Agency</button>
+          <!-- <button class="tab-btn" id="adminTab" onclick="showTab('admin')">Admin</button> -->
+          <!-- <button class="tab-btn" id="agencyTab" onclick="showTab('agency')">Agency</button> -->
         </div>
 
         <!-- LOGIN FORM -->
