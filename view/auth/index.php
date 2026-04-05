@@ -264,20 +264,7 @@ unset($_SESSION['old']);
         </form>
 
         <!-- AGENCY FORM -->
-        <form method="POST" action="<?= BASE_URL ?>/controller/agency_login.php" id="agency" class="tab-content">
-          <label>Username</label>
-          <input type="text" name="username" placeholder="agency_username" required autocomplete="username">
-
-          <label>Password</label>
-          <div class="password-wrapper">
-            <input type="password" name="password" placeholder="••••••••" id="agencyPassword" required autocomplete="current-password">
-            <span class="toggle-password" onclick="togglePassword('agencyPassword', this)">
-              <i class="fa-solid fa-eye"></i>
-            </span>
-          </div>
-
-          <button type="submit">Agency Sign In</button>
-        </form>
+        <!-- REMOVED ALREADY -->
 
       </div>
     </div>
