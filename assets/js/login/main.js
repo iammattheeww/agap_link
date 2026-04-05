@@ -1,7 +1,7 @@
 // ── Tab Switching ──────────────────────────────────────
 const loginTab    = document.getElementById("loginTab");
 const registerTab = document.getElementById("registerTab");
-const agencyTab   = document.getElementById("agencyTab");
+// const agencyTab   = document.getElementById("agencyTab");
 const container   = document.getElementById("authContainer");
 
 function showTab(tabId) {
@@ -22,7 +22,7 @@ function showTab(tabId) {
 
 if (loginTab)    loginTab.addEventListener("click",    () => showTab("login"));
 if (registerTab) registerTab.addEventListener("click", () => showTab("register"));
-if (agencyTab)   agencyTab.addEventListener("click",   () => showTab("agency"));
+// if (agencyTab)   agencyTab.addEventListener("click",   () => showTab("agency"));
 
 // ── Middle Initial — uppercase & 1 char ────────────────
 const miInput = document.querySelector('input[name="middle_initial"]');
