@@ -41,7 +41,7 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="<?= ASSET_URL ?>/favicon_io/favicon.ico">
     <title><?= htmlspecialchars($agency_name) ?> - AGAP-Link Agency Dashboard</title>
-    <link rel="stylesheet" href="<?= ASSET_URL ?>/css/admin_module/admin_module.css">
+    <link rel="stylesheet" href="<?= ASSET_URL ?>/css/agency_module/agency_module.css">
 </head>
 
 <body data-base-url="<?= BASE_URL ?>">
