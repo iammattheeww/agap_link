@@ -105,7 +105,7 @@ unset($_SESSION['old']);
         <div class="step-dot" id="dot3"></div>
       </div>
 
-      <!-- Step 1 -->
+      <!-- STEP 1 -->
       <div class="forgot-step active" id="forgotStep1">
         <h3 class="forgot-title">Reset Your Password</h3>
         <p class="forgot-subtitle">Enter the email address linked to your account. We'll help you get back in.</p>
@@ -114,22 +114,26 @@ unset($_SESSION['old']);
         <button class="forgot-btn" id="forgotStep1Btn">Continue</button>
       </div>
 
-      <!-- Step 2 -->
+      <!-- STEP 2 -->
       <div class="forgot-step" id="forgotStep2">
         <h3 class="forgot-title">Send Verification Code</h3>
         <p class="forgot-subtitle">Choose how you want to receive your one-time password (OTP).</p>
         <div class="forgot-error" id="forgotStep2Error" style="display:none;"></div>
+
+        <!-- VIA SMS OPTION -->
         <button class="channel-btn" id="btnSendSms">
           <strong>📱 Send via SMS</strong>
           <span id="maskedPhoneDisplay">to your registered phone</span>
         </button>
+
+        <!-- VIA EMAIL OPTION -->
         <button class="channel-btn" id="btnSendEmail">
           <strong>📧 Send via Email</strong>
           <span id="maskedEmailDisplay">to your registered email</span>
         </button>
       </div>
 
-      <!-- Step 3 -->
+      <!-- STEP 3 -->
       <div class="forgot-step" id="forgotStep3">
         <h3 class="forgot-title">Enter OTP &amp; New Password</h3>
         <p class="forgot-subtitle">Enter the 6-digit code you received and your new password.</p>
@@ -146,7 +150,7 @@ unset($_SESSION['old']);
     </div>
   </div>
 
-  <!-- TOASTS -->
+  <!-- LOGIN/REGISTER TOASTS (NOT FOR FORGOT PASSWORD MODAL) -->
   <?php if ($error): ?>
     <div class="toast toast-error show"><?= htmlspecialchars($error) ?></div>
   <?php endif; ?>
