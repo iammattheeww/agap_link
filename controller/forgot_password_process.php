@@ -6,8 +6,8 @@ require_once MODEL_PATH . 'OtpModel.php';
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
-    exit();
+  echo json_encode(['success' => false, 'message' => 'Invalid request method.']);
+  exit();
 }
 
 $action   = $_GET['action'] ?? '';
@@ -16,170 +16,178 @@ $otpModel = new OtpModel();
 
 switch ($action) {
 
-    case 'find_user':
-        $email = trim($_POST['email'] ?? '');
+  case 'find_user':
+    $email = trim($_POST['email'] ?? '');
 
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            echo json_encode(['success' => false, 'message' => 'Please enter a valid email address.']);
-            exit();
-        }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      echo json_encode(['success' => false, 'message' => 'Please enter a valid email address.']);
+      exit();
+    }
 
-        $userData = $user->getUserByEmail($email);
-        if (!$userData) {
-            echo json_encode(['success' => false, 'message' => 'No account found with that email.']);
-            exit();
-        }
+    // CALL FUNCTION getUserByEmail() to CHECK IF THE EMAIL EXISTS IN THE DATABASE
+    $userData = $user->getUserByEmail($email);
+    if (!$userData) {
+      echo json_encode(['success' => false, 'message' => 'No account found with that email.']);
+      exit();
+    }
 
-        $maskedPhone = _mask_phone_fp($userData['phone_number'] ?? '');
-        $maskedEmail = _mask_email($email);
+    $maskedPhone = _mask_phone_fp($userData['phone_number'] ?? ''); // MASKED PHONE NUMBER VARIABLE
+    $maskedEmail = _mask_email($email); // MASKED MAIL VARIABLE
+
+    // RETURN SUCCESS RESPONSE WITH MASKED CONTACT INFO
+    echo json_encode([
+      'success'      => true,
+      'email'        => $email,
+      'masked_phone' => $maskedPhone,
+      'masked_email' => $maskedEmail,
+    ]);
+    break;
+
+  case 'send_otp':
+    $email   = trim($_POST['email']   ?? ''); // EMAIL VARIABLE
+    $channel = trim($_POST['channel'] ?? ''); // CHANNEL VARIABLE (SMS OR EMAIL)
+
+    // BASIC VALIDATION
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !in_array($channel, ['sms', 'email'], true)) {
+      echo json_encode(['success' => false, 'message' => 'Invalid request parameters.']);
+      exit();
+    }
+
+    // CALL FUNCTION getUserByEmail() to CHECK IF THE EMAIL EXISTS IN THE DATABASE
+    $userData = $user->getUserByEmail($email);
+    if (!$userData) {
+      echo json_encode(['success' => false, 'message' => 'No account found with that email.']);
+      exit();
+    }
+
+    $userId    = (int) $userData['user_id']; // USER ID VARIABLE
+    $firstName = $userData['first_name']; // FIRST NAME VARIABLE
+    $phone     = $userData['phone_number'] ?? ''; // PHONE NUMBER VARIABLE (MAY BE NULL)
+
+    $otpCode = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT); // GENERATE 6-DIGIT OTP CODE
+
+    $otpModel->deleteOtpsByUser($userId); // DELETE EXISTING OTPs FOR THIS USER
+    $otpModel->insertOtp($userId, $otpCode, $channel); // INSERT NEW OTP INTO DATABASE
+
+    // SEND OTP VIA SELECTED CHANNEL
+    if ($channel === 'sms') { // IF CHANNEL IS SMS, SEND OTP VIA SMS
+      if (empty($phone)) {
+        echo json_encode(['success' => false, 'message' => 'No phone number on record. Please try email instead.']);
+        exit();
+      }
+      $smsMessage = "AGAP-Link: Your password reset code is: " . $otpCode;
+
+      try {
+        require_once MODEL_PATH . 'SmsNotifier.php';
+        SmsNotifier::sendRawSMS($phone, $smsMessage);
+      } catch (Exception $e) {
+        error_log('[forgot_password_process] SMS OTP failed: ' . $e->getMessage());
+        echo json_encode(['success' => false, 'message' => 'Failed to send SMS. Please try email instead.']);
+        exit();
+      }
+    } else { // IF CHANNEL IS EMAIL, SEND OTP VIA EMAIL
+      try {
+        require_once CONFIG_PATH . 'mailer.php';
+        $mail = createMailer();
+        $mail->addAddress($email, $firstName);
+        $mail->Subject = 'AGAP-Link — Your Password Reset OTP';
+        $mail->Body    = _build_otp_email($firstName, $otpCode);
+        $mail->AltBody = "Your AGAP-Link password reset OTP is: $otpCode\nThis code expires in 5 minutes.";
+        $mail->send();
+
+        error_log('[forgot_password_process] Email OTP sent successfully to ' . $email);
+      } catch (Exception $e) {
+        $errorMsg = $e->getMessage();
+        error_log('[forgot_password_process] Email OTP failed: ' . $errorMsg);
+        error_log('[forgot_password_process] Full exception: ' . get_class($e) . ' - ' . $e->getTraceAsString());
 
         echo json_encode([
-            'success'      => true,
-            'email'        => $email,
-            'masked_phone' => $maskedPhone,
-            'masked_email' => $maskedEmail,
+          'success' => false,
+          'message' => 'Failed to send email. Please try SMS instead.',
+          'debug' => $errorMsg // Remove in production
         ]);
-        break;
+        exit();
+      }
+    }
 
-    case 'send_otp':
-        $email   = trim($_POST['email']   ?? '');
-        $channel = trim($_POST['channel'] ?? '');
+    echo json_encode(['success' => true]);
+    break;
 
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL) || !in_array($channel, ['sms', 'email'], true)) {
-            echo json_encode(['success' => false, 'message' => 'Invalid request parameters.']);
-            exit();
-        }
+  // HANDLE PASSWORD RESET SUBMISSION
+  case 'reset_password':
+    $email           = trim($_POST['email']            ?? ''); // EMAIL VARIABLE
+    $otpCode         = trim($_POST['otp_code']         ?? ''); // OTP CODE VARIABLE
+    $newPassword     = $_POST['new_password']          ?? ''; // NEW PASSWORD VARIABLE
+    $confirmPassword = $_POST['confirm_password']      ?? ''; // CONFIRM PASSWORD VARIABLE
 
-        $userData = $user->getUserByEmail($email);
-        if (!$userData) {
-            echo json_encode(['success' => false, 'message' => 'No account found with that email.']);
-            exit();
-        }
+    if (empty($email) || empty($otpCode) || empty($newPassword) || empty($confirmPassword)) {
+      echo json_encode(['success' => false, 'message' => 'All fields are required.']);
+      exit();
+    }
 
-        $userId    = (int) $userData['user_id'];
-        $firstName = $userData['first_name'];
-        $phone     = $userData['phone_number'] ?? '';
+    if ($newPassword !== $confirmPassword) {
+      echo json_encode(['success' => false, 'message' => 'Passwords do not match.']);
+      exit();
+    }
 
-        $otpCode = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
+    if (strlen($newPassword) < 8) {
+      echo json_encode(['success' => false, 'message' => 'Password must be at least 8 characters long.']);
+      exit();
+    }
 
-        $otpModel->deleteOtpsByUser($userId);
-        $otpModel->insertOtp($userId, $otpCode, $channel);
+    $userData = $user->getUserByEmail($email);
+    if (!$userData) {
+      echo json_encode(['success' => false, 'message' => 'Account not found.']);
+      exit();
+    }
 
-        if ($channel === 'sms') {
-            if (empty($phone)) {
-                echo json_encode(['success' => false, 'message' => 'No phone number on record. Please try email instead.']);
-                exit();
-            }
-            $smsMessage = "AGAP-Link: Your password reset code is: " . $otpCode;
+    $userId = (int) $userData['user_id'];
 
-            try {
-                require_once MODEL_PATH . 'SmsNotifier.php';
-                SmsNotifier::sendRawSMS($phone, $smsMessage);
-            } catch (Exception $e) {
-                error_log('[forgot_password_process] SMS OTP failed: ' . $e->getMessage());
-                echo json_encode(['success' => false, 'message' => 'Failed to send SMS. Please try email instead.']);
-                exit();
-            }
-        } else {
-            try {
-                require_once CONFIG_PATH . 'mailer.php';
-                $mail = createMailer();
-                $mail->addAddress($email, $firstName);
-                $mail->Subject = 'AGAP-Link — Your Password Reset OTP';
-                $mail->Body    = _build_otp_email($firstName, $otpCode);
-                $mail->AltBody = "Your AGAP-Link password reset OTP is: $otpCode\nThis code expires in 5 minutes.";
-                $mail->send();
-                
-                error_log('[forgot_password_process] Email OTP sent successfully to ' . $email);
-            } catch (Exception $e) {
-                $errorMsg = $e->getMessage();
-                error_log('[forgot_password_process] Email OTP failed: ' . $errorMsg);
-                error_log('[forgot_password_process] Full exception: ' . get_class($e) . ' - ' . $e->getTraceAsString());
-                
-                echo json_encode([
-                    'success' => false, 
-                    'message' => 'Failed to send email. Please try SMS instead.',
-                    'debug' => $errorMsg // Remove in production
-                ]);
-                exit();
-            }
-        }
+    $otpRow = $otpModel->findValidOtp($userId, $otpCode);
+    if (!$otpRow) {
+      echo json_encode(['success' => false, 'message' => 'Invalid or expired OTP. Please request a new one.']);
+      exit();
+    }
 
-        echo json_encode(['success' => true]);
-        break;
+    $hashed = password_hash($newPassword, PASSWORD_DEFAULT);
+    $user->update_password($userId, $hashed);
+    $otpModel->markOtpUsed((int) $otpRow['otp_id']);
 
-    case 'reset_password':
-        $email           = trim($_POST['email']            ?? '');
-        $otpCode         = trim($_POST['otp_code']         ?? '');
-        $newPassword     = $_POST['new_password']          ?? '';
-        $confirmPassword = $_POST['confirm_password']      ?? '';
+    echo json_encode(['success' => true, 'message' => 'Password reset successfully. You may now log in.']);
+    break;
 
-        if (empty($email) || empty($otpCode) || empty($newPassword) || empty($confirmPassword)) {
-            echo json_encode(['success' => false, 'message' => 'All fields are required.']);
-            exit();
-        }
-
-        if ($newPassword !== $confirmPassword) {
-            echo json_encode(['success' => false, 'message' => 'Passwords do not match.']);
-            exit();
-        }
-
-        if (strlen($newPassword) < 8) {
-            echo json_encode(['success' => false, 'message' => 'Password must be at least 8 characters long.']);
-            exit();
-        }
-
-        $userData = $user->getUserByEmail($email);
-        if (!$userData) {
-            echo json_encode(['success' => false, 'message' => 'Account not found.']);
-            exit();
-        }
-
-        $userId = (int) $userData['user_id'];
-
-        $otpRow = $otpModel->findValidOtp($userId, $otpCode);
-        if (!$otpRow) {
-            echo json_encode(['success' => false, 'message' => 'Invalid or expired OTP. Please request a new one.']);
-            exit();
-        }
-
-        $hashed = password_hash($newPassword, PASSWORD_DEFAULT);
-        $user->update_password($userId, $hashed);
-        $otpModel->markOtpUsed((int) $otpRow['otp_id']);
-
-        echo json_encode(['success' => true, 'message' => 'Password reset successfully. You may now log in.']);
-        break;
-
-    default:
-        echo json_encode(['success' => false, 'message' => 'Unknown action.']);
-        break;
+  default:
+    echo json_encode(['success' => false, 'message' => 'Unknown action.']);
+    break;
 }
 
 // ── HELPERS ───────────────────────────────────────────────────────────────────
 
 function _mask_phone_fp(string $phone): string
 {
-    $digits = preg_replace('/\D/', '', $phone);
-    if (strlen($digits) <= 5) {
-        return $phone;
-    }
-    $first = substr($digits, 0, 2);
-    $last  = substr($digits, -3);
-    $stars = str_repeat('*', strlen($digits) - 5);
-    return $first . $stars . $last;
+  $digits = preg_replace('/\D/', '', $phone);
+  if (strlen($digits) <= 5) {
+    return $phone;
+  }
+  $first = substr($digits, 0, 2);
+  $last  = substr($digits, -3);
+  $stars = str_repeat('*', strlen($digits) - 5);
+  return $first . $stars . $last;
 }
 
 function _mask_email(string $email): string
 {
-    [$local, $domain] = explode('@', $email, 2);
-    $show = max(1, (int) ceil(strlen($local) * 0.3));
-    return substr($local, 0, $show) . str_repeat('*', strlen($local) - $show) . '@' . $domain;
+  [$local, $domain] = explode('@', $email, 2);
+  $show = max(1, (int) ceil(strlen($local) * 0.3));
+  return substr($local, 0, $show) . str_repeat('*', strlen($local) - $show) . '@' . $domain;
 }
 
+
+// BUILD OTP EMAIL TEMPLATE (AMO NI NGAA MAY STYLE AND EMAIL NATON)
 function _build_otp_email(string $firstName, string $otpCode): string
 {
-    $year = date('Y');
-    return <<<HTML
+  $year = date('Y');
+  return <<<HTML
 <!DOCTYPE html>
 <html lang="en">
 <head>
