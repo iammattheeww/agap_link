@@ -25,8 +25,12 @@ function createMailer(): PHPMailer
     $mail->SMTPAuth   = true;
     $mail->Username   = $_ENV['MAILER_USER'];
     $mail->Password   = $_ENV['MAILER_PASS'];
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->SMTPSecure = 'ssl';
     $mail->Port       = $_ENV['MAILER_PORT'];
+
+    // OR
+    // $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+    // $mail->Port       = $_ENV['MAILER_PORT'];
 
     $mail->SMTPDebug = 2;
     $mail->Debugoutput = 'error_log';
