@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 04, 2026 at 08:24 AM
+-- Generation Time: Apr 19, 2026 at 06:45 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -40,7 +40,7 @@ CREATE TABLE `admin_users` (
 --
 
 INSERT INTO `admin_users` (`id`, `name`, `email`, `password`, `last_login`) VALUES
-(1, 'System Admin', 'admin@agap-link.com', '$2y$10$by9oEeew9Hufd4OF2IkRlOPU9OUTLlwxQqiNVOFKNQdnTV97W3xSq', NULL);
+(1, 'System Admin', 'admin@agap-link.com', '$2y$10$by9oEeew9Hufd4OF2IkRlOPU9OUTLlwxQqiNVOFKNQdnTV97W3xSq', '2026-04-19 02:35:44');
 
 -- --------------------------------------------------------
 
@@ -109,7 +109,7 @@ INSERT INTO `agency_users` (`agency_user_id`, `agency_id`, `username`, `email`, 
 (2, 21, 'cenro', 'cenro@agap-link.gov.ph', '$2y$10$BsHHR4ivyPS6RSJl.3lF4OrggqR0HlQ6q0tjrQtg8kPXLs2ixTQaO', 'CENRO Coordinator', '+639123456789', 1, '2026-03-04 00:10:53', NULL),
 (3, 23, 'baciwa', 'baciwa@agap-link.gov.ph', '$2y$10$BsHHR4ivyPS6RSJl.3lF4OrggqR0HlQ6q0tjrQtg8kPXLs2ixTQaO', 'BACIWA Coordinator', '+639123456789', 1, '2026-03-04 00:10:53', NULL),
 (4, 25, 'pnp', 'pnp@agap-link.gov.ph', '$2y$10$BsHHR4ivyPS6RSJl.3lF4OrggqR0HlQ6q0tjrQtg8kPXLs2ixTQaO', 'Bacolod City Police Office (BCPO) Coordinator', '+639123456789', 1, '2026-03-03 23:46:31', NULL),
-(5, 26, 'bfp', 'bfp@agap-link.gov.ph', '$2y$10$BsHHR4ivyPS6RSJl.3lF4OrggqR0HlQ6q0tjrQtg8kPXLs2ixTQaO', 'Bureau of Fire Protection - Bacolod Coordinator', '+639123456789', 1, '2026-03-03 23:46:31', '2026-03-04 14:56:43'),
+(5, 26, 'bfp', 'bfp@agap-link.gov.ph', '$2y$10$BsHHR4ivyPS6RSJl.3lF4OrggqR0HlQ6q0tjrQtg8kPXLs2ixTQaO', 'Bureau of Fire Protection - Bacolod Coordinator', '+639123456789', 1, '2026-03-03 23:46:31', '2026-04-19 02:31:18'),
 (6, 27, 'cenro_env', 'cenro.env@agap-link.gov.ph', '$2y$10$jdqAAYQQ399iNWxnmcopfedzDhqhYFjzFgxqjhQFseZnCJLcxFYpa', 'CENRO Environment Coordinator', '+639123456789', 1, '2026-03-04 00:10:53', NULL),
 (7, 28, 'denr', 'denr@agap-link.gov.ph', '$2y$10$jdqAAYQQ399iNWxnmcopfedzDhqhYFjzFgxqjhQFseZnCJLcxFYpa', 'DENR Region VI Coordinator', '+639123456789', 1, '2026-03-04 00:10:53', NULL),
 (8, 29, 'negrospower', 'negrospower@agap-link.gov.ph', '$2y$10$jdqAAYQQ399iNWxnmcopfedzDhqhYFjzFgxqjhQFseZnCJLcxFYpa', 'Negros Power Coordinator', '+639123456789', 1, '2026-03-04 00:10:53', NULL),
@@ -198,7 +198,8 @@ INSERT INTO `login_tokens` (`token_id`, `user_id`, `token_code`, `expires_at`, `
 (13, 15, '661471', '2026-03-24 02:35:55', 1, '2026-03-24 02:30:55'),
 (19, 16, '068888', '2026-03-29 23:36:53', 0, '2026-03-29 23:31:53'),
 (20, 17, '206709', '2026-03-29 23:45:33', 0, '2026-03-29 23:40:33'),
-(21, 11, '907490', '2026-03-29 23:49:32', 1, '2026-03-29 23:44:32');
+(23, 5, '847288', '2026-04-19 02:34:06', 0, '2026-04-19 02:29:06'),
+(25, 11, '846157', '2026-04-19 02:41:17', 1, '2026-04-19 02:36:17');
 
 -- --------------------------------------------------------
 
@@ -221,7 +222,7 @@ CREATE TABLE `password_reset_otps` (
 --
 
 INSERT INTO `password_reset_otps` (`otp_id`, `user_id`, `otp_code`, `channel`, `expires_at`, `used`, `created_at`) VALUES
-(18, 11, '270394', 'sms', '2026-03-29 23:49:00', 1, '2026-03-29 23:44:00');
+(22, 11, '414715', 'email', '2026-04-19 12:12:44', 0, '2026-04-19 12:07:44');
 
 -- --------------------------------------------------------
 
@@ -310,9 +311,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `first_name`, `middle_initial`, `last_name`, `email`, `phone_number`, `password_hash`, `created_at`, `last_login`) VALUES
-(5, 'Peter', NULL, 'Parker', 'peterparker@email.com', '09123456789', '$2y$10$7Hrm88DdYzTvhuQtdunfOeOdQMrtpr3ORCTSR86VlXNsl3IM3wXQu', '2026-02-10 03:46:37', NULL),
+(5, 'Peter', NULL, 'Parker', 'peterparker@email.com', '09123456789', '$2y$10$7Hrm88DdYzTvhuQtdunfOeOdQMrtpr3ORCTSR86VlXNsl3IM3wXQu', '2026-02-10 03:46:37', '2026-04-19 02:29:11'),
 (8, 'LEO CERLYN', 'A', 'TACSAGON', 'alvinferrer691@gmail.com', '09087053123', '$2y$10$LF6GU32okdUXO6vQpyQSO.gzSTf3gL5HgDEmT.i1HF1QdiqJL7E1a', '2026-02-20 02:19:04', NULL),
-(11, 'Matthew Justin', NULL, 'Intoy', 's2402438@usls.edu.ph', '09949926492', '$2y$10$yzjaoftYKAdS8.kWDWSase0JdJNnb49I/GV5YB5qztEwUNqKimiKC', '2026-03-04 10:59:38', NULL),
+(11, 'Matthew Justin', NULL, 'Intoy', 's2402438@usls.edu.ph', '09949926492', '$2y$10$yzjaoftYKAdS8.kWDWSase0JdJNnb49I/GV5YB5qztEwUNqKimiKC', '2026-03-04 10:59:38', '2026-04-19 02:36:20'),
 (15, 'Miles', NULL, 'Morales', 'bhorbhor2014@gmail.com', '09949926492', '$2y$12$Lb13fasDZ4pAVw5X4zqSvuJD4Ofu6J.c.PCMaVLwwBc5BSOgTAU3S', '2026-03-24 10:30:39', NULL),
 (16, 'Jayram', NULL, 'Garcia', 'jaryam123@gmail.com', '09207828624', '$2y$10$SaLqtLIeAy/tdGk3HaOEmu4T501Od4m/sfOmNU5dRJs1Ib7M/4i.u', '2026-03-29 23:31:24', NULL),
 (17, 'David', NULL, 'Buala', 'davidbuala@email.com', '09942017579', '$2y$10$20.9ECHwiycO.I2tkhnsfORoVN1L4C85YJ6FtTHwWd4Zajtg6t7dm', '2026-03-29 23:40:24', NULL);
@@ -440,13 +441,13 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `login_tokens`
 --
 ALTER TABLE `login_tokens`
-  MODIFY `token_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `token_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `password_reset_otps`
 --
 ALTER TABLE `password_reset_otps`
-  MODIFY `otp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `otp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `reports`
