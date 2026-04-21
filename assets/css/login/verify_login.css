@@ -120,12 +120,12 @@
 }
 
 .resend-form button {
-  background: #f3f4f6;
+  background: #f9fafb;
   /* background: #ff6b35; */
-  border: 1px solid #e5e7eb;
+  border: 1px solid #ffc9a3;
   color: #ff6b35;
   /* color: #f3f4f6; */
-  text-decoration: none;      /* Remove underline */
+  text-decoration: none; /* Remove underline */
   cursor: pointer;
   font-size: 0.9rem;
   font-weight: 600;
@@ -136,9 +136,9 @@
 }
 
 .resend-form button:hover {
-  background: #ff6b35;
-  border-color: #ff6b35;
-  color: #f3f4f6; 
+  background: #ffc9a3;
+  color: #ffffff;
+  text-decoration: underline;
 }
 
 .verify-back {
