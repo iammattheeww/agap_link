@@ -1,24 +1,26 @@
 // FORM VALIDATION
-document.getElementById("profileForm").addEventListener("submit", function (e) {
-  const firstName = document.getElementById("first_name").value.trim();
-  const lastName = document.getElementById("last_name").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const phoneNumber = document.getElementById("phone_number").value.trim();
+document
+  .getElementById("profileInfoForm")
+  .addEventListener("submit", function (e) {
+    const firstName = document.getElementById("first_name").value.trim();
+    const lastName = document.getElementById("last_name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phoneNumber = document.getElementById("phone_number").value.trim();
 
-  if (!firstName || !lastName || !email || !phoneNumber) {
-    e.preventDefault();
-    alert("Please fill in all required fields.");
-    return false;
-  }
+    if (!firstName || !lastName || !email || !phoneNumber) {
+      e.preventDefault();
+      alert("Please fill in all required fields.");
+      return false;
+    }
 
-  // Validate phone number format
-  const phonePattern = /^09[0-9]{9}$/;
-  if (!phonePattern.test(phoneNumber)) {
-    e.preventDefault();
-    alert("Please enter a valid Philippine mobile number (09XXXXXXXXX)");
-    return false;
-  }
-});
+    // Validate phone number format
+    const phonePattern = /^09[0-9]{9}$/;
+    if (!phonePattern.test(phoneNumber)) {
+      e.preventDefault();
+      alert("Please enter a valid Philippine mobile number (09XXXXXXXXX)");
+      return false;
+    }
+  });
 
 // // PASSWORD FORM VALIDATION
 // document
@@ -76,10 +78,17 @@ function closeDeleteModal() {
 document
   .getElementById("delete_confirmation")
   .addEventListener("input", function () {
+    // THIS DEBUGGER IS TO SEE THE DEBUG MESSAGES ONLY
+    console.log("[DEBUG] delete_confirmation value: " + this.value);
+    console.log("[DEBUG] length: " + this.value.length);
+    console.log('[DEBUG] equals "DELETE"? ' + (this.value === "DELETE"));
+
     const deleteBtn = document.getElementById("confirmDeleteBtn");
     if (this.value === "DELETE") {
+      console.log("[DEBUG] Button should be ENABLED");
       deleteBtn.disabled = false;
     } else {
+      console.log("[DEBUG] Button should be DISABLED");
       deleteBtn.disabled = true;
     }
   });
