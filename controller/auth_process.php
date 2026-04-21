@@ -216,7 +216,7 @@ function login_user(): void
     $_SESSION['agency_full_name'] = $agency_data['full_name'];
 
     // UPDATE THE LAST LOGIN TIMESTAMP FOR AGENCY USERS
-    $user->update_agency_last_login($agency_data['agency_user_id']);    
+    $user->update_agency_last_login($agency_data['agency_user_id']);
 
     header('Location: ' . BASE_URL . '/view/lgu_module/agency_dashboard.php');
     exit();
@@ -236,13 +236,29 @@ function login_user(): void
 
     $smsMessage = "AGAP-Link: Your login code is: " . $tokenCode;
 
-    if (!empty($phone)) {
-      try {
-        require_once MODEL_PATH . 'SmsNotifier.php';
-        SmsNotifier::sendRawSMS($phone, $smsMessage);
-      } catch (Exception $e) {
-        error_log('[auth_process] Login token SMS failed: ' . $e->getMessage());
+    // if (!empty($phone)) {
+    //   try {
+    //     require_once MODEL_PATH . 'SmsNotifier.php';
+    //     SmsNotifier::sendRawSMS($phone, $smsMessage);
+    //   } catch (Exception $e) {
+    //     error_log('[auth_process] Login token SMS failed: ' . $e->getMessage());
+    //   }
+    // }
+
+    try {
+      require_once CONFIG_PATH . 'mailer.php';
+      $mail = createMailer();
+      $userEmail = $user_data['email'] ?? '';
+      if (!empty($userEmail)) {
+        $mail->addAddress($userEmail, trim($user_data['first_name'] . ' ' . $user_data['last_name']));
+        $mail->Subject = 'Your AGAP-Link Login Verification Code';
+        // $mail->Body = _build_login_verification_email($userData['first_name'], $tokenCode);
+        $mail->Body = _build_login_verification_email($user_data['first_name'], $tokenCode);
+        $mail->AltBody = "Your AGAP-Link login verification code is: " . $tokenCode . ". This code expires in 5 minutes.";
+        $mail->send();
       }
+    } catch (Exception $e) {
+      error_log('[auth_process] Login verification email failed: ' . $e->getMessage());
     }
 
     // UPDATE THE LAST LOGIN TIMESTAMP FOR REGULAR USERS OR RESIDENTS
@@ -262,7 +278,7 @@ function login_user(): void
   exit();
 }
 
-// ── HELPERS ───────────────────────────────────────────────────────────────────
+// ── HELPER FUNCTIONS ───────────────────────────────────────────────────────────────────
 
 function _mask_phone(string $phone): string
 {
@@ -276,10 +292,16 @@ function _mask_phone(string $phone): string
   return $first . $stars . $last;
 }
 
+// BUILD WELCOME EMAIL TEMPLATE (HTML AND INLINE CSS ONLY)
 function _build_welcome_email(string $firstName): string
 {
   $year         = date('Y');
   $dashboardUrl = BASE_URL . '/view/user_module/user_dashboard.php';
+
+  // DEBUGGING OUTPUT TO VERIFY BASE_URL AND DASHBOARD URL VALUES — IN LAYMAN'S TERM, THIS IS TO CHECK IF BASE_URL IS CORRECTLY SET AND IF THE DASHBOARD URL IS BEING CONSTRUCTED PROPERLY. THIS CAN HELP IDENTIFY ISSUES WITH URL FORMATION IN THE EMAIL TEMPLATE.
+  error_log('[DEBUG] BASE_URL value: ' . var_export(BASE_URL, true));
+  error_log('[DEBUG] $dashboardUrl: ' . $dashboardUrl);
+  error_log('[DEBUG] HTTP_HOST: ' . $_SERVER['HTTP_HOST']);
 
   return <<<HTML
 <!DOCTYPE html>
@@ -475,6 +497,79 @@ function _build_welcome_email(string $firstName): string
           <td style="padding:36px 36px 40px;text-align:center;">
             <p style="margin:0 0 6px;color:#9ca3af;font-size:0.82rem;">This email was sent because you registered an account on AGAP-Link.</p>
             <p style="margin:0;color:#9ca3af;font-size:0.82rem;">&copy; {$year} AGAP-Link. All rights reserved.</p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>
+HTML;
+}
+
+// BUILD LOGIN VERIFICATION EMAIL TEMPLATE (HTML AND INLINE CSS ONLY)
+function _build_login_verification_email(string $firstName, string $tokenCode): string
+{
+  return <<<HTML
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Verification - AGAP-Link</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f4f6f9;font-family:'Segoe UI',Arial,sans-serif;color:#333;">
+
+<table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f6f9;padding:40px 16px;">
+  <tr>
+    <td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:14px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.09);">
+
+        <!-- HEADER -->
+        <tr>
+          <td style="background:linear-gradient(135deg,#FF6B35 0%,#e85520 100%);padding:44px 36px 36px;text-align:center;">
+            <h1 style="margin:0 0 6px;color:#ffffff;font-size:2rem;font-weight:800;letter-spacing:1.5px;line-height:1.2;">AGAP-Link</h1>
+            <p style="margin:0;color:rgba(255,255,255,0.85);font-size:0.95rem;font-weight:400;">Secure Login Verification</p>
+          </td>
+        </tr>
+
+        <!-- CONTENT -->
+        <tr>
+          <td style="padding:40px 36px;">
+            <h2 style="margin:0 0 14px;color:#1a2332;font-size:1.4rem;font-weight:700;">Hi {$firstName}! 🔐</h2>
+            <p style="margin:0 0 20px;color:#4b5563;line-height:1.75;font-size:0.97rem;">
+              We received a login request for your AGAP-Link account. Use the verification code below to complete your login.
+            </p>
+
+            <!-- OTP CODE BOX -->
+            <table width="100%" cellpadding="0" cellspacing="0" style="background:#fff3f0;border:2px solid #FF6B35;border-radius:10px;margin:28px 0;">
+              <tr>
+                <td style="padding:28px;text-align:center;">
+                  <p style="margin:0 0 12px;color:#666;font-size:0.9rem;text-transform:uppercase;letter-spacing:2px;">Your Verification Code</p>
+                  <p style="margin:0;color:#FF6B35;font-size:3rem;font-weight:800;letter-spacing:8px;font-family:monospace;">{$tokenCode}</p>
+                  <p style="margin:10px 0 0;color:#999;font-size:0.85rem;">This code expires in <strong>5 minutes</strong></p>
+                </td>
+              </tr>
+            </table>
+
+            <p style="margin:20px 0;color:#4b5563;line-height:1.75;font-size:0.95rem;">
+              <strong>⏱️ Valid for 5 minutes only:</strong> If you don't complete your login within 5 minutes, the code will expire and you'll need to request a new one.
+            </p>
+
+            <p style="margin:20px 0;color:#4b5563;line-height:1.75;font-size:0.95rem;">
+              <strong>🔒 Didn't request this?</strong> If you didn't attempt to log in, ignore this email or change your password immediately.
+            </p>
+          </td>
+        </tr>
+
+        <!-- FOOTER -->
+        <tr>
+          <td style="padding:28px 36px 40px;border-top:1px solid #eee;text-align:center;">
+            <p style="margin:0 0 8px;color:#999;font-size:0.8rem;">This is an automated message from AGAP-Link Security.</p>
+            <p style="margin:0;color:#999;font-size:0.8rem;">&copy; 2026 AGAP-Link. All rights reserved.</p>
           </td>
         </tr>
 
