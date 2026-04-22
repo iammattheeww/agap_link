@@ -1,5 +1,6 @@
 <?php
 require_once dirname(__DIR__) . '/config/init.php';
+require_once MODEL_PATH . 'RegistrationVerification.php';
 require_once MODEL_PATH . 'User.php';
 require_once MODEL_PATH . 'OtpModel.php';
 
@@ -20,6 +21,7 @@ switch ($action) {
     exit();
 }
 
+// THIS FUNCTION IS TO STORE THE USER'S INPUT FROM THE REGISTRATION FORM IN THE SESSION, SO THAT IF THERE'S AN ERROR DURING REGISTRATION (LIKE MISSING FIELDS OR PASSWORD MISMATCH), WE CAN PRE-FILL THE FORM WITH THE DATA THEY ALREADY ENTERED. THIS IMPROVES USER EXPERIENCE BY NOT FORCING THEM TO RE-ENTER ALL THEIR INFORMATION AFTER A VALIDATION ERROR.
 function store_old_register_input(): void
 {
   $_SESSION['old'] = [
@@ -31,9 +33,99 @@ function store_old_register_input(): void
   ];
 }
 
+// function register_user(): void
+// {
+//   // CALLING THE USER MODEL TO HANDLE THE REGISTRATION LOGIC, INCLUDING CHECKING FOR EXISTING EMAILS AND CREATING NEW USER RECORDS IN THE DATABASE.
+//   $user = new User();
+
+//   $first_name     = trim($_POST['first_name']    ?? '');
+//   $middle_initial = isset($_POST['middle_initial']) && trim($_POST['middle_initial']) !== ''
+//     ? strtoupper(trim($_POST['middle_initial']))
+//     : null;
+//   $last_name      = trim($_POST['last_name']     ?? '');
+//   $email          = trim($_POST['email']         ?? '');
+//   $phone          = trim($_POST['phone']         ?? '');
+//   $password       = $_POST['password']           ?? '';
+//   $confirm_password = $_POST['confirm_password'] ?? '';
+
+//   if (empty($first_name) || empty($last_name) || empty($email) || empty($phone)) {
+//     $_SESSION['error'] = 'Please fill in all required fields!';
+//     $_SESSION['active_tab'] = 'register';
+//     store_old_register_input();
+//     header('Location: ' . BASE_URL . '/view/auth/index.php');
+//     exit();
+//   }
+
+//   if ($middle_initial !== null && strlen($middle_initial) > 5) {
+//     $_SESSION['error'] = 'Middle initial should be 1 character only!';
+//     $_SESSION['active_tab'] = 'register';
+//     store_old_register_input();
+//     header('Location: ' . BASE_URL . '/view/auth/index.php');
+//     exit();
+//   }
+
+//   if ($user->email_exists($email)) {
+//     $_SESSION['error'] = 'This email is already registered!';
+//     $_SESSION['active_tab'] = 'register';
+//     store_old_register_input();
+//     header('Location: ' . BASE_URL . '/view/auth/index.php');
+//     exit();
+//   }
+
+//   if (strlen($password) < 8) {
+//     $_SESSION['error'] = 'Password must be at least 8 characters long!';
+//     $_SESSION['active_tab'] = 'register';
+//     store_old_register_input();
+//     header('Location: ' . BASE_URL . '/view/auth/index.php');
+//     exit();
+//   }
+
+//   if ($password !== $confirm_password) {
+//     $_SESSION['error'] = 'Passwords do not match!';
+//     $_SESSION['active_tab'] = 'register';
+//     store_old_register_input();
+//     header('Location: ' . BASE_URL . '/view/auth/index.php');
+//     exit();
+//   }
+
+//   $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+//   try {
+//     $result = $user->new_user($first_name, $middle_initial, $last_name, $email, $phone, $hashed_password);
+
+//     if ($result) {
+//       // Send welcome email — failure must NOT block registration
+//       try {
+//         require_once CONFIG_PATH . 'mailer.php';
+//         $mail = createMailer();
+//         $mail->addAddress($email, trim($first_name . ' ' . $last_name));
+//         $mail->Subject = 'Welcome to AGAP-Link — Your Community Reporting Platform';
+//         $mail->Body    = _build_welcome_email($first_name);
+//         $mail->AltBody = "Welcome to AGAP-Link, $first_name! Your account is ready. Log in at localhost/agap_link.";
+//         $mail->send();
+//       } catch (Exception $mailEx) {
+//         error_log('[auth_process] Welcome email failed for ' . $email . ': ' . $mailEx->getMessage());
+//       }
+
+//       $_SESSION['success'] = 'Account created successfully. Please log in.';
+//       $_SESSION['active_tab'] = 'login';
+//       header('Location: ' . BASE_URL . '/view/auth/index.php');
+//       exit();
+//     }
+//   } catch (Exception $e) {
+//     $_SESSION['error'] = 'Registration failed: ' . $e->getMessage();
+//     $_SESSION['active_tab'] = 'register';
+//     store_old_register_input();
+//     header('Location: ' . BASE_URL . '/view/auth/index.php');
+//     exit();
+//   }
+// }
+
+
 function register_user(): void
 {
   $user = new User();
+  $regVerify = new RegistrationVerification();
 
   $first_name     = trim($_POST['first_name']    ?? '');
   $middle_initial = isset($_POST['middle_initial']) && trim($_POST['middle_initial']) !== ''
@@ -61,8 +153,9 @@ function register_user(): void
     exit();
   }
 
-  if ($user->email_exists($email)) {
-    $_SESSION['error'] = 'This email is already registered!';
+  // CHECKS IF EMAIL ALREADY EXISTS IN BOTH USERS TABLE AND PENDING VERIFICATIONS
+  if ($user->email_exists($email) || $regVerify->hasPendingVerification($email)) {
+    $_SESSION['error'] = 'This email is already registered or pending verification!';
     $_SESSION['active_tab'] = 'register';
     store_old_register_input();
     header('Location: ' . BASE_URL . '/view/auth/index.php');
@@ -85,30 +178,43 @@ function register_user(): void
     exit();
   }
 
+  // GENERATE OTP & STORE TEMPORARY DATA IN registration_verifications TABLE in .sql FILE.
   $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+  $otpCode = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
   try {
-    $result = $user->new_user($first_name, $middle_initial, $last_name, $email, $phone, $hashed_password);
+    // STORE EVERYTHING IN registration_verifications TABLE
+    $result = $regVerify->createVerification(
+      $first_name,
+      $middle_initial,
+      $last_name,
+      $email,
+      $phone,
+      $hashed_password,
+      $otpCode
+    );
 
-    if ($result) {
-      // Send welcome email — failure must NOT block registration
-      try {
-        require_once CONFIG_PATH . 'mailer.php';
-        $mail = createMailer();
-        $mail->addAddress($email, trim($first_name . ' ' . $last_name));
-        $mail->Subject = 'Welcome to AGAP-Link — Your Community Reporting Platform';
-        $mail->Body    = _build_welcome_email($first_name);
-        $mail->AltBody = "Welcome to AGAP-Link, $first_name! Your account is ready. Log in at localhost/agap_link.";
-        $mail->send();
-      } catch (Exception $mailEx) {
-        error_log('[auth_process] Welcome email failed for ' . $email . ': ' . $mailEx->getMessage());
-      }
-
-      $_SESSION['success'] = 'Account created successfully. Please log in.';
-      $_SESSION['active_tab'] = 'login';
-      header('Location: ' . BASE_URL . '/view/auth/index.php');
-      exit();
+    if (!$result) {
+      throw new Exception('Failed to create verification record');
     }
+
+    // SEND OTP VIA SMS — FAILURE MUST NOT BLOCK REGISTRATION. THIS IS TO ENSURE THAT EVEN IF THE SMS SERVICE FACES ISSUES, THE USER CAN STILL COMPLETE REGISTRATION USING THE OTP CODE SENT TO THEIR EMAIL. THIS DESIGN CHOICE PRIORITIZES USER EXPERIENCE AND ACCOUNT CREATION SUCCESS WHILE STILL ATTEMPTING TO PROVIDE THE CONVENIENCE OF SMS VERIFICATION.
+    try {
+      require_once MODEL_PATH . 'SmsNotifier.php';
+      $smsMessage = "AGAP-Link: Your registration code is: " . $otpCode . ". Code expires in 5 minutes.";
+      SmsNotifier::sendRawSMS($phone, $smsMessage);
+    } catch (Exception $smsEx) {
+      error_log('[auth_process] Registration OTP SMS failed: ' . $smsEx->getMessage());
+      throw new Exception('Failed to send SMS. Please try again.');
+    }
+
+    // STORE IN SESSION FOR VERIFICATION PAGE — THIS IS TO PASS THE USER'S EMAIL AND MASKED PHONE NUMBER TO THE VERIFICATION PAGE, SO THAT THE PAGE CAN DISPLAY THIS INFORMATION TO THE USER (E.G., "
+    $_SESSION['pending_registration_email'] = $email;
+    $_SESSION['pending_registration_phone'] = _mask_phone($phone);
+
+    header('Location: ' . BASE_URL . '/view/auth/verify_registration.php');
+    exit();
+
   } catch (Exception $e) {
     $_SESSION['error'] = 'Registration failed: ' . $e->getMessage();
     $_SESSION['active_tab'] = 'register';
