@@ -55,49 +55,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // FILE UPLOAD PREVIEW
-  const fileUploadArea = document.getElementById("fileUploadArea");
-  const fileInput = document.getElementById("photo");
-  const previewContainer = document.getElementById("previewContainer");
-  const previewImage = document.getElementById("previewImage");
-  const removeBtn = document.getElementById("removeImageBtn");
-
-  if (fileUploadArea && fileInput) {
-    fileUploadArea.addEventListener("click", function (e) {
-      // FIXED DOUBLE FILE DIALOG BY PREVENTING CLICK BUBBLING FROM INPUT/PREVIEW/REMOVE ELEMENTS AND ADDING GUARDS, WITH STRUCTURAL FIX OF MOVING INPUT OUTSIDE THE CONTAINER AS PRIMARY SOLUTION.
-      if (
-        e.target === fileInput ||
-        e.target === previewImage ||
-        e.target === removeBtn
-      )
-        return;
-
-      fileInput.click();
-    });
-  }
-
-  if (fileInput) {
-    fileInput.addEventListener("change", function () {
-      const file = this.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        if (previewImage) previewImage.src = e.target.result;
-        if (previewContainer) previewContainer.style.display = "block";
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-
-  if (removeBtn) {
-    removeBtn.addEventListener("click", function (e) {
-      // FIXED STOPPROPAGATION TO PREVENT REMOVE CLICK FROM BUBBLING AND REOPENING THE FILE DIALOG.
-      e.stopPropagation();
-      if (fileInput) fileInput.value = "";
-      if (previewContainer) previewContainer.style.display = "none";
-      if (previewImage) previewImage.src = "";
-    });
-  }
 
   // INITIALIZE LEAFLET MAP WHEN MODAL OPENS
   if (openBtn) {

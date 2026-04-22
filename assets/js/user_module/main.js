@@ -63,6 +63,18 @@ document.addEventListener("DOMContentLoaded", function () {
   if (openBtn && reportModal) {
     openBtn.addEventListener("click", function () {
       reportModal.classList.add("active");
+
+      // INIT UPLOAD HANDLER AFTER MODAL IS VISIBLE IN DOM
+      if (typeof initUploadHandler === "function") {
+        initUploadHandler();
+      }
+
+      // INIT MAP AFTER MODAL IS VISIBLE
+      setTimeout(() => {
+        if (typeof initReportMap === "function") {
+          initReportMap();
+        }
+      }, 150);
     });
   }
 

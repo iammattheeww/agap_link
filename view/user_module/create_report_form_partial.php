@@ -44,27 +44,33 @@ $userName = $_SESSION['user_name'] ?? 'User';
         <div class="form-group">
             <label class="form-label">Photo Evidence <span class="form-label-optional">(Optional)</span></label>
 
-            <div class="file-upload-area" id="fileUploadArea">
+            <!-- THE FIX: label wraps the upload area and is linked to the input -->
+            <!-- Clicking anywhere on the label triggers the file input natively -->
+            <input type="file" name="photo" id="photo"
+                style="display:none;"
+                accept="image/png, image/jpeg, image/jpg">
 
-                <!-- IMAGE PLACEHOLDER -->
+            <label for="photo" class="file-upload-area" id="fileUploadArea">
+
+                <!-- PLACEHOLDER -->
                 <div class="upload-placeholder" id="uploadPlaceholder">
                     <div class="upload-icon">📷</div>
                     <div class="upload-text">Click to upload or drag and drop</div>
                     <div class="upload-hint">PNG, JPG, JPEG up to 5MB</div>
                 </div>
 
-                <!-- PREVIEW INSIDE UPLOAD BOX -->
+                <!-- PREVIEW -->
                 <div class="preview-container" id="previewContainer">
                     <img src="" alt="Preview" class="preview-image" id="previewImage">
-                    <button type="button" class="remove-image-btn" id="removeImageBtn">
-                        Remove Photo
-                    </button>
                 </div>
 
-            </div>
-            <input type="file" name="photo" id="photo"
-                class="file-input-hidden"
-                accept="image/png, image/jpeg, image/jpg">
+            </label>
+
+            <!-- REMOVE BUTTON OUTSIDE THE LABEL SO IT DOESN'T TRIGGER FILE DIALOG -->
+            <button type="button" class="remove-image-btn" id="removeImageBtn" style="display:none;">
+                ✕ Remove Photo
+            </button>
+
         </div>
 
         <div class="form-group">
@@ -99,3 +105,6 @@ $userName = $_SESSION['user_name'] ?? 'User';
         }
     });
 </script>
+<!-- CORRECT ORDER -->
+<script src="<?= ASSET_URL ?>/js/user_module/create_report.js"></script>
+<script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
