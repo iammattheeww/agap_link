@@ -97,19 +97,34 @@ switch ($action) {
         $otpModel->deleteTokensByUser($userId);
         $otpModel->insertToken($userId, $tokenCode);
 
-        $smsMessage =
-            "AGAP-Link — Login Verification\n\n" .
-            "Your new temporary login verification code is:\n\n" .
-            $tokenCode . "\n\n" .
-            "This code is valid for 5 minutes only.\n\n" .
-            "– AGAP-Link Security";
+        // $smsMessage =
+        //     "AGAP-Link — Login Verification\n\n" .
+        //     "Your new temporary login verification code is:\n\n" .
+        //     $tokenCode . "\n\n" .
+        //     "This code is valid for 5 minutes only.\n\n" .
+        //     "– AGAP-Link Security";
 
-        if (!empty($phone)) {
-            try {
-                SmsNotifier::sendRawSMS($phone, $smsMessage);
-            } catch (Exception $e) {
-                error_log('[verify_login_process] Resend SMS failed: ' . $e->getMessage());
+        // if (!empty($phone)) {
+        //     try {
+        //         SmsNotifier::sendRawSMS($phone, $smsMessage);
+        //     } catch (Exception $e) {
+        //         error_log('[verify_login_process] Resend SMS failed: ' . $e->getMessage());
+        //     }
+        // }
+
+        try {
+            require_once CONFIG_PATH . 'mailer.php';
+            $mail = createMailer();
+            $userEmail = $userData['email'] ?? '';
+            if (!empty($userEmail)) {
+                $mail->addAddress($userEmail, trim($userData['first_name'] . ' ' . $userData['last_name']));
+                $mail->Subject = 'Your New AGAP-Link Login Verification Code';
+                $mail->Body = _build_login_verification_email($userData['first_name'], $tokenCode);
+                $mail->AltBody = "Your new AGAP-Link login verification code is: " . $tokenCode . ". This code expires in 5 minutes.";
+                $mail->send();
             }
+        } catch (Exception $e) {
+            error_log('[verify_login_process] Resend email failed: ' . $e->getMessage());
         }
 
         $_SESSION['verify_success'] = 'A new verification code has been sent to your phone.';
