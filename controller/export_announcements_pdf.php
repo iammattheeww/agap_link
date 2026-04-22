@@ -7,208 +7,311 @@ if (!isset($_SESSION['admin_logged_in'])) {
 }
 
 require_once MODEL_PATH . 'Announcement.php';
-
-// ── Load FPDF ────────────────────────────────────────────────────────────────
-// Adjust the path to wherever fpdf.php lives in your project.
-// Common placements:  vendor/fpdf/fpdf.php  OR  lib/fpdf/fpdf.php
 require_once ROOT_PATH . "/vendor/autoload.php";
 
-// ── Fetch data ───────────────────────────────────────────────────────────────
+// ── Fetch data ────────────────────────────────────────────────
 $announcementModel = new Announcement();
 $announcements     = $announcementModel->getAll();
 
-// ── Custom FPDF class with header / footer ───────────────────────────────────
+// ── PDF Class ─────────────────────────────────────────────────
 class AnnouncementsPDF extends FPDF
 {
-    // ── Page header ──────────────────────────────────────────────────────────
-    public function Header()
+    // Landscape A4: 297 × 210 mm
+    public float $PW = 297;
+    public float $ML = 10;
+    public float $MR = 10;
+
+    public function usableWidth(): float
     {
-        // Background accent bar
-        $this->SetFillColor(255, 107, 53); // #ff6b35    // blue-600
-        $this->Rect(0, 0, 210, 18, 'F');
-
-        // System name
-        $this->SetFont('Arial', 'B', 13);
-        $this->SetTextColor(255, 255, 255);
-        $this->SetXY(10, 4);
-        $this->Cell(0, 10, 'AGAP-Link', 0, 0, 'L');
-
-        // Page label on the right
-        $this->SetFont('Arial', '', 9);
-        $this->SetXY(0, 5);
-        $this->Cell(200, 8, 'Page ' . $this->PageNo() . ' of {nb}', 0, 0, 'R');
-
-        // Section title below the bar
-      $this->SetTextColor(26, 35, 50); // dark        // slate-800
-        $this->SetFont('Arial', 'B', 16);
-        $this->SetXY(10, 24);
-        $this->Cell(0, 10, 'Announcements Report', 0, 1, 'L');
-
-        // Generated timestamp
-        $this->SetFont('Arial', 'I', 8);
-        $this->SetTextColor(100, 116, 139);        // slate-500
-        $this->SetX(10);
-        $this->Cell(0, 6, 'Generated: ' . date('F d, Y  h:i A'), 0, 1, 'L');
-
-        // Divider line
-        $this->SetDrawColor(37, 99, 235);
-        $this->SetLineWidth(0.6);
-        $this->Line(10, $this->GetY() + 1, 200, $this->GetY() + 1);
-        $this->Ln(5);
+        return $this->PW - $this->ML - $this->MR; // 277 mm
     }
 
-    // ── Page footer ──────────────────────────────────────────────────────────
+    // ── HEADER ────────────────────────────────────────────────
+    public function Header()
+    {
+        $pw = $this->PW;
+
+        // Full-width orange bar
+        $this->SetFillColor(255, 107, 53);
+        $this->Rect(0, 0, $pw, 20, 'F');
+
+        // Brand
+        $this->SetFont('Arial', 'B', 14);
+        $this->SetTextColor(255, 255, 255);
+        $this->SetXY(12, 5);
+        $this->Cell(120, 10, 'AGAP-Link', 0, 0, 'L');
+
+        // Page number
+        $this->SetFont('Arial', '', 8);
+        $this->SetXY(0, 7);
+        $this->Cell($pw - 10, 6, 'Page ' . $this->PageNo() . ' of {nb}', 0, 0, 'R');
+
+        // Title
+        $this->SetTextColor(26, 35, 50);
+        $this->SetFont('Arial', 'B', 15);
+        $this->SetXY(12, 26);
+        $this->Cell(0, 8, 'Announcements Report', 0, 1, 'L');
+
+        // Date
+        $this->SetFont('Arial', 'I', 8);
+        $this->SetTextColor(100, 116, 139);
+        $this->SetX(12);
+        $this->Cell(0, 5, 'Generated: ' . date('F d, Y  h:i A'), 0, 1, 'L');
+
+        // Full-width divider
+        $this->SetDrawColor(255, 107, 53);
+        $this->SetLineWidth(0.6);
+        $this->Line($this->ML, $this->GetY() + 2, $pw - $this->MR, $this->GetY() + 2);
+        $this->SetLineWidth(0.2);
+        $this->Ln(6);
+    }
+
+    // ── FOOTER ────────────────────────────────────────────────
     public function Footer()
     {
-        $this->SetY(-12);
+        $pw   = $this->PW;
+        $half = $this->usableWidth() / 2;
+        $this->SetY(-13);
         $this->SetDrawColor(203, 213, 225);
-        $this->SetLineWidth(0.3);
-        $this->Line(10, $this->GetY(), 200, $this->GetY());
+        $this->Line($this->ML, $this->GetY(), $pw - $this->MR, $this->GetY());
         $this->Ln(1);
         $this->SetFont('Arial', 'I', 7);
         $this->SetTextColor(148, 163, 184);
-        $this->Cell(95, 6, 'AGAP-Link Community Platform', 0, 0, 'L');
-        $this->Cell(95, 6, 'Page ' . $this->PageNo() . ' of {nb}', 0, 0, 'R');
+        $this->SetX($this->ML);
+        $this->Cell($half, 6, 'AGAP-Link Community Platform', 0, 0, 'L');
+        $this->Cell($half, 6, 'Page ' . $this->PageNo() . ' of {nb}', 0, 0, 'R');
     }
 
-    // ── Safe multi-line cell (latin-1 safe) ──────────────────────────────────
-    public function SafeMultiCell($w, $h, $txt, $border = 0, $align = 'L', $fill = false)
+    // ── SAFE TEXT (UTF-8 → latin-1) ───────────────────────────
+    public function safe(string $txt): string
     {
-        $txt = iconv('UTF-8', 'windows-1252//TRANSLIT//IGNORE', $txt);
-        $this->MultiCell($w, $h, $txt, $border, $align, $fill);
+        return iconv('UTF-8', 'windows-1252//TRANSLIT//IGNORE', $txt);
     }
 
-    // ── Safe single cell ─────────────────────────────────────────────────────
-    public function SafeCell($w, $h, $txt, $border = 0, $ln = 0, $align = 'L', $fill = false)
+    // ── TABLE HEADER ─────────────────────────────────────────
+    public function TableHeader(array $cols, float $h): void
     {
-        $txt = iconv('UTF-8', 'windows-1252//TRANSLIT//IGNORE', $txt);
-        $this->Cell($w, $h, $txt, $border, $ln, $align, $fill);
+        $this->SetFillColor(44, 62, 80);
+        $this->SetTextColor(255, 255, 255);
+        $this->SetFont('Arial', 'B', 8);
+        $this->SetDrawColor(44, 62, 80);
+        $this->SetX($this->ML);
+        foreach ($cols as $label => $w) {
+            $this->Cell($w, $h, $label, 1, 0, 'C', true);
+        }
+        $this->Ln();
+    }
+
+    // ── TRUNCATE to fit width ─────────────────────────────────
+    public function truncate(string $text, float $maxW, string $font = 'Arial', string $style = '', int $size = 8): string
+    {
+        $this->SetFont($font, $style, $size);
+        if ($this->GetStringWidth($text) <= $maxW) return $text;
+        while (mb_strlen($text) > 0 && $this->GetStringWidth($text . '...') > $maxW) {
+            $text = mb_substr($text, 0, -1);
+        }
+        return $text . '...';
+    }
+
+    // ── MULTILINE HEIGHT ESTIMATE ─────────────────────────────
+    // Returns how many mm a MultiCell will consume (approx)
+    public function multiCellHeight(float $w, float $lineH, string $text, string $font = 'Arial', string $style = '', int $size = 7): float
+    {
+        $this->SetFont($font, $style, $size);
+        $text  = $this->safe($text);
+        $lines = explode("\n", $text);
+        $count = 0;
+        foreach ($lines as $line) {
+            if ($line === '') { $count++; continue; }
+            $count += max(1, ceil($this->GetStringWidth($line) / ($w - 2)));
+        }
+        return $count * $lineH;
+    }
+
+    // ── SAFE IMAGE ────────────────────────────────────────────
+    public function safeImage(string $path, float $x, float $y, float $w, float $h): void
+    {
+        if (!file_exists($path) || !is_readable($path)) return;
+        $info = @getimagesize($path);
+        if (!$info) return;
+        $ext = strtolower(image_type_to_extension($info[2], false));
+        if (!in_array($ext, ['jpg', 'jpeg', 'png', 'gif'])) return;
+        try { $this->Image($path, $x, $y, $w, $h, strtoupper($ext === 'jpg' ? 'jpeg' : $ext)); }
+        catch (Throwable $e) {}
     }
 }
 
-// ── Build PDF ────────────────────────────────────────────────────────────────
-$pdf = new AnnouncementsPDF('P', 'mm', 'A4');
+// ── INIT PDF ─────────────────────────────────────────────────
+$pdf = new AnnouncementsPDF('L', 'mm', 'A4');
 $pdf->AliasNbPages();
 $pdf->SetAuthor('AGAP-Link Admin');
 $pdf->SetTitle('Announcements Report');
-$pdf->SetCreator('AGAP-Link');
-$pdf->SetMargins(10, 50, 10);   // left, top (leaves room for header), right
+$pdf->SetMargins(10, 48, 10);
+$pdf->SetAutoPageBreak(true, 18);
 $pdf->AddPage();
 
-// ── Summary box ──────────────────────────────────────────────────────────────
-$pdf->SetFillColor(255, 237, 230); // light orange bg
-$pdf->SetDrawColor(255, 107, 53);  // primary border
-$pdf->SetLineWidth(0.3);
-$pdf->Rect(10, $pdf->GetY(), 190, 14, 'DF'); // needs custom or use Rect
+// ── COLUMN WIDTHS  (must total 277 mm) ───────────────────────
+// #(10) + Title(65) + Date(30) + Author(35) + Preview(92) + Image(45) = 277
+$cols = [
+    '#'       =>  10,
+    'Title'   =>  65,
+    'Date'    =>  30,
+    'Author'  =>  35,
+    'Preview' =>  92,
+    'Image'   =>  45,
+];
 
-// Fallback if RoundedRect not available — plain rect
-// $pdf->Rect(10, $pdf->GetY(), 190, 14, 'DF');
+$HEADER_H = 9;
+$IMG_W    = 38;   // thumbnail width  (inside Image cell)
+$IMG_H    = 20;   // thumbnail height
 
-$pdf->SetFont('Arial', 'B', 9);
-$pdf->SetTextColor(29, 78, 216);   // blue-700
-$pdf->SetX(14);
-$pdf->SafeCell(0, 14, 'Total Announcements Published:  ' . count($announcements), 0, 1, 'L');
-$pdf->Ln(4);
+// ── SUMMARY BOX ──────────────────────────────────────────────
+$uw       = $pdf->usableWidth();  // 277 mm
+$summaryY = $pdf->GetY();
 
-// ── Table header row ─────────────────────────────────────────────────────────
-$colWidths = [8, 55, 25, 30, 72];   // #, Title, Category, Date, Content preview
+$pdf->SetFillColor(255, 237, 230);
+$pdf->SetDrawColor(255, 107, 53);
+$pdf->SetLineWidth(0.4);
+$pdf->Rect(10, $summaryY, $uw, 13, 'DF');
 
-$pdf->SetFillColor(44, 62, 80); // secondary (dark blue-gray)
-$pdf->SetTextColor(255, 255, 255);
-$pdf->SetFont('Arial', 'B', 8);
-$pdf->SetLineWidth(0);
+$pdf->SetFont('Arial', 'B', 10);
+$pdf->SetTextColor(29, 78, 216);
+$pdf->SetXY(14, $summaryY + 3);
+$pdf->Cell(100, 7, 'Total Announcements Published:  ' . count($announcements), 0, 0, 'L');
 
-$headers = ['#', 'Title', 'Category', 'Date', 'Content Preview'];
-foreach ($headers as $i => $h) {
-    $pdf->SafeCell($colWidths[$i], 8, $h, 0, 0, 'C', true);
-}
-$pdf->Ln();
+$pdf->Ln(17);
 
-// ── Table rows ───────────────────────────────────────────────────────────────
-$rowNum  = 0;
-$oddFill  = [248, 250, 252];   // slate-50
-$evenFill = [255, 255, 255];
+// ── TABLE HEADER ─────────────────────────────────────────────
+$pdf->TableHeader($cols, $HEADER_H);
+
+// ── ROWS ─────────────────────────────────────────────────────
+$rowNum = 0;
 
 foreach ($announcements as $a) {
     $rowNum++;
-    $isOdd = ($rowNum % 2 !== 0);
 
-    // Truncate content preview to ~120 chars
-    $preview = strip_tags($a['content']);
-    if (mb_strlen($preview) > 120) {
-        $preview = mb_substr($preview, 0, 117) . '...';
+    // Content preview (strip HTML, truncate)
+    $preview  = strip_tags($a['content'] ?? '');
+    $preview  = preg_replace('/\s+/', ' ', trim($preview));
+    if (mb_strlen($preview) > 160) $preview = mb_substr($preview, 0, 157) . '...';
+
+    $dateStr  = date('M d, Y', strtotime($a['created_at']));
+    $author   = $a['author_name'] ?? 'Admin';
+    $title    = $a['title']       ?? '—';
+
+    // Determine dynamic row height based on tallest multi-line cell
+    $lineH    = 5;
+    $previewH = $pdf->multiCellHeight($cols['Preview'], $lineH, $preview, 'Arial', 'I', 7);
+    $titleH   = $pdf->multiCellHeight($cols['Title'],   $lineH, $title,   'Arial', 'B', 8);
+    $ROW_H    = max($previewH, $titleH, $IMG_H + 4, $lineH * 2 + 2);
+
+    // Page-break check
+    if ($pdf->GetY() + $ROW_H > ($pdf->GetPageHeight() - 18)) {
+        $pdf->AddPage();
+        $pdf->TableHeader($cols, $HEADER_H);
     }
 
-    $category   = $a['category']    ?? '—';
-    $dateStr    = date('M d, Y', strtotime($a['created_at']));
-    $author     = $a['author_name'] ?? 'Admin';
-
-    // Estimate row height based on content (MultiCell height)
-    $lineH  = 5;
-    $fill   = $isOdd ? $oddFill : $evenFill;
-    $pdf->SetFillColor($fill[0], $fill[1], $fill[2]);
-    $pdf->SetTextColor(55, 65, 81); // gray-800
-    $pdf->SetFont('Arial', '', 8);
-
-    // Save Y before row, draw each cell
-    $xStart  = $pdf->GetX();
-    $yStart  = $pdf->GetY();
-
-    // Row number
-    $pdf->SetFont('Arial', 'B', 8);
-    $pdf->SetTextColor(100, 116, 139);
-    $pdf->SetXY($xStart, $yStart);
-    $pdf->Cell($colWidths[0], $lineH, $rowNum, 0, 0, 'C', true);
-
-    // Title (may wrap — measure first with GetStringWidth)
-    $pdf->SetFont('Arial', 'B', 8);
-    $pdf->SetTextColor(15, 23, 42);
-    $pdf->SetXY($xStart + $colWidths[0], $yStart);
-    $titleLines = ceil($pdf->GetStringWidth($a['title']) / ($colWidths[1] - 4));
-    $pdf->SafeMultiCell($colWidths[1], $lineH, $a['title'], 0, 'L', true);
-
-    // Figure out actual height used by title
-    $yAfterTitle = $pdf->GetY();
-    $rowH = max($yAfterTitle - $yStart, $lineH);
-
-    // Category
-    $pdf->SetFont('Arial', '', 8);
-    $pdf->SetTextColor(30, 41, 59);
-    $pdf->SetXY($xStart + $colWidths[0] + $colWidths[1], $yStart);
-    $pdf->SafeCell($colWidths[2], $rowH, $category, 0, 0, 'C', true);
-
-    // Date + author
-    $pdf->SetXY($xStart + $colWidths[0] + $colWidths[1] + $colWidths[2], $yStart);
-    $pdf->SafeMultiCell($colWidths[3], $lineH, $dateStr . "\n" . $author, 0, 'C', true);
-
-    // Content preview
-    $pdf->SetFont('Arial', 'I', 7);
-    $pdf->SetTextColor(71, 85, 105);
-    $pdf->SetXY($xStart + $colWidths[0] + $colWidths[1] + $colWidths[2] + $colWidths[3], $yStart);
-    $pdf->SafeMultiCell($colWidths[4], $lineH, $preview, 0, 'L', true);
-
-    // Advance past the tallest cell
-    $yEnd = max(
-        $yAfterTitle,
-        $xStart + $colWidths[0] + $colWidths[1] + $colWidths[2] + $colWidths[3],
-        $pdf->GetY()
-    );
-
-    // Thin separator line
+    // Row background
+    [$bgR, $bgG, $bgB] = ($rowNum % 2 === 0) ? [255, 255, 255] : [248, 250, 252];
+    $pdf->SetFillColor($bgR, $bgG, $bgB);
     $pdf->SetDrawColor(203, 213, 225);
     $pdf->SetLineWidth(0.2);
-    $curY = $pdf->GetY();
-    $pdf->Line(10, $curY, 200, $curY);
+
+    $startX = 10;
+    $startY = $pdf->GetY();
+
+    // ── # ────────────────────────────────────────────────────
+    $pdf->SetXY($startX, $startY);
+    $pdf->SetFont('Arial', 'B', 8);
+    $pdf->SetTextColor(100, 116, 139);
+    $pdf->Cell($cols['#'], $ROW_H, $rowNum, 1, 0, 'C', true);
+
+    // ── TITLE (MultiCell — vertically + horizontally centered) ──
+    $curX = $startX + $cols['#'];
+    $pdf->SetFont('Arial', 'B', 8);
+    $pdf->SetTextColor(15, 23, 42);
+    $pdf->Rect($curX, $startY, $cols['Title'], $ROW_H, 'DF');
+    $titleTextH = $pdf->multiCellHeight($cols['Title'] - 2, $lineH, $title, 'Arial', 'B', 8);
+    $titleOffY  = ($ROW_H - $titleTextH) / 2;
+    $pdf->SetXY($curX + 1, $startY + max(1, $titleOffY));
+    $pdf->MultiCell($cols['Title'] - 2, $lineH, $pdf->safe($title), 0, 'C', false);
+
+    // ── DATE ─────────────────────────────────────────────────
+    $curX += $cols['Title'];
+    $pdf->SetXY($curX, $startY);
+    $pdf->SetFont('Arial', '', 7);
+    $pdf->SetTextColor(30, 41, 59);
+    $pdf->Cell($cols['Date'], $ROW_H, $dateStr, 1, 0, 'C', true);
+
+    // ── AUTHOR ───────────────────────────────────────────────
+    $curX += $cols['Date'];
+    $pdf->SetXY($curX, $startY);
+    $pdf->SetFont('Arial', '', 7);
+    $auth = $pdf->truncate($pdf->safe($author), $cols['Author'] - 3, 'Arial', '', 7);
+    $pdf->Cell($cols['Author'], $ROW_H, $auth, 1, 0, 'C', true);
+
+    // ── PREVIEW (MultiCell — vertically + horizontally centered) ─
+    $curX += $cols['Author'];
+    $pdf->SetFont('Arial', 'I', 7);
+    $pdf->SetTextColor(71, 85, 105);
+    $pdf->Rect($curX, $startY, $cols['Preview'], $ROW_H, 'DF');
+    $previewTextH = $pdf->multiCellHeight($cols['Preview'] - 2, $lineH, $preview, 'Arial', 'I', 7);
+    $previewOffY  = ($ROW_H - $previewTextH) / 2;
+    $pdf->SetXY($curX + 1, $startY + max(1, $previewOffY));
+    $pdf->MultiCell($cols['Preview'] - 2, $lineH, $pdf->safe($preview), 0, 'C', false);
+
+    // ── IMAGE CELL ───────────────────────────────────────────
+    $curX += $cols['Preview'];
+    $pdf->SetXY($curX, $startY);
+    $pdf->SetFillColor($bgR, $bgG, $bgB);
+    $pdf->Cell($cols['Image'], $ROW_H, '', 1, 0, 'C', true);  // bordered placeholder
+
+    // Build image path
+    $imgPath = null;
+    if (!empty($a['image_path'])) {
+        // Try DOCUMENT_ROOT + image_path (absolute web path stored in DB)
+        $candidate = rtrim($_SERVER['DOCUMENT_ROOT'], '/') . '/' . ltrim($a['image_path'], '/');
+        if (file_exists($candidate)) {
+            $imgPath = $candidate;
+        } else {
+            // Fallback: treat as filesystem path directly
+            $candidate2 = rtrim(ROOT_PATH, '/') . '/uploads/announcements/' . basename($a['image_path']);
+            if (file_exists($candidate2)) $imgPath = $candidate2;
+        }
+    }
+
+    if ($imgPath) {
+        $imgX = $curX + ($cols['Image'] - $IMG_W) / 2;
+        $imgY = $startY + ($ROW_H - $IMG_H) / 2;
+        $pdf->safeImage($imgPath, $imgX, $imgY, $IMG_W, $IMG_H);
+    } else {
+        $pdf->SetFont('Arial', 'I', 6);
+        $pdf->SetTextColor(156, 163, 175);
+        $pdf->SetXY($curX, $startY + $ROW_H / 2 - 2);
+        $pdf->Cell($cols['Image'], 4, 'No image', 0, 0, 'C');
+    }
+
+    // ── Advance to next row ───────────────────────────────────
+    $pdf->SetXY($startX, $startY + $ROW_H);
 }
 
-$pdf->Ln(6);
+// Empty state
+if (count($announcements) === 0) {
+    $pdf->Ln(10);
+    $pdf->SetFont('Arial', 'I', 10);
+    $pdf->SetTextColor(100, 116, 139);
+    $pdf->Cell($pdf->usableWidth(), 10, 'No announcements have been published yet.', 0, 1, 'C');
+}
 
-// ── Footer note ──────────────────────────────────────────────────────────────
+// ── Footer note ───────────────────────────────────────────────
+$pdf->Ln(6);
 $pdf->SetFont('Arial', 'I', 7);
 $pdf->SetTextColor(148, 163, 184);
-$pdf->SafeCell(0, 5, 'This report was automatically generated by AGAP-Link. All times are server-local.', 0, 1, 'C');
+$pdf->SetX(10);
+$pdf->Cell($pdf->usableWidth(), 5,
+    'This report was automatically generated by AGAP-Link. All times are server-local.',
+    0, 1, 'C');
 
-// ── Stream to browser ────────────────────────────────────────────────────────
-$filename = 'announcements_' . date('Ymd_His') . '.pdf';
-$pdf->Output('D', $filename);   // 'D' = force download  |  'I' = inline preview
+// ── Output ────────────────────────────────────────────────────
+$pdf->Output('D', 'announcements_' . date('Ymd_His') . '.pdf');
 exit();

@@ -1968,3 +1968,88 @@ textarea.form-input {
             background: #d1fae5;
             color: #065f46;
         }
+
+.chart-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    height: 350px;
+}
+
+.chart-wrapper canvas {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.main-content {
+    overflow-x: hidden;
+}
+
+.dashboard-container {
+    overflow-x: hidden;
+}
+.chart-wrapper {
+    overflow-x: auto;
+}
+
+.chart-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    height: 350px;
+    overflow: hidden;
+}
+
+.chart-wrapper canvas {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+   /* ── Export button ───────────────────────────────────── */
+        .btn-export-pdf {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 18px;
+            background: #dc2626;          /* red-600 */
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.18s ease, transform 0.12s ease, box-shadow 0.18s ease;
+            box-shadow: 0 2px 6px rgba(220, 38, 38, 0.25);
+            white-space: nowrap;
+        }
+        .btn-export-pdf:hover {
+            background: #b91c1c;          /* red-700 */
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
+            transform: translateY(-1px);
+        }
+        .btn-export-pdf:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+        .btn-export-pdf svg {
+            flex-shrink: 0;
+        }
+
+        /* ── Header action group ─────────────────────────────── */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* Loading state on the export button */
+        .btn-export-pdf.loading {
+            opacity: 0.75;
+            pointer-events: none;
+        }
+        .btn-export-pdf.loading .export-label::after {
+            content: '…';
+        }

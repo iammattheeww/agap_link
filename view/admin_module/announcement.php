@@ -30,55 +30,6 @@ unset($_SESSION['success'], $_SESSION['error']);
     <link rel="icon" type="image/x-icon" href="<?= ASSET_URL ?>/favicon_io/favicon.ico">
     <title>Announcements - AGAP-Link</title>
     <link rel="stylesheet" href="<?= ASSET_URL ?>/css/admin_module/admin_module.css">
-    <style>
-        /* ── Export button ───────────────────────────────────── */
-        .btn-export-pdf {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            padding: 9px 18px;
-            background: #dc2626;          /* red-600 */
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            transition: background 0.18s ease, transform 0.12s ease, box-shadow 0.18s ease;
-            box-shadow: 0 2px 6px rgba(220, 38, 38, 0.25);
-            white-space: nowrap;
-        }
-        .btn-export-pdf:hover {
-            background: #b91c1c;          /* red-700 */
-            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
-            transform: translateY(-1px);
-        }
-        .btn-export-pdf:active {
-            transform: translateY(0);
-            box-shadow: none;
-        }
-        .btn-export-pdf svg {
-            flex-shrink: 0;
-        }
-
-        /* ── Header action group ─────────────────────────────── */
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        /* Loading state on the export button */
-        .btn-export-pdf.loading {
-            opacity: 0.75;
-            pointer-events: none;
-        }
-        .btn-export-pdf.loading .export-label::after {
-            content: '…';
-        }
-    </style>
 </head>
 
 <body>
@@ -104,15 +55,6 @@ unset($_SESSION['success'], $_SESSION['error']);
                         id="exportPdfBtn"
                         title="Download all announcements as a PDF report"
                         <?= empty($announcements) ? 'aria-disabled="true" tabindex="-1" style="opacity:.45;pointer-events:none;"' : '' ?>>
-                        <!-- PDF / download icon -->
-                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15"
-                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                             stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                            <line x1="12" y1="11" x2="12" y2="17"/>
-                            <polyline points="9 14 12 17 15 14"/>
-                        </svg>
                         <span class="export-label">Export to PDF</span>
                     </a>
 

@@ -36,7 +36,19 @@ $pendingReports  = $stats['pending_count']  ?? 0;
 
 // CHECK IF REPORTS ARRAY IS EMPTY OR FALSE
 $hasReports = is_array($userReports) && count($userReports) > 0;
+
+// GROUP REPORTS BY DAY (Mon–Sun)
+$days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+$reportCounts = array_fill(0, 7, 0);
+
+foreach ($userReports as $report) {
+    if (!empty($report['created_at'])) {
+        $dayIndex = date('N', strtotime($report['created_at'])) - 1;
+        $reportCounts[$dayIndex]++;
+    }
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -47,6 +59,7 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
     <link rel="icon" type="image/x-icon" href="<?= ASSET_URL ?>/favicon_io/favicon.ico">
     <title>Admin Dashboard - AGAP-Link</title>
     <link rel="stylesheet" href="<?= ASSET_URL ?>/css/admin_module/admin_module.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>       
 </head>
 
 <body>
@@ -94,6 +107,8 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
                     </div>
                 </div>
 
+                
+
                 <div class="stat-card stat-card-orange">
                     <div class="stat-icon-wrapper">
                         <i data-lucide="clock" class="stat-icon"></i>
@@ -105,6 +120,20 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
                     </div>
                 </div>
             </div>
+
+          <section class="recent-reports-section">
+    <h2 class="section-title">Reports Over Time</h2>
+
+    <select id="filterSelect" style="margin-bottom: 20px;">
+        <option value="daily">Daily</option>
+        <option value="weekly" selected>Weekly</option>
+        <option value="monthly">Monthly</option>
+    </select>
+
+    <div class="chart-wrapper">
+        <canvas id="reportsChart"></canvas>
+    </div>
+</section>
 
             <!-- RECENT REPORTS SECTION -->
             <section class="recent-reports-section">
@@ -159,6 +188,80 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
 
     <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle Menu">☰</button>
     <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
+
+<script>
+let chart;
+
+async function loadChart(filter = 'weekly') {
+    try {
+        const response = await fetch("<?= BASE_URL ?>/controller/chart_data.php?filter=" + filter);
+        const result = await response.json();
+
+        console.log("Chart Data:", result); // DEBUG
+
+        const ctx = document.getElementById('reportsChart');
+
+        if (!ctx) {
+            console.error("Canvas not found!");
+            return;
+        }
+
+        if (chart) {
+            chart.destroy();
+        }
+
+        chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: result.labels,
+                datasets: [{
+                    label: 'Reports',
+                    data: result.data,
+                    backgroundColor: '#FF6B00',
+                    borderRadius: 6
+                }]
+            },
+          options: {
+    responsive: true,
+    maintainAspectRatio: false,
+animation: false,
+    plugins: {
+        legend: { display: false }
+    },
+
+    scales: {
+        x: {
+            ticks: {
+                maxRotation: 0,
+                autoSkip: true
+            },
+            grid: { display: false }
+        },
+        y: {
+            beginAtZero: true
+        }
+    }
+}
+        });
+
+    } catch (error) {
+        console.error("Chart Error:", error);
+    }
+}
+
+// INITIAL LOAD
+document.addEventListener("DOMContentLoaded", () => {
+    loadChart();
+
+    document.getElementById('filterSelect').addEventListener('change', function () {
+        loadChart(this.value);
+    });
+});
+
+window.addEventListener('resize', () => {
+    loadChart(document.getElementById('filterSelect').value);
+});
+</script>
 </body>
 
 </html>
