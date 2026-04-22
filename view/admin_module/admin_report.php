@@ -370,11 +370,8 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
     <!-- main.js para mag gana ang hamburger icon kung mag mobile view -->
     <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
 
-    <!-- admin_report.js -->
-    <script src="<?= ASSET_URL ?>/js/admin_module/admin_reports.js"></script>
-
 </body>
-<!-- <script>
+ <script>
     /* ============================================================
    admin_reports.js  –  AGAP-Link Admin Reports Module
    Handles: meatball menus, view-details modal, forward modal,
@@ -676,5 +673,5 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
 }); // end DOMContentLoaded
-</script> -->
+</script> 
 </html>

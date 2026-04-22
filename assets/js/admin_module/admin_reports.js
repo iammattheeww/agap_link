@@ -12,17 +12,16 @@ document.addEventListener("DOMContentLoaded", function () {
   let currentReportStatus = null;
 
   // ── MEATBALLS MENU ──────────────────────────────────────────
-  document.querySelectorAll(".meatballs-btn").forEach((btn) => {
+document.querySelectorAll(".meatballs-btn").forEach((btn) => {
     btn.addEventListener("click", function (e) {
-      e.stopPropagation();
-      // Close all other open menus first
-      document.querySelectorAll(".meatballs-menu.open").forEach((m) => {
-        if (m !== this.nextElementSibling) m.classList.remove("open");
-      });
-      this.nextElementSibling.classList.toggle("open");
+        e.stopPropagation();
+        const menu = this.nextElementSibling; // ← capture BEFORE inner forEach
+        document.querySelectorAll(".meatballs-menu.open").forEach((m) => {
+            if (m !== menu) m.classList.remove("open"); // ← use variable, not `this`
+        });
+        menu.classList.toggle("open");
     });
-  });
-
+});
   // Close meatballs when clicking outside
   document.addEventListener("click", function () {
     document

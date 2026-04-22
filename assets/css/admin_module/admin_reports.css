@@ -175,3 +175,78 @@
         .btn-export-pdf.loading .export-label::after {
             content: '…';
         }
+        /* ── Meatballs Menu ──────────────────────────────────────── */
+.action-cell {
+    position: relative;
+}
+
+.meatballs-container {
+    position: relative;
+    display: inline-block;
+}
+
+.meatballs-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 22px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    color: #374151;
+    line-height: 1;
+}
+
+.meatballs-btn:hover {
+    background: #f3f4f6;
+}
+
+/* HIDDEN by default */
+.meatballs-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 9999;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    min-width: 190px;
+    padding: 6px 0;
+    white-space: nowrap;
+}
+
+/* SHOWN when JS adds .open */
+.meatballs-menu.open {
+    display: block;
+}
+
+/* Menu item buttons */
+.meatballs-menu button,
+.meatballs-menu .archive-btn {
+    display: block;
+    width: 100%;
+    padding: 10px 16px;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    color: #374151;
+    transition: background 0.15s ease;
+}
+
+.meatballs-menu button:hover:not(:disabled),
+.meatballs-menu .archive-btn:hover {
+    background: #f9fafb;
+}
+
+.meatballs-menu button:disabled {
+    cursor: default;
+    opacity: 0.5;
+}
+
+.archive-btn {
+    color: #dc2626 !important;
+    font-weight: 600;
+}
