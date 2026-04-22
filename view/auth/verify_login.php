@@ -11,7 +11,7 @@ if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] === true) 
     exit();
 }
 
-$maskedPhone   = $_SESSION['pending_login_masked_phone'] ?? '09*****XXX';
+// $maskedPhone   = $_SESSION['pending_login_masked_phone'] ?? '09*****XXX';
 $verifyError   = $_SESSION['verify_error']   ?? '';
 $verifySuccess = $_SESSION['verify_success'] ?? '';
 unset($_SESSION['verify_error'], $_SESSION['verify_success']);
@@ -34,11 +34,9 @@ unset($_SESSION['verify_error'], $_SESSION['verify_success']);
     <div class="verify-container">
         <div class="verify-box">
 
-            <div class="verify-logo">AGAP-Link</div>
-            <h2 class="verify-title">Verify Your Login</h2>
             <p class="verify-subtitle">
                 A 6-digit verification code has been sent to<br>
-                <strong><?= htmlspecialchars($maskedPhone) ?></strong>.<br>
+                <strong><?= htmlspecialchars($_SESSION['user_email'] ?? 'your email') ?></strong>.<br>
                 Enter it below to complete your sign-in.
             </p>
 
