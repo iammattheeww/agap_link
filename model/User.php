@@ -212,6 +212,15 @@ class User
         return $q->fetch(PDO::FETCH_ASSOC);
     }
 
+    // GET USER'S REPORTS WITH PHOTO PATHS — THIS IS USED TO DISPLAY THE USER'S REPORTS WITH PHOTOS IN THE PROFILE PAGE
+    public function get_user_reports_with_photos($user_id)
+    {
+        $sql = "SELECT photo_path FROM reports WHERE user_id = :user_id AND photo_path IS NOT NULL";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([':user_id' => $user_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function list_users()
     {
         $sql = "SELECT user_id, first_name, middle_initial, last_name,
@@ -249,12 +258,21 @@ class User
         return $result;
     }
 
+    // DELETE USER ACCOUNT - THIS IS CALLED IN THE DELETE ACCOUNT PROCESS TO DELETE THE USER ACCOUNT ITSELF AFTER DELETING ALL THE USER'S REPORTS
     public function delete_user($id)
     {
         $sql = "DELETE FROM users WHERE user_id = :id";
         $q = $this->conn->prepare($sql);
         $result = $q->execute(['id' => $id]);
         return $result;
+    }
+
+    // DELETE ALL USER REPORTS — THIS IS CALLED IN THE DELETE ACCOUNT PROCESS TO FIRST DELETE ALL REPORTS BEFORE DELETING THE USER ACCOUNT ITSELF
+    public function delete_user_reports($user_id)
+    {
+        $sql = "DELETE FROM reports WHERE user_id = :user_id";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([':user_id' => $user_id]);
     }
 
     public function get_session()
