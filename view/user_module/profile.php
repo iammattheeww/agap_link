@@ -26,6 +26,7 @@ $firstInitial  = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U'
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,6 +34,7 @@ $firstInitial  = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U'
     <title>Profile - AGAP-Link</title>
     <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/user_module/user_module.css">
 </head>
+
 <body>
     <?php require VIEW_PATH . 'partials/mobile_topnav_user.php'; ?>
 
@@ -43,7 +45,8 @@ $firstInitial  = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U'
 
             <?php if (isset($_SESSION['success'])): ?>
                 <div class="alert alert-success fade-alert" style="margin:20px;">
-                    <?= htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?>
+                    <?= htmlspecialchars($_SESSION['success']);
+                    unset($_SESSION['success']); ?>
                 </div>
             <?php endif; ?>
 
@@ -66,7 +69,7 @@ $firstInitial  = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U'
                     <div class="profile-form-card">
                         <h1 class="welcome-title">Account Information</h1>
                         <br>
-                 <form id="profileInfoForm" action="<?= BASE_URL ?>/controller/profile_process.php" method="POST">
+                        <form id="profileInfoForm" action="<?= BASE_URL ?>/controller/profile_process.php" method="POST">
                             <input type="hidden" name="action" value="update_profile">
                             <div class="form-grid form-grid-2">
                                 <div class="form-group">
@@ -76,13 +79,13 @@ $firstInitial  = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U'
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Middle Initial</label>
-                                    <input type="text" 
-           name="middle_initial" 
-           class="form-input form-input-small"
-           value="<?= htmlspecialchars($middleInitial) ?>"
-           maxlength="1" 
-           style="text-transform: uppercase;"
-           oninput="this.value = this.value.toUpperCase().slice(0,1);">
+                                    <input type="text"
+                                        name="middle_initial"
+                                        class="form-input form-input-small"
+                                        value="<?= htmlspecialchars($middleInitial) ?>"
+                                        maxlength="1"
+                                        style="text-transform: uppercase;"
+                                        oninput="this.value = this.value.toUpperCase().slice(0,1);">
                                 </div>
                             </div>
                             <div class="form-grid">
@@ -98,16 +101,16 @@ $firstInitial  = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U'
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label">Phone</label>
-                                       <input type="text" 
-           name="phone_number" 
-           class="form-input"
-           value="<?= htmlspecialchars($phoneNumber) ?>"
-           maxlength="11" 
-           pattern="\d{11}" 
-           inputmode="numeric" 
-           oninput="this.value = this.value.replace(/\D/g, '')" 
-           placeholder="09123456789" 
-           required>
+                                    <input type="text"
+                                        name="phone_number"
+                                        class="form-input"
+                                        value="<?= htmlspecialchars($phoneNumber) ?>"
+                                        maxlength="11"
+                                        pattern="\d{11}"
+                                        inputmode="numeric"
+                                        oninput="this.value = this.value.replace(/\D/g, '')"
+                                        placeholder="09123456789"
+                                        required>
                                 </div>
                             </div>
                             <div class="form-actions">
@@ -120,7 +123,7 @@ $firstInitial  = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U'
                     <!-- CHANGE PASSWORD -->
                     <div class="profile-form-card">
                         <h2 class="form-section-title">Change Password</h2>
-                 <form id="passwordForm" action="<?= BASE_URL ?>/controller/profile_process.php" method="POST">
+                        <form id="passwordForm" action="<?= BASE_URL ?>/controller/profile_process.php" method="POST">
                             <input type="hidden" name="action" value="change_password">
                             <div class="form-grid">
                                 <div class="form-group">
@@ -190,4 +193,5 @@ $firstInitial  = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U'
     <script src="<?= BASE_URL ?>/assets/js/user_module/main.js"></script>
     <script src="<?= BASE_URL ?>/assets/js/user_module/profile.js"></script>
 </body>
+
 </html>
