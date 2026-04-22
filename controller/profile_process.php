@@ -175,6 +175,12 @@ function change_password()
 // DELETE USER ACCOUNT - UPDATED TO USE MODEL METHOD
 function delete_account()
 {
+    // THIS error_log FUNCTION IS TO SEE EXACTLY WHAT VALUES ARE BEING PASSED.
+    error_log('[DELETE_ACCOUNT DEBUG] User ID: ' . ($_SESSION['user_id'] ?? 'NOT SET'));
+    error_log('[DELETE_ACCOUNT DEBUG] POST data: ' . print_r($_POST, true));
+    error_log('[DELETE_ACCOUNT DEBUG] delete_confirmation value: ' . trim($_POST['delete_confirmation'] ?? ''));
+    error_log('[DELETE_ACCOUNT DEBUG] Confirmation matches "DELETE"? ' . (trim($_POST['delete_confirmation'] ?? '') === 'DELETE' ? 'YES' : 'NO'));
+
     global $user; // INSTANCE NI SIYA
 
     // VERIFY CONFIRMATION INPUT
@@ -189,22 +195,11 @@ function delete_account()
     $user_id = $_SESSION['user_id'];
 
     try {
-        // CONNECT TO DATABASE FOR PHOTO DELETION AND TRANSACTION
-        $conn = new PDO(
-            "mysql:host=localhost;dbname=agap_link",
-            "root",
-            ""
-        );
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-        // BEGIN TRANSACTION
+        global $conn;
         $conn->beginTransaction();
 
-        // GET USER'S REPORTS TO DELETE ASSOCIATED PHOTOS
-        $getReportsQuery = "SELECT photo_path FROM reports WHERE user_id = :user_id AND photo_path IS NOT NULL";
-        $getReportsStmt = $conn->prepare($getReportsQuery);
-        $getReportsStmt->execute([':user_id' => $user_id]);
-        $reports = $getReportsStmt->fetchAll(PDO::FETCH_ASSOC);
+        // GET USER'S REPORTS WITH PHOTOS (using Model)
+        $reports = $user->get_user_reports_with_photos($user_id);
 
         // DELETE REPORT PHOTOS FROM FILESYSTEM
         foreach ($reports as $report) {
@@ -214,17 +209,14 @@ function delete_account()
             }
         }
 
-        // DELETE USER REPORTS (manually, before user deletion)
-        $deleteReportsQuery = "DELETE FROM reports WHERE user_id = :user_id";
-        $deleteReportsStmt = $conn->prepare($deleteReportsQuery);
-        $deleteReportsStmt->execute([':user_id' => $user_id]);
+        // DELETE USER REPORTS (using Model)
+        $user->delete_user_reports($user_id); // UNA ANAY DELETE SI USER REPORTS BEFORE KAY DELETE USER
+
+        // DELETE USER ACCOUNT (using Model)
+        $deleteResult = $user->delete_user($user_id);
 
         // COMMIT TRANSACTION
         $conn->commit();
-
-        // NOW USE THE MODEL'S delete_user METHOD
-        // This follows proper MVC pattern - Controller uses Model
-        $deleteResult = $user->delete_user($user_id);
 
         if ($deleteResult) {
             // DESTROY SESSION
