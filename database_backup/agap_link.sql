@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 19, 2026 at 06:45 AM
+-- Generation Time: Apr 22, 2026 at 04:17 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -195,11 +195,13 @@ CREATE TABLE `login_tokens` (
 --
 
 INSERT INTO `login_tokens` (`token_id`, `user_id`, `token_code`, `expires_at`, `used`, `created_at`) VALUES
-(13, 15, '661471', '2026-03-24 02:35:55', 1, '2026-03-24 02:30:55'),
 (19, 16, '068888', '2026-03-29 23:36:53', 0, '2026-03-29 23:31:53'),
 (20, 17, '206709', '2026-03-29 23:45:33', 0, '2026-03-29 23:40:33'),
 (23, 5, '847288', '2026-04-19 02:34:06', 0, '2026-04-19 02:29:06'),
-(25, 11, '846157', '2026-04-19 02:41:17', 1, '2026-04-19 02:36:17');
+(26, 18, '571543', '2026-04-19 18:45:54', 1, '2026-04-19 18:40:54'),
+(30, 15, '059022', '2026-04-19 20:58:27', 1, '2026-04-19 20:53:27'),
+(40, 11, '869532', '2026-04-22 21:13:56', 1, '2026-04-22 21:08:56'),
+(43, 19, '805586', '2026-04-22 22:17:53', 1, '2026-04-22 22:12:53');
 
 -- --------------------------------------------------------
 
@@ -222,7 +224,28 @@ CREATE TABLE `password_reset_otps` (
 --
 
 INSERT INTO `password_reset_otps` (`otp_id`, `user_id`, `otp_code`, `channel`, `expires_at`, `used`, `created_at`) VALUES
-(22, 11, '414715', 'email', '2026-04-19 12:12:44', 0, '2026-04-19 12:07:44');
+(22, 11, '414715', 'email', '2026-04-19 12:12:44', 0, '2026-04-19 12:07:44'),
+(24, 19, '497684', 'sms', '2026-04-22 22:14:12', 1, '2026-04-22 22:09:12');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `registration_verifications`
+--
+
+CREATE TABLE `registration_verifications` (
+  `verification_id` int(11) NOT NULL,
+  `temp_first_name` varchar(100) NOT NULL,
+  `temp_middle_initial` varchar(5) DEFAULT NULL,
+  `temp_last_name` varchar(100) NOT NULL,
+  `temp_email` varchar(150) NOT NULL,
+  `temp_phone` varchar(20) NOT NULL,
+  `temp_password_hash` varchar(255) NOT NULL,
+  `otp_code` varchar(6) NOT NULL,
+  `expires_at` datetime NOT NULL,
+  `used` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -256,10 +279,7 @@ CREATE TABLE `reports` (
 
 INSERT INTO `reports` (`report_id`, `user_id`, `category_id`, `assigned_agency_id`, `description`, `address`, `photo_path`, `gps_lat`, `gps_long`, `status`, `priority`, `created_at`, `updated_at`, `is_archived`, `archived_at`, `is_verified`, `agency_verified_at`) VALUES
 (3, 5, 1, 19, 'fhdfhf', 'La Salle Avenue, Villamonte, Bacolod-1, Bacolod, Negros Island Region, 6100, Philippines', '/agap_link/uploads/report_69a79c49e61b03.30825166.png', 10.67971734, 122.96084690, 'Verified', 'Medium', '2026-03-04 02:43:21', '2026-03-04 02:44:22', 0, NULL, 0, NULL),
-(4, 5, 1, 19, '67', 'B.S. Aquino Drive, Sunflower, Barangay 7, Villamonte, Bacolod-1, Bacolod, Negros Island Region, 6100, Philippines', '/agap_link/uploads/report_69a79eed1056d1.00393859.png', 10.67899620, 122.95932770, 'Pending', 'Medium', '2026-03-04 02:54:37', '2026-03-04 02:54:37', 0, NULL, 0, NULL),
-(5, 11, 7, 31, '67', 'Museo de La Salle, La Salle Avenue, Villamonte, Bacolod-1, Bacolod, Negros Island Region, 6100, Philippines', '/agap_link/uploads/report_69a7a0634a1131.36435259.png', 10.67929562, 122.96219873, 'Resolved', 'Medium', '2026-03-04 03:00:51', '2026-03-04 07:26:37', 1, '2026-03-04 15:26:37', 1, NULL),
-(13, 11, 1, 19, 'Spider-Man Brand New Day', 'Estefania, Bacolod-1, Bacolod, Negros Island Region, 6100, Philippines', '/agap_link/uploads/report_69bdfa74d3f154.76959522.jpg', 10.65889539, 122.99637359, 'Resolved', 'Medium', '2026-03-21 01:55:00', '2026-03-21 03:10:04', 0, NULL, 1, NULL),
-(14, 11, 7, 31, 'Oillll', 'Datiles Street, Inzo Arnaldo Village, Punta Tabuc, Roxas, Capiz, Western Visayas, 5800, Philippines', '/uploads/report_69c1e76d4bbaa7.01709933.jpg', 11.58759871, 122.75129712, 'Pending', 'Medium', '2026-03-24 09:22:53', '2026-03-24 01:24:25', 0, NULL, 1, NULL);
+(4, 5, 1, 19, '67', 'B.S. Aquino Drive, Sunflower, Barangay 7, Villamonte, Bacolod-1, Bacolod, Negros Island Region, 6100, Philippines', '/agap_link/uploads/report_69a79eed1056d1.00393859.png', 10.67899620, 122.95932770, 'Pending', 'Medium', '2026-03-04 02:54:37', '2026-03-04 02:54:37', 0, NULL, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -282,11 +302,7 @@ CREATE TABLE `report_logs` (
 INSERT INTO `report_logs` (`log_id`, `report_id`, `status_change`, `remarks`, `timestamp`) VALUES
 (1, 3, 'Verified', NULL, '2026-03-04 02:44:22'),
 (2, 3, 'Verified', NULL, '2026-03-04 02:44:24'),
-(3, 3, 'Verified', NULL, '2026-03-04 02:44:26'),
-(4, 5, 'Resolved', NULL, '2026-03-04 03:02:00'),
-(7, 13, 'Forwarded', NULL, '2026-03-21 02:16:37'),
-(8, 13, 'Verified', NULL, '2026-03-21 02:17:49'),
-(9, 13, 'Resolved', NULL, '2026-03-21 03:10:04');
+(3, 3, 'Verified', NULL, '2026-03-04 02:44:26');
 
 -- --------------------------------------------------------
 
@@ -313,10 +329,10 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`user_id`, `first_name`, `middle_initial`, `last_name`, `email`, `phone_number`, `password_hash`, `created_at`, `last_login`) VALUES
 (5, 'Peter', NULL, 'Parker', 'peterparker@email.com', '09123456789', '$2y$10$7Hrm88DdYzTvhuQtdunfOeOdQMrtpr3ORCTSR86VlXNsl3IM3wXQu', '2026-02-10 03:46:37', '2026-04-19 02:29:11'),
 (8, 'LEO CERLYN', 'A', 'TACSAGON', 'alvinferrer691@gmail.com', '09087053123', '$2y$10$LF6GU32okdUXO6vQpyQSO.gzSTf3gL5HgDEmT.i1HF1QdiqJL7E1a', '2026-02-20 02:19:04', NULL),
-(11, 'Matthew Justin', NULL, 'Intoy', 's2402438@usls.edu.ph', '09949926492', '$2y$10$yzjaoftYKAdS8.kWDWSase0JdJNnb49I/GV5YB5qztEwUNqKimiKC', '2026-03-04 10:59:38', '2026-04-19 02:36:20'),
-(15, 'Miles', NULL, 'Morales', 'bhorbhor2014@gmail.com', '09949926492', '$2y$12$Lb13fasDZ4pAVw5X4zqSvuJD4Ofu6J.c.PCMaVLwwBc5BSOgTAU3S', '2026-03-24 10:30:39', NULL),
 (16, 'Jayram', NULL, 'Garcia', 'jaryam123@gmail.com', '09207828624', '$2y$10$SaLqtLIeAy/tdGk3HaOEmu4T501Od4m/sfOmNU5dRJs1Ib7M/4i.u', '2026-03-29 23:31:24', NULL),
-(17, 'David', NULL, 'Buala', 'davidbuala@email.com', '09942017579', '$2y$10$20.9ECHwiycO.I2tkhnsfORoVN1L4C85YJ6FtTHwWd4Zajtg6t7dm', '2026-03-29 23:40:24', NULL);
+(17, 'David', NULL, 'Buala', 'davidbuala@email.com', '09942017579', '$2y$10$20.9ECHwiycO.I2tkhnsfORoVN1L4C85YJ6FtTHwWd4Zajtg6t7dm', '2026-03-29 23:40:24', NULL),
+(18, 'Matthew Justin', NULL, 'Intoy', 'intoymatthewjustin@gmail.com', '09949926492', '$2y$10$CwqIvJHJb8..qStx/MpdHeYxrKEW1C6r55STaVnE2FrbzJ9NP5uwu', '2026-04-19 18:37:46', '2026-04-19 18:40:57'),
+(20, 'Matthew Justin', NULL, 'Intoy', 's2402438@usls.edu.ph', '09949926492', '$2y$10$6mc44VhBQnhj9SLvyCleGORshk/as7l/q/C8UuJufiAmUZYQEUel6', '2026-04-22 22:13:57', NULL);
 
 --
 -- Indexes for dumped tables
@@ -372,6 +388,14 @@ ALTER TABLE `login_tokens`
 ALTER TABLE `password_reset_otps`
   ADD PRIMARY KEY (`otp_id`),
   ADD KEY `idx_user_otp` (`user_id`,`otp_code`);
+
+--
+-- Indexes for table `registration_verifications`
+--
+ALTER TABLE `registration_verifications`
+  ADD PRIMARY KEY (`verification_id`),
+  ADD UNIQUE KEY `temp_email` (`temp_email`),
+  ADD KEY `idx_email_otp` (`temp_email`,`otp_code`);
 
 --
 -- Indexes for table `reports`
@@ -441,13 +465,19 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `login_tokens`
 --
 ALTER TABLE `login_tokens`
-  MODIFY `token_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `token_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `password_reset_otps`
 --
 ALTER TABLE `password_reset_otps`
-  MODIFY `otp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `otp_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- AUTO_INCREMENT for table `registration_verifications`
+--
+ALTER TABLE `registration_verifications`
+  MODIFY `verification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `reports`
@@ -465,7 +495,7 @@ ALTER TABLE `report_logs`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Constraints for dumped tables
