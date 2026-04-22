@@ -1,6 +1,5 @@
 <?php
 require_once dirname(dirname(__DIR__)) . '/config/init.php';
-session_start();
 
 // Ensure user has pending registration (came from register form)
 if (empty($_SESSION['pending_registration_email'])) {
