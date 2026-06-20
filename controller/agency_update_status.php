@@ -26,27 +26,27 @@ if (!$report_id || !in_array($new_status, $allowed_statuses)) {
 
 try {
     $reportModel = new Report();
+    
+    // Build remarks with agency name and optional user notes
+    $remarks = $_POST['remarks'] ?? null;
+    $fullRemarks = "Updated by agency: " . $_SESSION['agency_name'];
+    if (!empty($remarks)) {
+        $fullRemarks .= "\nRemarks: " . $remarks;
+    }
+    
     $reportModel->updateReportStatus(
         $report_id,
         $new_status,
-        "Updated by agency: " . $_SESSION['agency_name']
+        $fullRemarks
     );
 
-    // Send SMS notification to the citizen
-    try {
-        require_once MODEL_PATH . 'SmsNotifier.php';
-        SmsNotifier::sendStatusUpdate($report_id, $new_status);
-    } catch (Exception $e) {
-        // Log but don't block the redirect — SMS failure is non-fatal
-        error_log("SMS notification failed for report #$report_id: " . $e->getMessage());
-    }
+    // NO SMS TO CITIZEN - Agency does NOT communicate directly with citizen
+    // Admin will handle all citizen notifications after seeing the update
 
     $_SESSION['success'] = "Report #$report_id status updated to $new_status.";
-
 } catch (PDOException $e) {
     $_SESSION['error'] = 'Failed to update status. Please try again.';
 }
 
 header("Location: " . BASE_URL . "/view/lgu_module/agency_dashboard.php");
 exit();
-
