@@ -137,3 +137,48 @@ hassle
 testestest
 
 Stay informed. Downl... | RESP:{"status":"error","message":"There is not enough balance available to send this message.You have 5 of the 6"}
+2026-04-23 06:24:29 | HTTP:403 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link — Report Forwarded 📨
+
+Your verified report (Ref. #... | RESP:{"status":"error","message":"There is not enough balance available to send this message.You have 5 of the 6"}
+2026-04-23 06:26:16 | HTTP:403 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link — Action in Progress 🔧
+
+Update on your report (Ref... | RESP:{"status":"error","message":"There is not enough balance available to send this message.You have 5 of the 7"}
+2026-04-23 06:47:23 | HTTP:403 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link — Report Received ✔
+
+Hello! Your community report ... | RESP:{"status":"error","message":"There is not enough balance available to send this message.You have 5 of the 6"}
+2026-04-23 07:00:16 | HTTP:404 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link — Report Status Update
+
+Your report (Ref. #15) has... | RESP:{"status":"error","message":"Your message contains spam words."}
+2026-04-23 07:02:20 | HTTP:404 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link — Report Status Update
+
+Your report (Ref. #15) has... | RESP:{"status":"error","message":"Your message contains spam words."}
+2026-04-23 07:09:57 | HTTP:404 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link — Report Status Update
+
+Your report (Ref. #15) has... | RESP:{"status":"error","message":"Your message contains spam words."}
+2026-04-23 07:21:04 | HTTP:404 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link — Report Status Update
+
+Your report (Ref. #15) has... | RESP:{"status":"error","message":"Your message contains spam words."}
+2026-04-23 07:23:45 | HTTP:403 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link — Report Received ✔
+
+Hello! Your community report ... | RESP:{"status":"error","message":"Failed"}
+2026-04-23 07:34:06 | HTTP:403 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link — Report Received ✔
+
+Hello! Your community report ... | RESP:{"status":"error","message":"Failed"}
+2026-04-23 07:44:19 | HTTP:403 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link — Report Forwarded 📨
+
+Your verified report (Ref. #... | RESP:{"status":"error","message":"Failed"}
+2026-04-23 07:48:05 | HTTP:200 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link: Your report (#15) has been forwarded to the assig... | RESP:{"status":"success","message":"Your message was successfully delivered","data":{"uid":"69e95e35b2b1e","to":"639949926492","from":"PhilSMS","message":"AGAP-Link: Your report (#15) has been forwarded to the assigned agency for action.","status":"Delivered","cost":"1","sms_count":1}}
+2026-04-23 07:52:54 | HTTP:200 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link Report Update
+
+Your verified report (#15) has been... | RESP:{"status":"success","message":"Your message was successfully delivered","data":{"uid":"69e95f572ed99","to":"639949926492","from":"PhilSMS","message":"AGAP-Link Report Update\n\nYour verified report (#15) has been officially forwarded to the assigned government agency. The relevant office has been notified and is expected to take the necessary steps to address your concern. We will continue to monitor progress and notify you of any status changes.\n\nYour report is making a difference.","status":"Delivered","cost":"3","sms_count":3}}
+2026-04-23 08:28:17 | HTTP:200 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link: Your report (#15) is being actively addressed by ... | RESP:{"status":"success","message":"Your message was successfully delivered","data":{"uid":"69e967a1b86fb","to":"639949926492","from":"PhilSMS","message":"AGAP-Link: Your report (#15) is being actively addressed by the assigned agency.","status":"Delivered","cost":"1","sms_count":1}}
+2026-04-23 08:28:59 | HTTP:200 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link: Your report (#15) is being actively addressed by ... | RESP:{"status":"success","message":"Your message was successfully delivered","data":{"uid":"69e967cc1c8ea","to":"639949926492","from":"PhilSMS","message":"AGAP-Link: Your report (#15) is being actively addressed by the assigned agency.","status":"Delivered","cost":"1","sms_count":1}}
+2026-04-23 09:06:49 | HTTP:200 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link: Your report (#16) has been received and is under ... | RESP:{"status":"success","message":"Your message was successfully delivered","data":{"uid":"69e970a9e2a43","to":"639949926492","from":"PhilSMS","message":"AGAP-Link: Your report (#16) has been received and is under review.","status":"Delivered","cost":"1","sms_count":1}}
+2026-04-23 09:07:24 | HTTP:404 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link: Your report (#16) status is now: Pending. Please ... | RESP:{"status":"error","message":"Your message contains spam words."}
+2026-04-23 09:08:51 | HTTP:404 | TO:639949926492 | SENDER:PhilSMS | MSG:Update on your report from Land Transportation Office (LTO) ... | RESP:{"status":"error","message":"Your message contains spam words."}
+2026-04-23 09:10:51 | HTTP:200 | TO:639949926492 | SENDER:PhilSMS | MSG:Report update: Land Transportation Office (LTO) - Bacolod se... | RESP:{"status":"success","message":"Your message was successfully delivered","data":{"uid":"69e9719c24d63","to":"639949926492","from":"PhilSMS","message":"Report update: Land Transportation Office (LTO) - 
+2026-04-23 09:12:28 | HTTP:200 | TO:639949926492 | SENDER:PhilSMS | MSG:Report update: Land Transportation Office (LTO) - Bacolod se... | RESP:{"status":"success","message":"Your message was successfully delivered","data":{"uid":"69e971fce10b6","to":"639949926492","from":"PhilSMS","message":"Report update: Land Transportation Office (LTO) - 
+2026-04-23 09:15:23 | HTTP:200 | TO:639949926492 | SENDER:PhilSMS | MSG:Report update: Land Transportation Office (LTO) - Bacolod ha... | RESP:{"status":"success","message":"Your message was successfully delivered","data":{"uid":"69e972ab3c8cd","to":"639949926492","from":"PhilSMS","message":"Report update: Land Transportation Office (LTO) - 
+2026-04-23 09:16:00 | HTTP:200 | TO:639949926492 | SENDER:PhilSMS | MSG:Report update: Land Transportation Office (LTO) - Bacolod ha... | RESP:{"status":"success","message":"Your message was successfully delivered","data":{"uid":"69e972d0b7593","to":"639949926492","from":"PhilSMS","message":"Report update: Land Transportation Office (LTO) - 
+2026-06-15 11:27:30 | HTTP:200 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link: Your report (#17) has been received and is under ... | RESP:{"status":"success","message":"Your message was successfully delivered","data":{"uid":"6a2f7121dadd4","to":"639949926492","from":"PhilSMS","message":"AGAP-Link: Your report (#17) has been received and
+2026-06-20 11:03:10 | HTTP:200 | TO:639949926492 | SENDER:PhilSMS | MSG:AGAP-Link: Your report (#17) has been received and is under ... | RESP:{"status":"success","message":"Your message was successfully delivered","data":{"uid":"6a3602eeafb8e","to":"639949926492","from":"PhilSMS","message":"AGAP-Link: Your report (#17) has been received and

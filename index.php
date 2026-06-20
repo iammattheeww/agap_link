@@ -18,7 +18,7 @@ $id      = isset($_GET['id']) ? $_GET['id'] : '';
     <link rel="stylesheet" href="<?= ASSET_URL ?>/css/landing_page/style.css">
     <script src="<?= ASSET_URL?>/js/landing/main.js"></script>
 </head>
-
+ 
 <body>
     <?php
     $page = $_GET['page'] ?? 'landing'; // SAME AS $page = isset($_GET['page']) ? $_GET['page'] : 'landing';

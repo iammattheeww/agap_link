@@ -57,21 +57,20 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
     <?php require VIEW_PATH . 'partials/mobile_topnav_user.php'; ?>
 
     <?php if (isset($_GET['report_success'])): ?>
-    <div class="alert alert-success" style="margin: 0; border-radius: 0;">
-        ✅ Report submitted successfully!
-    </div>
+        <div class="alert alert-success" style="margin: 0; border-radius: 0;">
+            ✅ Report submitted successfully!
+        </div>
     <?php endif; ?>
     <?php if (isset($_GET['report_error'])): ?>
-    <div class="alert alert-error" style="margin: 0; border-radius: 0;">
-        <?= htmlspecialchars($_SESSION['error'] ?? 'Something went wrong.') ?>
-    </div>
-    <?php unset($_SESSION['error']); ?>
+        <div class="alert alert-error" style="margin: 0; border-radius: 0;">
+            <?= htmlspecialchars($_SESSION['error'] ?? 'Something went wrong.') ?>
+        </div>
+        <?php unset($_SESSION['error']); ?>
     <?php endif; ?>
 
     <div class="dashboard-container">
         <!-- SIDEBAR - USING REQUIRE_ONCE -->
-        <?php require VIEW_PATH . 'partials/user_sidebar.php'; ?>
-        <!-- MAIN CONTENT -->
+        <?php require VIEW_PATH . 'partials/user_sidebar.php'; ?> <!-- MAIN CONTENT -->
 
         <!-- REPORT MODAL -->
         <div class="report-modal-overlay" id="reportModal">
@@ -152,50 +151,50 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
 
                 <?php if (!$hasReports): ?>
 
-                <div class="empty-state">
-                    <div class="empty-icon">!</div>
-                    <p class="empty-message">
-                        You haven't submitted any reports yet.
-                    </p>
-                </div>
+                    <div class="empty-state">
+                        <div class="empty-icon">!</div>
+                        <p class="empty-message">
+                            You haven't submitted any reports yet.
+                        </p>
+                    </div>
 
                 <?php else: ?>
 
-                <div class="reports-list-activity">
+                    <div class="reports-list-activity">
 
-                    <?php foreach ($userReports as $report): ?>
+                        <?php foreach ($userReports as $report): ?>
 
-                    <div class="activity-card">
+                            <div class="activity-card">
 
-                        <!-- STATUS ICON -->
-                        <div class="activity-icon 
+                                <!-- STATUS ICON -->
+                                <div class="activity-icon 
                             <?= strtolower($report['status']) === 'resolved' ? 'icon-success' : 'icon-pending' ?>">
 
-                            <?= strtolower($report['status']) === 'resolved' ? '✓' : '⏱' ?>
-                        </div>
+                                    <?= strtolower($report['status']) === 'resolved' ? '✓' : '⏱' ?>
+                                </div>
 
-                        <!-- DETAILS -->
-                        <div class="activity-content">
-                            <h3 class="activity-title">
-                                <?= htmlspecialchars($report['description']) ?>
-                            </h3>
+                                <!-- DETAILS -->
+                                <div class="activity-content">
+                                    <h3 class="activity-title">
+                                        <?= htmlspecialchars($report['description']) ?>
+                                    </h3>
 
-                            <div class="activity-meta">
-                                <span>📍 <?= htmlspecialchars($report['address']) ?></span>
-                                <span>• <?= date('Y-m-d', strtotime($report['created_at'])) ?></span>
+                                    <div class="activity-meta">
+                                        <span>📍 <?= htmlspecialchars($report['address']) ?></span>
+                                        <span>• <?= date('Y-m-d', strtotime($report['created_at'])) ?></span>
+                                    </div>
+                                </div>
+
+                                <!-- BADGE -->
+                                <span class="status-badge status-<?= strtolower($report['status']) ?>">
+                                    <?= strtolower($report['status']) ?>
+                                </span>
+
                             </div>
-                        </div>
 
-                        <!-- BADGE -->
-                        <span class="status-badge status-<?= strtolower($report['status']) ?>">
-                            <?= strtolower($report['status']) ?>
-                        </span>
+                        <?php endforeach; ?>
 
                     </div>
-
-                    <?php endforeach; ?>
-
-                </div>
 
                 <?php endif; ?>
 
@@ -206,10 +205,9 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
 
     <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
     <script src="<?= ASSET_URL ?>/js/user_module/reports.js"></script>
+    <script src="<?= ASSET_URL ?>/js/user_module/user_dashboard.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
-
-    <!-- <button class="mobile-menu-toggle" aria-label="Toggle Menu">☰</button> -->
+</body>
 </body>
 
 

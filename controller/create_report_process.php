@@ -90,9 +90,9 @@ if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
     error_log("File upload error code: " . $_FILES['photo']['error']);
 }
 
-    // AUTO-ASSIGN AGENCY BASED ON CATEGORY (via model)
+    // DO NOT AUTO-ASSIGN AGENCY - Admin must explicitly forward via Forward button
     $reportModel = new Report();
-    $assigned_agency_id = $reportModel->getAgencyByCategory((int)$category_id);
+    $assigned_agency_id = null; // Start as NULL until admin forwards
 
     try {
         $report_id = $reportModel->createReport(

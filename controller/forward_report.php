@@ -28,15 +28,8 @@ try {
     // Forward using model's conn (not raw $conn which is out of scope inside try)
     $reportModel->forwardReport($report_id, $agency_id);
 
-    // Send SMS notification to the reporter
-    try {
-        require_once MODEL_PATH . 'SmsNotifier.php';
-        SmsNotifier::sendStatusUpdate($report_id, 'Forwarded');
-    } catch (Exception $e) {
-        error_log("SMS notification failed for report #$report_id: " . $e->getMessage());
-    }
-
-    $_SESSION['success'] = "Report #$report_id has been forwarded to the agency.";
+    // NO SMS YET - Agency must verify first
+    $_SESSION['success'] = "Report #$report_id forwarded to agency. Awaiting verification.";
 
 } catch (PDOException $e) {
     $_SESSION['error'] = 'Failed to forward report. Please try again.';

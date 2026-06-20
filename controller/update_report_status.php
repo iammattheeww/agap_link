@@ -12,6 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 require_once MODEL_PATH . 'Report.php';
+require_once MODEL_PATH . 'SmsNotifier.php'; // 1. Require the Notifier
 
 $report_id  = filter_var($_POST['report_id'] ?? 0, FILTER_VALIDATE_INT);
 $new_status = $_POST['new_status'] ?? '';
@@ -28,28 +29,17 @@ if (!$report_id || !in_array($new_status, $allowed_statuses)) {
 try {
     $reportModel = new Report();
 
-    // GET CURRENT REPORT BEFORE UPDATE
-    $report = $reportModel->getReportById($report_id);
-
     // UPDATE STATUS
     $reportModel->updateReportStatus($report_id, $new_status, $remarks ?: null);
 
-    // SEND SMS ONLY IF STATUS CHANGED
-    if ($report && $report['status'] !== $new_status) {
-        try {
-            require_once MODEL_PATH . 'SmsNotifier.php';
-            SmsNotifier::sendStatusUpdate($report_id, $new_status);
-            // SMS sent successfully — include confirmation in the success message
-            $_SESSION['success'] = "Report #$report_id updated to $new_status. SMS notification sent.";
-        } catch (Exception $e) {
-            // SMS failed — log it but don't block the status update
-            // Also surface the reason in the session so the admin sees it
-            error_log("SMS failed for report #$report_id: " . $e->getMessage());
-            $_SESSION['success'] = "Report #$report_id updated to $new_status. (SMS failed: " . $e->getMessage() . ")";
-        }
-    } else {
-        // Status unchanged — no SMS sent
-        $_SESSION['success'] = "Report #$report_id updated to $new_status.";
+    // 2. SEND SMS AUTOMATICALLY ON STATUS UPDATE
+    try {
+        SmsNotifier::sendStatusUpdate($report_id, $new_status);
+        $_SESSION['success'] = "Report #$report_id updated to $new_status. SMS Sent!";
+    } catch (Exception $e) {
+        // If SMS fails, log it, but still acknowledge the status update success
+        error_log("SMS Error Report #$report_id: " . $e->getMessage());
+        $_SESSION['success'] = "Report #$report_id updated to $new_status, but SMS notification failed.";
     }
 } catch (PDOException $e) {
     $_SESSION['error'] = 'Database error. Try again.';

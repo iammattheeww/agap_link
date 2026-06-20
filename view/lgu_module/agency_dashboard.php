@@ -64,10 +64,6 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
                     <span>Dashboard</span>
                 </a>
 
-                <a href="<?= BASE_URL ?>/view/lgu_module/agency_reports.php" class="nav-item">
-                    <span class="nav-icon"><i data-lucide="file-text"></i></span>
-                    <span>My Reports</span>
-                </a>
             </nav>
 
             <div class="sidebar-footer">
@@ -232,15 +228,28 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
                                                     View Details
                                                 </button>
 
-                                                <!-- Update Status -->
-                                                <form method="POST" action="<?= BASE_URL ?>/controller/agency_update_status.php">
-                                                    <input type="hidden" name="report_id" value="<?= $report['report_id'] ?>">
-                                                    <select name="new_status" style="width:100%; margin:4px 0; padding:6px;" onchange="if(this.value){this.form.submit();}">
-                                                        <option value="">Update Status...</option>
-                                                        <option value="Ongoing">Mark Ongoing</option>
-                                                        <option value="Resolved">Mark Resolved</option>
-                                                    </select>
-                                                </form>
+                                                <!-- VERIFY REPORT -->
+                                                <?php if (empty($report['is_verified'])): ?>
+                                                    <form method="POST"
+                                                        action="<?= BASE_URL ?>/controller/agency_verify_report.php"
+                                                        onsubmit="return confirm('Verify this report? This confirms the report is legitimate before updating status.');">
+                                                        <input type="hidden" name="report_id" value="<?= $report['report_id'] ?>">
+                                                        <button type="submit" style="width:100%; padding:10px; border:none; background:none; text-align:left; cursor:pointer; color:#1d4ed8; font-weight:600;">
+                                                            ✓ Verify Report
+                                                        </button>
+                                                    </form>
+                                                <?php else: ?>
+                                                    <button type="button" style="width:100%; padding:10px; border:none; background:none; text-align:left; cursor:default; color:#6b7280;" disabled>
+                                                        ✓ Already Verified
+                                                    </button>
+                                                <?php endif; ?>
+
+                                                <!-- Update Status with Remarks -->
+                                                <button type="button" class="update-status-modal-btn" 
+                                                    onclick="showUpdateModal(<?= $report['report_id'] ?>)"
+                                                    style="width:100%; padding:10px; border:none; background:none; text-align:left; cursor:pointer; color:#059669; font-weight:600;">
+                                                    Update Status with Remarks
+                                                </button>
                                             </div>
                                         </div>
                                     </td>
@@ -253,6 +262,35 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
             </section>
 
         </main>
+    </div>
+
+    <!-- UPDATE STATUS MODAL -->
+    <div id="updateModal" class="modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <span class="close-modal" onclick="closeUpdateModal()">&times;</span>
+            <h2>Update Report Status</h2>
+            <form method="POST" action="<?= BASE_URL ?>/controller/agency_update_status.php">
+                <input type="hidden" name="report_id" id="updateReportId">
+                <div class="form-group">
+                    <label for="updateStatus">New Status</label>
+                    <select name="new_status" id="updateStatus" required>
+                        <option value="">Select Status</option>
+                        <option value="Ongoing">Ongoing</option>
+                        <option value="Resolved">Resolved</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="remarks">Remarks (Optional)</label>
+                    <textarea name="remarks" id="remarks" rows="4" 
+                        placeholder="Add notes about the status update..."
+                        style="width:100%; padding:8px; border:1px solid #ddd; border-radius:4px; font-family:Arial, sans-serif;"></textarea>
+                </div>
+                <div style="text-align:right; margin-top:16px;">
+                    <button type="submit" class="btn-primary">Update</button>
+                    <button type="button" class="btn-secondary" onclick="closeUpdateModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- REPORT DETAILS MODAL -->
@@ -327,8 +365,7 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
                     const photoWrapper = document.getElementById("modalPhotoWrapper");
                     const photoEl = document.getElementById("modalPhoto");
                     if (btn.dataset.photo && btn.dataset.photo !== '') {
-                        const baseUrl = document.body.dataset.baseUrl || '';
-                        photoEl.src = baseUrl + btn.dataset.photo;
+                        photoEl.src = btn.dataset.photo;
                         photoWrapper.style.display = "block";
                     } else {
                         photoWrapper.style.display = "none";
@@ -343,7 +380,24 @@ $statuses = ['Pending', 'Verified', 'Forwarded', 'Ongoing', 'Resolved'];
             closeModal.addEventListener("click", closeM);
             closeModalBtn.addEventListener("click", closeM);
             modal.addEventListener("click", e => { if (e.target === modal) closeM(); });
+
+            // Update Status Modal Functions
+            const updateModal = document.getElementById("updateModal");
+            if (updateModal) {
+                updateModal.addEventListener("click", function(e) {
+                    if (e.target === this) closeUpdateModal();
+                });
+            }
         });
+
+        window.showUpdateModal = function(reportId) {
+            document.getElementById("updateReportId").value = reportId;
+            document.getElementById("updateModal").style.display = "flex";
+        };
+
+        window.closeUpdateModal = function() {
+            document.getElementById("updateModal").style.display = "none";
+        };
     </script>
 </body>
 

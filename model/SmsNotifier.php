@@ -100,50 +100,106 @@ class SmsNotifier
      * Build a rich, professional status-update message for the citizen.
      * Task 6: Rewritten with warm, informative, empathetic wording.
      */
+    // private static function buildMessage(int $reportId, string $status): string
+    // {
+    //     return match ($status) {
+    //         'Pending' =>
+    //         "AGAP-Link — Report Received ✔\n\n" .
+    //             "Hello! Your community report (Ref. #$reportId) has been successfully submitted to AGAP-Link. " .
+    //             "Our admin team has received your concern and it is currently under initial review. " .
+    //             "We appreciate you taking the time to help improve your community. " .
+    //             "You will be notified as soon as there are updates on your report.\n\n" .
+    //             "Thank you for being a responsible citizen.\n– The AGAP-Link Team",
+
+    //         'Verified' =>
+    //         "AGAP-Link — Report Verified ✔\n\n" .
+    //             "Great news! Your report (Ref. #$reportId) has been reviewed and officially verified by our admin team. " .
+    //             "This means your concern has been assessed as legitimate and is now eligible for further action. " .
+    //             "We are currently identifying the appropriate government agency to handle your concern.\n\n" .
+    //             "Stay tuned for further updates. We are on it!\n– The AGAP-Link Team",
+
+    //         'Forwarded' =>
+    //         "AGAP-Link — Report Forwarded 📨\n\n" .
+    //             "Your verified report (Ref. #$reportId) has been officially forwarded to the relevant local government authority or agency for proper action. " .
+    //             "The concerned office is now aware of your report and is expected to act on it accordingly. " .
+    //             "We will continue to monitor the progress and notify you of any status changes.\n\n" .
+    //             "Your report is making a difference.\n– The AGAP-Link Team",
+
+    //         'Ongoing' =>
+    //         "AGAP-Link — Action in Progress 🔧\n\n" .
+    //             "Update on your report (Ref. #$reportId): The assigned agency or local authority is now actively working on addressing your concern. " .
+    //             "Field teams or responsible officers have been deployed or are in the process of resolving the issue you reported. " .
+    //             "We appreciate your patience as this matter is being handled.\n\n" .
+    //             "Thank you for your continued trust in AGAP-Link.\n– The AGAP-Link Team",
+
+    //         'Resolved' =>
+    //         "AGAP-Link — Report Resolved ✅\n\n" .
+    //             "We are pleased to inform you that your report (Ref. #$reportId) has been officially marked as resolved by the handling agency. " .
+    //             "The concern you raised has been addressed and the necessary actions have been taken. " .
+    //             "We hope this resolution meets your expectations. If the issue persists or resurfaces, please do not hesitate to submit a new report.\n\n" .
+    //             "Thank you for your contribution in making our community a better place.\n– The AGAP-Link Team",
+
+    //         default =>
+    //         "AGAP-Link — Report Status Update\n\n" .
+    //             "Your report (Ref. #$reportId) has been updated. Its current status is now: $status. " .
+    //             "Please log in to your AGAP-Link account to view the full details and any remarks associated with this update.\n\n" .
+    //             "– The AGAP-Link Team"
+    //     };
+    // }
+
+    // private static function buildMessage(int $reportId, string $status): string
+    // {
+    //     return match ($status) {
+    //         'Pending' => 
+    //             "AGAP-Link Report Update\n\n" .
+    //             "Your community report (#$reportId) has been successfully received and submitted to AGAP-Link. " .
+    //             "Our admin team is currently reviewing your submission. We truly appreciate your effort in helping improve our community. " .
+    //             "You will receive updates as soon as we process your report.\n\n" .
+    //             "Thank you for being a responsible citizen.",
+
+    //         'Verified' => 
+    //             "AGAP-Link Report Update\n\n" .
+    //             "Great news! Your report (#$reportId) has been reviewed and verified by our team. " .
+    //             "This means your concern is legitimate and has been approved for further action. " .
+    //             "We are now identifying the appropriate government agency to handle your concern.\n\n" .
+    //             "Stay tuned for updates.",
+
+    //         'Forwarded' => 
+    //             "AGAP-Link Report Update\n\n" .
+    //             "Your verified report (#$reportId) has been officially forwarded to the assigned government agency. " .
+    //             "The relevant office has been notified and is expected to take the necessary steps to address your concern. " .
+    //             "We will continue to monitor progress and notify you of any status changes.\n\n" .
+    //             "Your report is making a difference.",
+
+    //         'Ongoing' => 
+    //             "AGAP-Link Report Update\n\n" .
+    //             "Your report (#$reportId) is now being actively addressed. The assigned agency is working on resolving the issue you reported. " .
+    //             "Field teams or responsible officers have been deployed to address your concern. " .
+    //             "Thank you for your patience as we work toward a solution.\n\n" .
+    //             "We appreciate your trust in AGAP-Link.",
+
+    //         'Resolved' => 
+    //             "AGAP-Link Report Update\n\n" .
+    //             "Your report (#$reportId) has been officially resolved. The assigned agency has completed the necessary actions to address your concern. " .
+    //             "We hope this resolution meets your expectations. If the issue persists, please submit a new report.\n\n" .
+    //             "Thank you for contributing to community improvement.",
+
+    //         default => 
+    //             "AGAP-Link Report Update\n\n" .
+    //             "Your report (#$reportId) has been updated. Current status: $status. " .
+    //             "Please log in to your AGAP-Link account to view full details and any remarks associated with this update."
+    //     };
+    // }
+
     private static function buildMessage(int $reportId, string $status): string
     {
         return match ($status) {
-            'Pending' =>
-            "AGAP-Link — Report Received ✔\n\n" .
-                "Hello! Your community report (Ref. #$reportId) has been successfully submitted to AGAP-Link. " .
-                "Our admin team has received your concern and it is currently under initial review. " .
-                "We appreciate you taking the time to help improve your community. " .
-                "You will be notified as soon as there are updates on your report.\n\n" .
-                "Thank you for being a responsible citizen.\n– The AGAP-Link Team",
-
-            'Verified' =>
-            "AGAP-Link — Report Verified ✔\n\n" .
-                "Great news! Your report (Ref. #$reportId) has been reviewed and officially verified by our admin team. " .
-                "This means your concern has been assessed as legitimate and is now eligible for further action. " .
-                "We are currently identifying the appropriate government agency to handle your concern.\n\n" .
-                "Stay tuned for further updates. We are on it!\n– The AGAP-Link Team",
-
-            'Forwarded' =>
-            "AGAP-Link — Report Forwarded 📨\n\n" .
-                "Your verified report (Ref. #$reportId) has been officially forwarded to the relevant local government authority or agency for proper action. " .
-                "The concerned office is now aware of your report and is expected to act on it accordingly. " .
-                "We will continue to monitor the progress and notify you of any status changes.\n\n" .
-                "Your report is making a difference.\n– The AGAP-Link Team",
-
-            'Ongoing' =>
-            "AGAP-Link — Action in Progress 🔧\n\n" .
-                "Update on your report (Ref. #$reportId): The assigned agency or local authority is now actively working on addressing your concern. " .
-                "Field teams or responsible officers have been deployed or are in the process of resolving the issue you reported. " .
-                "We appreciate your patience as this matter is being handled.\n\n" .
-                "Thank you for your continued trust in AGAP-Link.\n– The AGAP-Link Team",
-
-            'Resolved' =>
-            "AGAP-Link — Report Resolved ✅\n\n" .
-                "We are pleased to inform you that your report (Ref. #$reportId) has been officially marked as resolved by the handling agency. " .
-                "The concern you raised has been addressed and the necessary actions have been taken. " .
-                "We hope this resolution meets your expectations. If the issue persists or resurfaces, please do not hesitate to submit a new report.\n\n" .
-                "Thank you for your contribution in making our community a better place.\n– The AGAP-Link Team",
-
-            default =>
-            "AGAP-Link — Report Status Update\n\n" .
-                "Your report (Ref. #$reportId) has been updated. Its current status is now: $status. " .
-                "Please log in to your AGAP-Link account to view the full details and any remarks associated with this update.\n\n" .
-                "– The AGAP-Link Team"
+            'Pending' => "AGAP-Link: Your report (#$reportId) has been received and is under review.",
+            'Verified' => "AGAP-Link: Your report (#$reportId) has been verified and is being forwarded to the appropriate agency.",
+            'Forwarded' => "AGAP-Link: Your report (#$reportId) has been forwarded to the assigned agency for action.",
+            'Ongoing' => "AGAP-Link: Your report (#$reportId) is being actively addressed by the assigned agency.",
+            'Resolved' => "AGAP-Link: Your report (#$reportId) has been resolved. Thank you!",
+            default => "AGAP-Link: Your report (#$reportId) status is now: $status."
         };
     }
 
@@ -198,11 +254,13 @@ class SmsNotifier
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
 
-        // Log every attempt for audit trail
+        // Log every attempt for audit trail with FULL details
+        $logEntry = date('Y-m-d H:i:s') . " | HTTP:$httpCode | TO:$phone | SENDER:$senderId | MSG:" .
+                mb_substr($message, 0, 60) . '... | RESP:' . mb_substr($response, 0, 200) . "\n";
+        error_log($logEntry); // Also log to PHP error log
         file_put_contents(
             __DIR__ . '/../logs/sms_log.txt',
-            date('Y-m-d H:i:s') . " | HTTP:$httpCode | TO:$phone | SENDER:$senderId | MSG:" .
-                mb_substr($message, 0, 60) . '... | RESP:' . $response . "\n",
+            $logEntry,
             FILE_APPEND
         );
 

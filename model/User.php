@@ -126,50 +126,50 @@ class User
         return $stmt->execute([$user_id]);
     }
 
-    public function get_user_id($email)
-    {
-        $sql = "SELECT id FROM users WHERE email = :email";
-        $q = $this->conn->prepare($sql);
-        $q->execute(['email' => $email]);
-        $user_id = $q->fetchColumn();
-        return $user_id ? $user_id : false;
-    }
+    // public function get_user_id($email)
+    // {
+    //     $sql = "SELECT id FROM users WHERE email = :email";
+    //     $q = $this->conn->prepare($sql);
+    //     $q->execute(['email' => $email]);
+    //     $user_id = $q->fetchColumn();
+    //     return $user_id ? $user_id : false;
+    // }
 
-    public function get_user_name($id)
-    {
-        $sql = "SELECT CONCAT(first_name, ' ', IFNULL(CONCAT(middle_initial, '. '), ''), last_name) AS full_name FROM users WHERE user_id = :id";
-        $q = $this->conn->prepare($sql);
-        $q->execute(['id' => $id]);
-        $user_name = $q->fetchColumn();
-        return $user_name ? $user_name : false;
-    }
+    // public function get_user_name($id)
+    // {
+    //     $sql = "SELECT CONCAT(first_name, ' ', IFNULL(CONCAT(middle_initial, '. '), ''), last_name) AS full_name FROM users WHERE user_id = :id";
+    //     $q = $this->conn->prepare($sql);
+    //     $q->execute(['id' => $id]);
+    //     $user_name = $q->fetchColumn();
+    //     return $user_name ? $user_name : false;
+    // }
 
-    public function get_user_first_name($id)
-    {
-        $sql = "SELECT first_name FROM users WHERE user_id = :id";
-        $q = $this->conn->prepare($sql);
-        $q->execute(['id' => $id]);
-        $first_name = $q->fetchColumn();
-        return $first_name ? $first_name : false;
-    }
+    // public function get_user_first_name($id)
+    // {
+    //     $sql = "SELECT first_name FROM users WHERE user_id = :id";
+    //     $q = $this->conn->prepare($sql);
+    //     $q->execute(['id' => $id]);
+    //     $first_name = $q->fetchColumn();
+    //     return $first_name ? $first_name : false;
+    // }
 
-    public function get_user_last_name($id)
-    {
-        $sql = "SELECT last_name FROM users WHERE user_id = :id";
-        $q = $this->conn->prepare($sql);
-        $q->execute(['id' => $id]);
-        $last_name = $q->fetchColumn();
-        return $last_name ? $last_name : false;
-    }
+    // public function get_user_last_name($id)
+    // {
+    //     $sql = "SELECT last_name FROM users WHERE user_id = :id";
+    //     $q = $this->conn->prepare($sql);
+    //     $q->execute(['id' => $id]);
+    //     $last_name = $q->fetchColumn();
+    //     return $last_name ? $last_name : false;
+    // }
 
-    public function get_user_middle_initial($id)
-    {
-        $sql = "SELECT middle_initial FROM users WHERE user_id = :id";
-        $q = $this->conn->prepare($sql);
-        $q->execute(['id' => $id]);
-        $middle_initial = $q->fetchColumn();
-        return $middle_initial;
-    }
+    // public function get_user_middle_initial($id)
+    // {
+    //     $sql = "SELECT middle_initial FROM users WHERE user_id = :id";
+    //     $q = $this->conn->prepare($sql);
+    //     $q->execute(['id' => $id]);
+    //     $middle_initial = $q->fetchColumn();
+    //     return $middle_initial;
+    // }
 
     public function get_user_email($id)
     {
@@ -275,15 +275,15 @@ class User
         return $stmt->execute([':user_id' => $user_id]);
     }
 
-    public function get_session()
-    {
-        if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] == true) {
-            return true;
-        } elseif (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] == true) {
-            return true;
-        }
-        return false;
-    }
+    // public function get_session()
+    // {
+    //     if (isset($_SESSION['user_logged_in']) && $_SESSION['user_logged_in'] == true) {
+    //         return true;
+    //     } elseif (isset($_SESSION['admin_logged_in']) && $_SESSION['admin_logged_in'] == true) {
+    //         return true;
+    //     }
+    //     return false;
+    // }
 
     public function email_exists($email)
     {

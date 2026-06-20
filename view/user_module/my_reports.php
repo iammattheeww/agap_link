@@ -14,36 +14,39 @@ $hasReports  = is_array($userReports) && count($userReports) > 0;
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="<?= ASSET_URL ?>/favicon_io/favicon.ico">
+    <link rel="icon" href="<?= BASE_URL ?>/assets/favicon_io/favicon.ico">
     <title>My Reports - AGAP-Link</title>
-    <link rel="stylesheet" href="<?= ASSET_URL ?>/css/user_module/user_module.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/user_module/user_module.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
+
 <body>
     <?php require VIEW_PATH . 'partials/mobile_topnav_user.php'; ?>
 
     <div class="dashboard-container">
-        <?php require_once __DIR__ . '/../partials/user_sidebar.php'; ?>
 
-      <div class="report-modal-overlay" id="reportModal">
-                <div class="report-modal">
+        <?php require VIEW_PATH . 'partials/user_sidebar.php'; ?>
 
-                    <div class="modal-header">
-                        <h2>Report an Issue</h2>
-                        <button type="button" class="modal-close" id="closeReportModal">&times;</button>
-                    </div>
+        <div class="report-modal-overlay" id="reportModal">
+            <div class="report-modal">
 
-                    <p class="modal-subtitle">
-                        Help improve your community by reporting issues.
-                    </p>
-
-                    <?php require __DIR__ . '/create_report_form_partial.php'; ?>
-
+                <div class="modal-header">
+                    <h2>Report an Issue</h2>
+                    <button type="button" class="modal-close" id="closeReportModal">&times;</button>
                 </div>
+
+                <p class="modal-subtitle">
+                    Help improve your community by reporting issues.
+                </p>
+
+                <?php require __DIR__ . '/create_report_form_partial.php'; ?>
+
             </div>
+        </div>
 
         <main class="main-content page-transition">
             <div class="content-header">
@@ -52,13 +55,13 @@ $hasReports  = is_array($userReports) && count($userReports) > 0;
                     <p class="welcome-subtitle">Track the status of issues you've reported.</p>
                 </div>
 
-                
+
                 <div class="reports-toolbar">
                     <div class="reports-search">
                         <input type="text" id="reportSearch" placeholder="Search reports..." class="form-input">
                     </div>
 
-                    
+
                     <div class="reports-filters">
                         <div class="filter-dropdown" id="statusDropdown">
                             <button class="filter-toggle" id="filterToggle">
@@ -72,22 +75,24 @@ $hasReports  = is_array($userReports) && count($userReports) > 0;
                             </div>
                         </div>
                     </div>
-                       <button type="button" class="btn-report-issue" id="openReportModal">
-                    <span class="btn-icon">+</span>
-                    Report Issue
-                </button>
+                    <button type="button" class="btn-report-issue" id="openReportModal">
+                        <span class="btn-icon">+</span>
+                        Report Issue
+                    </button>
                 </div>
             </div>
 
             <?php if (isset($_SESSION['success'])): ?>
                 <div class="alert alert-success">
-                    <?= htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?>
+                    <?= htmlspecialchars($_SESSION['success']);
+                    unset($_SESSION['success']); ?>
                 </div>
             <?php endif; ?>
 
             <?php if (isset($_SESSION['error'])): ?>
                 <div class="alert alert-error">
-                    <?= htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?>
+                    <?= htmlspecialchars($_SESSION['error']);
+                    unset($_SESSION['error']); ?>
                 </div>
             <?php endif; ?>
 
@@ -141,9 +146,9 @@ $hasReports  = is_array($userReports) && count($userReports) > 0;
 
                                 <!-- DELETE REPORT BUTTON -->
                                 <form method="POST"
-                                      action="<?= BASE_URL ?>/controller/delete_report.php"
-                                      class="delete-report-form"
-                                      onsubmit="return confirm('Are you sure you want to delete this report? This cannot be undone.');">
+                                    action="<?= BASE_URL ?>/controller/delete_report.php"
+                                    class="delete-report-form"
+                                    onsubmit="return confirm('Are you sure you want to delete this report? This cannot be undone.');">
                                     <input type="hidden" name="report_id" value="<?= $report['report_id'] ?>">
                                     <button type="submit" class="btn-delete-report" title="Delete Report">🗑</button>
                                 </form>
@@ -156,7 +161,7 @@ $hasReports  = is_array($userReports) && count($userReports) > 0;
     </div>
 
     <!-- REPORT DETAIL MODAL -->
-  <div id="reportDetailModal" class="modal-overlay">
+    <div id="reportDetailModal" class="modal-overlay">
         <div class="modal-card">
             <div class="modal-header">
                 <h3 id="modalCategory">Report</h3>
@@ -200,11 +205,11 @@ $hasReports  = is_array($userReports) && count($userReports) > 0;
         </div>
     </div>
 
-    <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
-    <script src="<?= ASSET_URL ?>/js/user_module/reports.js"></script>
-    <script src="<?= ASSET_URL ?>/js/user_module/my_reports.js"></script>
-
-        
+    <script src="<?= BASE_URL ?>/assets/js/user_module/main.js"></script>
+    <script src="<?= BASE_URL ?>/assets/js/user_module/reports.js"></script>
+    <script src="<?= BASE_URL ?>/assets/js/user_module/my_reports.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </body>
+</body>
+
 </html>
