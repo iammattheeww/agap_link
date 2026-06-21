@@ -15,7 +15,8 @@ class Report
     // GET ALL CATEGORIES FOR DROPDOWNS (NEW)
     public function getAllCategories()
     {
-        $sql = "SELECT category_id, name FROM categories WHERE name != 'Other' ORDER BY name ASC";
+        // $sql = "SELECT category_id, name FROM categories WHERE name != 'Other' ORDER BY name ASC";
+        $sql = "SELECT category_id, name, description FROM categories ORDER BY name ASC";
         $q = $this->conn->query($sql);
         return $q->fetchAll(PDO::FETCH_ASSOC);
     }
@@ -219,7 +220,10 @@ class Report
         if ($filterSearch !== '') {
             $sql .= " AND (r.description LIKE ? OR r.address LIKE ? OR c.name LIKE ? OR CONCAT(u.first_name,' ',u.last_name) LIKE ?)";
             $like = "%{$filterSearch}%";
-            $params[] = $like; $params[] = $like; $params[] = $like; $params[] = $like;
+            $params[] = $like;
+            $params[] = $like;
+            $params[] = $like;
+            $params[] = $like;
         }
 
         $sql .= " ORDER BY r.created_at DESC";
@@ -280,7 +284,7 @@ class Report
     {
         $NOW = new DateTime('now', new DateTimeZone('Asia/Manila'));
         $NOW = $NOW->format('Y-m-d H:i:s');
-        
+
         $stmt = $this->conn->prepare(
             "UPDATE reports SET is_archived = 1, archived_at = ? WHERE report_id = ?"
         );
@@ -327,7 +331,10 @@ class Report
         if ($filterSearch !== '') {
             $sql .= " AND (r.description LIKE ? OR r.address LIKE ? OR c.name LIKE ? OR CONCAT(u.first_name,' ',u.last_name) LIKE ?)";
             $like = "%{$filterSearch}%";
-            $params[] = $like; $params[] = $like; $params[] = $like; $params[] = $like;
+            $params[] = $like;
+            $params[] = $like;
+            $params[] = $like;
+            $params[] = $like;
         }
 
         $sql .= " ORDER BY r.archived_at DESC";
@@ -345,7 +352,7 @@ class Report
     {
         $NOW = new DateTime('now', new DateTimeZone('Asia/Manila'));
         $NOW = $NOW->format('Y-m-d H:i:s');
-        
+
         $stmt = $this->conn->prepare(
             "UPDATE reports SET is_verified = 1 WHERE report_id = ?"
         );
@@ -375,7 +382,9 @@ class Report
         if ($filterSearch !== '') {
             $sql .= " AND (r.description LIKE ? OR r.address LIKE ? OR c.name LIKE ?)";
             $like = "%{$filterSearch}%";
-            $params[] = $like; $params[] = $like; $params[] = $like;
+            $params[] = $like;
+            $params[] = $like;
+            $params[] = $like;
         }
 
         $sql .= " ORDER BY r.created_at DESC";
@@ -417,5 +426,4 @@ class Report
         );
         return $stmt->execute([$agency_id, $report_id]);
     }
-
 }
