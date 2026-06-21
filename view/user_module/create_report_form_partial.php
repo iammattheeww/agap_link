@@ -97,14 +97,3 @@ $userName = $_SESSION['user_name'] ?? 'User';
         </div>
     </form>
 </div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        if (typeof initReportMap === "function") {
-            initReportMap();
-        }
-    });
-</script>
-<!-- CORRECT ORDER -->
-<script src="<?= ASSET_URL ?>/js/user_module/create_report.js"></script>
-<script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
