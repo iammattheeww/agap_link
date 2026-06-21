@@ -47,9 +47,9 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="<?= ASSET_URL ?>/favicon_io/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="<?= BASE_URL ?>/assets/favicon_io/favicon.ico">
     <title>User Dashboard - AGAP-Link</title>
-    <link rel="stylesheet" href="<?= ASSET_URL ?>/css/user_module/user_module.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>/assets/css/user_module/user_module.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 
@@ -203,11 +203,8 @@ $hasReports = is_array($userReports) && count($userReports) > 0;
         </main>
     </div>
 
-    <script src="<?= ASSET_URL ?>/js/user_module/main.js"></script>
-    <script src="<?= ASSET_URL ?>/js/user_module/reports.js"></script>
-    <script src="<?= ASSET_URL ?>/js/user_module/user_dashboard.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-</body>
+    <script src="<?= BASE_URL ?>/assets/js/user_module/main.js"></script>
 </body>
 
 
