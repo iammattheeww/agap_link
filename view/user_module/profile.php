@@ -191,7 +191,6 @@ $firstInitial  = !empty($firstName) ? strtoupper(substr($firstName, 0, 1)) : 'U'
     </div>
 
     <script src="<?= BASE_URL ?>/assets/js/user_module/main.js"></script>
-    <script src="<?= BASE_URL ?>/assets/js/user_module/profile.js"></script>
 </body>
 
 </html>
