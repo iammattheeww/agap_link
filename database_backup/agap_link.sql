@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.3
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Apr 24, 2026 at 03:13 PM
--- Server version: 11.8.5-MariaDB-log
--- PHP Version: 8.4.14
+-- Host: 127.0.0.1
+-- Generation Time: Jun 21, 2026 at 06:23 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `agaplink_db`
+-- Database: `agap_link`
 --
 
 -- --------------------------------------------------------
@@ -40,7 +40,7 @@ CREATE TABLE `admin_users` (
 --
 
 INSERT INTO `admin_users` (`id`, `name`, `email`, `password`, `last_login`) VALUES
-(1, 'System Admin', 'admin@agap-link.com', '$2y$10$by9oEeew9Hufd4OF2IkRlOPU9OUTLlwxQqiNVOFKNQdnTV97W3xSq', '2026-04-23 02:44:28');
+(1, 'System Admin', 'admin@agap-link.com', '$2y$10$by9oEeew9Hufd4OF2IkRlOPU9OUTLlwxQqiNVOFKNQdnTV97W3xSq', '2026-06-22 00:04:50');
 
 -- --------------------------------------------------------
 
@@ -105,15 +105,15 @@ CREATE TABLE `agency_users` (
 --
 
 INSERT INTO `agency_users` (`agency_user_id`, `agency_id`, `username`, `email`, `password_hash`, `full_name`, `contact_number`, `is_active`, `created_at`, `last_login`) VALUES
-(1, 19, 'engineering', 'engineering@agap-link.gov.ph', '$2y$10$BsHHR4ivyPS6RSJl.3lF4OrggqR0HlQ6q0tjrQtg8kPXLs2ixTQaO', 'Engineering Office Coordinator', '+639123456789', 1, '2026-03-04 00:10:53', NULL),
+(1, 19, 'engineering', 'engineering@agap-link.gov.ph', '$2y$10$BsHHR4ivyPS6RSJl.3lF4OrggqR0HlQ6q0tjrQtg8kPXLs2ixTQaO', 'Engineering Office Coordinator', '+639123456789', 1, '2026-03-04 00:10:53', '2026-06-20 14:22:26'),
 (2, 21, 'cenro', 'cenro@agap-link.gov.ph', '$2y$10$BsHHR4ivyPS6RSJl.3lF4OrggqR0HlQ6q0tjrQtg8kPXLs2ixTQaO', 'CENRO Coordinator', '+639123456789', 1, '2026-03-04 00:10:53', NULL),
 (3, 23, 'baciwa', 'baciwa@agap-link.gov.ph', '$2y$10$BsHHR4ivyPS6RSJl.3lF4OrggqR0HlQ6q0tjrQtg8kPXLs2ixTQaO', 'BACIWA Coordinator', '+639123456789', 1, '2026-03-04 00:10:53', NULL),
 (4, 25, 'pnp', 'pnp@agap-link.gov.ph', '$2y$10$BsHHR4ivyPS6RSJl.3lF4OrggqR0HlQ6q0tjrQtg8kPXLs2ixTQaO', 'Bacolod City Police Office (BCPO) Coordinator', '+639123456789', 1, '2026-03-03 23:46:31', NULL),
-(5, 26, 'bfp', 'bfp@agap-link.gov.ph', '$2y$10$BsHHR4ivyPS6RSJl.3lF4OrggqR0HlQ6q0tjrQtg8kPXLs2ixTQaO', 'Bureau of Fire Protection - Bacolod Coordinator', '+639123456789', 1, '2026-03-03 23:46:31', '2026-04-19 02:31:18'),
+(5, 26, 'bfp', 'bfp@agap-link.gov.ph', '$2y$10$BsHHR4ivyPS6RSJl.3lF4OrggqR0HlQ6q0tjrQtg8kPXLs2ixTQaO', 'Bureau of Fire Protection - Bacolod Coordinator', '+639123456789', 1, '2026-03-03 23:46:31', '2026-06-09 20:49:01'),
 (6, 27, 'cenro_env', 'cenro.env@agap-link.gov.ph', '$2y$10$jdqAAYQQ399iNWxnmcopfedzDhqhYFjzFgxqjhQFseZnCJLcxFYpa', 'CENRO Environment Coordinator', '+639123456789', 1, '2026-03-04 00:10:53', NULL),
 (7, 28, 'denr', 'denr@agap-link.gov.ph', '$2y$10$jdqAAYQQ399iNWxnmcopfedzDhqhYFjzFgxqjhQFseZnCJLcxFYpa', 'DENR Region VI Coordinator', '+639123456789', 1, '2026-03-04 00:10:53', NULL),
 (8, 29, 'negrospower', 'negrospower@agap-link.gov.ph', '$2y$10$jdqAAYQQ399iNWxnmcopfedzDhqhYFjzFgxqjhQFseZnCJLcxFYpa', 'Negros Power Coordinator', '+639123456789', 1, '2026-03-04 00:10:53', NULL),
-(9, 31, 'lto', 'lto@agap-link.gov.ph', '$2y$10$jdqAAYQQ399iNWxnmcopfedzDhqhYFjzFgxqjhQFseZnCJLcxFYpa', 'LTO Bacolod Coordinator', '+639123456789', 1, '2026-03-04 00:10:53', '2026-04-23 02:43:22'),
+(9, 31, 'lto', 'lto@agap-link.gov.ph', '$2y$10$jdqAAYQQ399iNWxnmcopfedzDhqhYFjzFgxqjhQFseZnCJLcxFYpa', 'LTO Bacolod Coordinator', '+639123456789', 1, '2026-03-04 00:10:53', '2026-04-23 09:14:58'),
 (10, 32, 'btao', 'btao@agap-link.gov.ph', '$2y$10$jdqAAYQQ399iNWxnmcopfedzDhqhYFjzFgxqjhQFseZnCJLcxFYpa', 'Bacolod Traffic Authority Office Coordinator', '+639123456789', 1, '2026-03-04 00:10:53', NULL),
 (11, 33, 'healthoffice', 'healthoffice@agap-link.gov.ph', '$2y$10$jdqAAYQQ399iNWxnmcopfedzDhqhYFjzFgxqjhQFseZnCJLcxFYpa', 'Bacolod City Health Office Coordinator', '+639123456789', 1, '2026-03-04 00:10:53', NULL),
 (12, 35, 'parks', 'parks@agap-link.gov.ph', '$2y$10$jdqAAYQQ399iNWxnmcopfedzDhqhYFjzFgxqjhQFseZnCJLcxFYpa', 'Bacolod Parks & Playground Division Coordinator', '+639123456789', 1, '2026-03-04 00:10:53', NULL),
@@ -202,8 +202,7 @@ INSERT INTO `login_tokens` (`token_id`, `user_id`, `token_code`, `expires_at`, `
 (30, 15, '059022', '2026-04-19 20:58:27', 1, '2026-04-19 20:53:27'),
 (40, 11, '869532', '2026-04-22 21:13:56', 1, '2026-04-22 21:08:56'),
 (43, 19, '805586', '2026-04-22 22:17:53', 1, '2026-04-22 22:12:53'),
-(60, 20, '359947', '2026-04-23 02:08:21', 1, '2026-04-23 02:03:21'),
-(64, 21, '841681', '2026-04-23 02:46:00', 1, '2026-04-23 02:41:00');
+(68, 20, '856444', '2026-06-21 17:41:27', 1, '2026-06-21 17:36:27');
 
 -- --------------------------------------------------------
 
@@ -280,12 +279,13 @@ CREATE TABLE `reports` (
 --
 
 INSERT INTO `reports` (`report_id`, `user_id`, `category_id`, `assigned_agency_id`, `description`, `address`, `photo_path`, `gps_lat`, `gps_long`, `status`, `priority`, `created_at`, `updated_at`, `is_archived`, `archived_at`, `is_verified`, `agency_verified_at`) VALUES
-(3, 5, 1, 19, 'fhdfhf', 'La Salle Avenue, Villamonte, Bacolod-1, Bacolod, Negros Island Region, 6100, Philippines', '/agap_link/uploads/report_69a79c49e61b03.30825166.png', 10.67971734, 122.96084690, 'Verified', 'Medium', '2026-03-04 02:43:21', '2026-03-04 02:44:22', 0, NULL, 0, NULL),
-(4, 5, 1, 19, '67', 'B.S. Aquino Drive, Sunflower, Barangay 7, Villamonte, Bacolod-1, Bacolod, Negros Island Region, 6100, Philippines', '/agap_link/uploads/report_69a79eed1056d1.00393859.png', 10.67899620, 122.95932770, 'Pending', 'Medium', '2026-03-04 02:54:37', '2026-03-04 02:54:37', 0, NULL, 0, NULL),
+(3, 5, 1, 19, 'fhdfhf', 'La Salle Avenue, Villamonte, Bacolod-1, Bacolod, Negros Island Region, 6100, Philippines', '/agap_link/uploads/report_69a79c49e61b03.30825166.png', 10.67971734, 122.96084690, 'Verified', 'Medium', '2026-03-04 02:43:21', '2026-06-20 06:22:52', 0, NULL, 1, NULL),
+(4, 5, 1, 19, '67', 'B.S. Aquino Drive, Sunflower, Barangay 7, Villamonte, Bacolod-1, Bacolod, Negros Island Region, 6100, Philippines', '/agap_link/uploads/report_69a79eed1056d1.00393859.png', 10.67899620, 122.95932770, 'Pending', 'Medium', '2026-03-04 02:54:37', '2026-06-10 06:08:25', 1, '2026-06-10 14:08:25', 0, NULL),
 (15, 20, 7, 31, 'Guba nga dalan.', 'Estefania, Bacolod-1, Bacolod, Negros Island Region, 6100, Philippines', '/agap_link/uploads/report_69e94a52bef576.75924458.jpg', 10.65899908, 122.99639531, 'Ongoing', 'Medium', '2026-04-22 22:23:14', '2026-04-23 00:28:13', 0, NULL, 1, NULL),
 (16, 20, 7, 31, 'Test', 'Estefania, Bacolod-1, Bacolod, Negros Island Region, 6100, Philippines', '/agap_link/uploads/report_69e968c6d5def4.35991887.jpg', 10.65897901, 122.99643979, 'Resolved', 'Medium', '2026-04-23 00:33:10', '2026-04-23 01:14:34', 0, NULL, 1, NULL),
-(17, 21, 7, NULL, 'test', 'Punta Tabuc, Roxas City, Capiz, Western Visayas, 5800, Philippines', '/uploads/report_69e9864c777761.85568098.jpg', 11.56695942, 122.73603058, 'Pending', 'Medium', '2026-04-23 10:39:08', '2026-04-23 02:39:08', 0, NULL, 0, NULL),
-(18, 21, 7, NULL, 'test #2', 'University of St. La Salle, Atis Street, La Salleville, Villamonte, Bacolod-1, Bacolod, Negros Island Region, 6100, Philippines', '/uploads/report_69e9870886b234.36495957.jpg', 10.67779258, 122.96176667, 'Pending', 'Medium', '2026-04-23 10:42:16', '2026-04-23 02:42:16', 0, NULL, 0, NULL);
+(17, 20, 1, NULL, 'Lorem Ipsum', 'Museo de La Salle, La Salle Avenue, La Salleville, Villamonte, Bacolod-1, Bacolod, Negros Island Region, 6100, Philippines', '/agap_link/uploads/report_6a2f708515c647.33879383.png', 10.67862240, 122.96244082, 'Pending', 'Medium', '2026-06-15 03:24:53', '2026-06-15 03:24:53', 0, NULL, 0, NULL),
+(18, 20, 1, NULL, 'Broken Building', 'Estefania, Bacolod-1, Bacolod, Negros Island Region, 6100, Philippines', '/agap_link/uploads/report_6a3603e62533f2.37104308.jpg', 10.65898968, 122.99643372, 'Pending', 'Medium', '2026-06-20 03:07:18', '2026-06-20 03:07:18', 0, NULL, 0, NULL),
+(19, 20, 7, NULL, 'Manhole', 'Estefania, Bacolod-1, Bacolod, Negros Island Region, 6100, Philippines', '/agap_link/uploads/report_6a360442555b60.56994849.jpg', 10.65899486, 122.99656667, 'Pending', 'Medium', '2026-06-20 03:08:50', '2026-06-20 03:08:50', 0, NULL, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -316,8 +316,7 @@ INSERT INTO `report_logs` (`log_id`, `report_id`, `status_change`, `remarks`, `t
 (14, 15, 'Forwarded', NULL, '2026-04-22 23:37:51'),
 (15, 15, 'Ongoing', 'Updated by agency: Land Transportation Office (LTO) - Bacolod', '2026-04-23 00:28:13'),
 (16, 16, 'Resolved', 'Updated by agency: Land Transportation Office (LTO) - Bacolod', '2026-04-23 01:14:34'),
-(17, 16, 'Resolved', 'Updated by agency: Land Transportation Office (LTO) - Bacolod', '2026-04-23 01:15:03'),
-(18, 16, 'Resolved', 'Updated by agency: Land Transportation Office (LTO) - Bacolod\nRemarks: ... ', '2026-04-23 10:44:05');
+(17, 16, 'Resolved', 'Updated by agency: Land Transportation Office (LTO) - Bacolod', '2026-04-23 01:15:03');
 
 -- --------------------------------------------------------
 
@@ -347,8 +346,7 @@ INSERT INTO `users` (`user_id`, `first_name`, `middle_initial`, `last_name`, `em
 (16, 'Jayram', NULL, 'Garcia', 'jaryam123@gmail.com', '09207828624', '$2y$10$SaLqtLIeAy/tdGk3HaOEmu4T501Od4m/sfOmNU5dRJs1Ib7M/4i.u', '2026-03-29 23:31:24', NULL),
 (17, 'David', NULL, 'Buala', 'davidbuala@email.com', '09942017579', '$2y$10$20.9ECHwiycO.I2tkhnsfORoVN1L4C85YJ6FtTHwWd4Zajtg6t7dm', '2026-03-29 23:40:24', NULL),
 (18, 'Matthew Justin', NULL, 'Intoy', 'intoymatthewjustin@gmail.com', '09949926492', '$2y$10$CwqIvJHJb8..qStx/MpdHeYxrKEW1C6r55STaVnE2FrbzJ9NP5uwu', '2026-04-19 18:37:46', '2026-04-19 18:40:57'),
-(20, 'Matthew Justin', NULL, 'Intoy', 's2402438@usls.edu.ph', '09949926492', '$2y$10$6mc44VhBQnhj9SLvyCleGORshk/as7l/q/C8UuJufiAmUZYQEUel6', '2026-04-22 22:13:57', '2026-04-23 02:03:22'),
-(21, 'Dairin', 'D', 'Janagap', 'dairinjan@gmail.com', '09152411363', '$2y$12$qZaJLz5vQkKq3lqeMJ9jcuzCy6bg.UjL.GvPKSAXljzfMgobBUqMm', '2026-04-23 10:34:38', '2026-04-23 02:41:01');
+(20, 'Matthew Justin', NULL, 'Intoy', 's2402438@usls.edu.ph', '09949926492', '$2y$10$6mc44VhBQnhj9SLvyCleGORshk/as7l/q/C8UuJufiAmUZYQEUel6', '2026-04-22 22:13:57', '2026-06-21 17:36:31');
 
 --
 -- Indexes for dumped tables
@@ -481,7 +479,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `login_tokens`
 --
 ALTER TABLE `login_tokens`
-  MODIFY `token_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `token_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT for table `password_reset_otps`
@@ -493,25 +491,25 @@ ALTER TABLE `password_reset_otps`
 -- AUTO_INCREMENT for table `registration_verifications`
 --
 ALTER TABLE `registration_verifications`
-  MODIFY `verification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `verification_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `reports`
 --
 ALTER TABLE `reports`
-  MODIFY `report_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `report_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `report_logs`
 --
 ALTER TABLE `report_logs`
-  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `log_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- Constraints for dumped tables
