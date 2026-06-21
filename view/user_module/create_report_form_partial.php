@@ -20,10 +20,11 @@ $userName = $_SESSION['user_name'] ?? 'User';
             <select name="category_id" id="category_id" class="form-input" required>
                 <option value="">Select a category...</option>
                 <?php foreach ($categories as $row): ?>
-                    <option value="<?= $row['category_id'] ?>">
-                        <?= htmlspecialchars($row['name']) ?>
+                    <option value="<?= $row['category_id'] ?? '' ?>" title="<?= htmlspecialchars($row['description'] ?? '') ?>">
+                        <?= htmlspecialchars($row['name'] ?? '') ?> — <?= htmlspecialchars($row['description'] ?? '') ?>
                     </option>
                 <?php endforeach; ?>
+                <option value="10" title="Please state in the description box below.">Others — Please state in the description box below.</option>
             </select>
         </div>
 
