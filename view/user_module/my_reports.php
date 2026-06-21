@@ -205,11 +205,8 @@ $hasReports  = is_array($userReports) && count($userReports) > 0;
         </div>
     </div>
 
-    <script src="<?= BASE_URL ?>/assets/js/user_module/main.js"></script>
-    <script src="<?= BASE_URL ?>/assets/js/user_module/reports.js"></script>
-    <script src="<?= BASE_URL ?>/assets/js/user_module/my_reports.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-</body>
+    <script src="<?= BASE_URL ?>/assets/js/user_module/main.js"></script>
 </body>
 
 </html>
